@@ -1,0 +1,110 @@
+<div class="header pb-8 pt-5 pt-md-8"
+    style="min-height: 300px; background-image: url(assets/img/theme/chimborazo.jpg); background-size: cover; background-position: 0px -120px;">
+    <span class="mask bg-default opacity-6"></span>
+    <div class="container-fluid">
+        <div class="header-body">
+        </div>
+    </div>
+</div>
+<div class="container-fluid mt--9" id="table">
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-9">
+                            <h3 class="mb-0">Lista de Usuarios</h3>
+                        </div>
+                        <div class="col-3 text-right text-default">
+                            <a [routerLink]="['/admin-layout/form-usuario']" class="btn btn-sm btn-default">Nuevo Usuario</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table align-items-center table-flush row-border hover">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Tel&eacute;fono</th>
+                                <th scope="col">Correo</th>
+                                <th scope="col">Rol</th>
+                                <th scope="col" class="button"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let usuario of usuarios">
+                                <th scope="row">
+                                    <div class="media align-items-center">
+                                        <div class="media-body">
+                                            <span class="mb-0 text-sm">{{usuario.nombre +" "+usuario.apellido}}</span>
+                                        </div>
+                                    </div>
+                                </th>
+                                <td>
+                                    {{usuario.telefono}}
+                                </td>
+                                <td>
+                                    {{usuario.email}}
+                                </td>
+                                <td>
+                                    {{usuario.role}}
+                                </td>
+                                <td class="text-right">
+                                    <div ngbDropdown placement="bottom-right">
+                                        <a class="btn btn-sm btn-icon-only text-light" ngbDropdownToggle>
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </a>
+                                        <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
+                                            <a class="dropdown-item" (click)="editarUsuario(usuario)">Editar</a>
+                                            <a class="dropdown-item" (click)="deleteUsuario(usuario)">Eliminar</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid mt--9" id="form-usuario" style="display: none;">
+    <div class="row">
+        <div class="col-xl-2"></div>
+        <div class="col-xl-8 mb-5 mb-xl-0">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Editar Usuario</h3>
+                </div>
+                <div class="card-body">
+                    <form #formUsuario="ngForm">
+                        <div class="form-group">
+                            <label for="nombre">Nombre</label><br>
+                            <input type="text" class="form-control" name="nombre" id="nombre"
+                                [(ngModel)]="usuario.nombre">
+                        </div>
+                        <div class="form-group">
+                            <label for="apellido">Apellido</label><br>
+                            <input type="text" class="form-control" name="apellido" id="apellido"
+                                [(ngModel)]="usuario.apellido">
+                        </div>
+                        <div class="form-group">
+                            <label for="telefono">Tel&eacute;fono</label><br>
+                            <input type="text" class="form-control" name="telefono" id="telefono"
+                                [(ngModel)]="usuario.telefono">
+                        </div>
+                        <div class="form-group">
+                            <label for="correo">Correo</label><br>
+                            <input type="email" class="form-control" name="correo" id="correo"
+                                [(ngModel)]="usuario.email">
+                        </div>
+                        <div>
+                            <button class="btn btn-secondary float-left" (click)="cancelar(formUsuario)">Cancelar</button>
+                            <button class="btn btn-default float-right" (click)="submit(formUsuario)">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
