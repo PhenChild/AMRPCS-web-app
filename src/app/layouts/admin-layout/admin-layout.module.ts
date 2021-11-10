@@ -7,10 +7,10 @@ import { FormsModule , ReactiveFormsModule } from "@angular/forms";
 import { adminLayoutRoutes } from "./admin-layout.routing";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { UsuariosComponent } from "../../pages/usuarios/usuarios.component";
-/*import { EstacionesComponent } from "../../pages/estaciones/estaciones.component";
-import { VariablesComponent } from "../../pages/variables/variables.component";
 import { FormUsuarioComponent } from "../../pages/form-usuario/form-usuario.component";
+import { EstacionesComponent } from "../../pages/estaciones/estaciones.component";
 import { FormEstacionComponent } from "../../pages/form-estacion/form-estacion.component";
+/*import { VariablesComponent } from "../../pages/variables/variables.component";
 import { FormVariableComponent } from "../../pages/form-variable/form-variable.component";
 import { AsignacionComponent } from "../../pages/asignacion/asignacion.component";
 import { RolesComponent } from "../../pages/roles/roles.component";
@@ -33,10 +33,10 @@ import { DataTablesModule } from "angular-datatables";
     ],
     declarations: [
         UsuariosComponent,
-        /*EstacionesComponent,
         FormUsuarioComponent,
+        EstacionesComponent,
         FormEstacionComponent,
-        VariablesComponent,
+        /*VariablesComponent,
         FormVariableComponent,
         AsignacionComponent,
         RolesComponent,
