@@ -20,10 +20,16 @@ export class User{
 
     /** Rol del usuario */
     role!: string;
+
+    idPais!: number;
+
+    token!: string;
     
+    foto!: string;
+
     /** Fecha de creación */
-    createdAt!: string;
+    audCreatedAt!: string;
 
     /** Fecha de actualización */
-    updatedAt!: string;
+    audUpdatedAt!: string;
 }

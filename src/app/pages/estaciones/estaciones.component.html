@@ -30,7 +30,6 @@
                                 <th scope="col">Latitud</th>
                                 <th scope="col">Longitud</th>
                                 <th scope="col">Altitud</th>
-                                <th scope="col">C&oacute;digo OMM</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -39,7 +38,7 @@
                                 <th scope="row">
                                     <div class="media align-items-center">
                                         <div class="media-body">
-                                            <span class="mb-0 text-sm">{{ estacion.nombreEstacion}}</span>
+                                            <span class="mb-0 text-sm">{{ estacion.nombre}}</span>
                                         </div>
                                     </div>
                                 </th>
@@ -54,9 +53,6 @@
                                 </td>
                                 <td>
                                     {{estacion.altitud}}
-                                </td>
-                                <td>
-                                    {{estacion.omm}}
                                 </td>
                                 <td class="text-right">
                                     <div ngbDropdown placement="bottom-right">
@@ -90,7 +86,7 @@
                         <div class="form-group">
                             <label for="nombre">Nombre</label><br>
                             <input type="text" class="form-control" name="nombre" id="nombre"
-                                [(ngModel)]="estacion.nombreEstacion">
+                                [(ngModel)]="estacion.nombre">
                         </div>
                         <div class="form-group">
                             <label for="codigo">Codigo</label><br>
@@ -120,11 +116,6 @@
                             <label for="tipoSuelo">Tipo de Suelo</label><br>
                             <input type="text" class="form-control" name="tipoSuelo" id="tipoSuelo"
                                 [(ngModel)]="estacion.suelo">
-                        </div>
-                        <div class="form-group">
-                            <label for="codomm">Codigo OMM</label><br>
-                            <input type="text" class="form-control" name="codomm" id="codomm"
-                                [(ngModel)]="estacion.omm">
                         </div>
                         <div>
                             <button class="btn btn-secondary float-left"

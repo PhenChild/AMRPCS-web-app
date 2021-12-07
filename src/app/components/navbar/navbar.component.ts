@@ -2,7 +2,7 @@ import { Component, OnInit, ElementRef } from "@angular/core";
 import { ROUTES } from "../sidebar/sidebar.component";
 import { Location } from "@angular/common";
 import { Router } from "@angular/router";
-//import { AuthService } from "../../services/auth/auth.service";
+import { AuthService } from "../../services/auth/auth.service";
 
 /** Barra de navegacion de la página. */
 @Component({
@@ -25,7 +25,7 @@ export class NavbarComponent implements OnInit {
         location: Location,  
         private element: ElementRef, 
         private router: Router, 
-        //private authService: AuthService
+        private authService: AuthService
         ) {
         this.location = location;
     }
@@ -53,13 +53,27 @@ export class NavbarComponent implements OnInit {
     }
 
     /** Obtiene el nombre de usuario. */
-    getUser(): void{
-        //return sessionStorage.getItem("user");
+    getUser(): any{
+        return sessionStorage.getItem("user");
+    }
+
+    getImage(): any{
+        return sessionStorage.getItem("foto");
+    }
+
+    hasImage(): boolean{
+        var foto = sessionStorage.getItem("foto")
+        console.log(foto)
+        if ( foto != "undefined"){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     /** Cierra sesion en la página. */
     logout(): void{
-        //this.authService.logout();
+        this.authService.logout();
         this.router.navigate(["/auth-layout/login"]);
     }
 

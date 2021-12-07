@@ -1,10 +1,22 @@
 /** Modelo para las estaciones. */
 export class Estacion {
+    id!: number;
+
     /** Codigo de la estación. */
     codigo!: string;
 
     /** Nombre de la estación. */
-    nombreEstacion!: string;
+    nombre!: string;
+
+    direccion!: string;
+
+    referencias!: string;
+
+    foto!: string;
+
+    hasPluviometro!: boolean;
+
+    idUbicacion!: number;
 
     posicion!: {
         coordinates: number[];
@@ -29,8 +41,11 @@ export class Estacion {
     jefeId!: string;
 
     /** Fecha de creación de la estación. */
-    createdAt!: string;
+    audCreatedAt!: string;
 
     /** Fecha de actualización de la estación. */
-    updatedAt!: string;
+    audDeletedAt!: string;
+
+    audUpdatedAt!: string;
+
 }

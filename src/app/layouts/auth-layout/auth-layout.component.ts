@@ -43,6 +43,6 @@ export class AuthLayoutComponent implements OnInit, OnDestroy {
         const html = document.getElementsByTagName("html")[0];
         html.classList.remove("auth-layout");
         const body = document.getElementsByTagName("body")[0];
-        body.classList.remove("bg-yellow");
+        body.classList.remove("bg-gradient-default");
     }
 }

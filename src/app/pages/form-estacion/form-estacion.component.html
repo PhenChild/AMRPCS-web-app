@@ -17,7 +17,7 @@
                     <form  #formEstacion="ngForm" (ngSubmit)="onSubmit(formEstacion)" >
                         <div class="form-group">
                             <label for="nombre">Nombre</label><br>
-                            <input type="text" class="form-control" name="nombre" id="nombre" [(ngModel)]="estacion.nombreEstacion">
+                            <input type="text" class="form-control" name="nombre" id="nombre" [(ngModel)]="estacion.nombre">
                         </div>
                         <div class="form-group">
                             <label for="codigo">C&oacute;digo</label><br>
@@ -42,11 +42,7 @@
                         <div class="form-group">
                             <label for="tipoSuelo">Tipo de Suelo</label><br>
                             <input type="text" class="form-control" name="tipoSuelo" id="tipoSuelo" [(ngModel)]="estacion.suelo">
-                        </div>
-                        <div class="form-group">
-                            <label for="codomm">C&oacute;digo OMM</label><br>
-                            <input type="text" class="form-control" name="codomm" id="codomm"[(ngModel)]="estacion.omm" >
-                        </div>
+                        </div>  
                         <div>
                             <button class="btn btn-secondary float-left">Cancelar</button>
                             <button class="btn btn-default float-right" type="submit">Guardar</button>

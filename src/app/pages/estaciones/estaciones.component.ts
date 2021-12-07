@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subject } from "rxjs";
 import { Estacion } from "../../models/estacion";
-//import {DbService} from "../../services/database/db.service";
+import {DbService} from "../../services/database/db.service";
 import { NgForm } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { Observador } from "../../models/observador";
@@ -41,7 +41,7 @@ export class EstacionesComponent implements OnInit, OnDestroy {
      * Constructor
      */
     constructor(
-        //private dbService: DbService,
+        private dbService: DbService,
         private tService: ToastrService
     ) { }
 
@@ -53,12 +53,12 @@ export class EstacionesComponent implements OnInit, OnDestroy {
             pagingType: "full_numbers",
             pageLength: 7
         };
-    /*this.dbService.getEstaciones()
-            .subscribe(data => {
+    this.dbService.getEstaciones()
+            .subscribe((data: any) => {
                 this.estaciones = (data as any);
                 console.log(this.estaciones);
                 this.dtTrigger1.next();
-            });*/
+            });
     }
 
     /**

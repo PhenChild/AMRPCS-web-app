@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Router } from "@angular/router";
 import { NgForm} from "@angular/forms";
-//import { AuthService} from "../../services/auth/auth.service";
+import { AuthService} from "../../services/auth/auth.service";
 import { ToastrService } from "ngx-toastr";
-//import { AccessToken } from "../../modelos/accessToken";
+import { AccessToken } from "../../models/accessToken";
+import { User } from "src/app/models/user";
 
 
 /**
@@ -26,7 +27,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     /**
      * Token de autenticación
      */
-    //token: AccessToken;
+     user!: User;
 
     /**
      * Cosntructor
@@ -35,7 +36,7 @@ export class LoginComponent implements OnInit, OnDestroy {
      * @param tService
      */
     constructor(
-        //private authService: AuthService,
+        private authService: AuthService,
         private router: Router,
         private tService: ToastrService
     ) {}
@@ -57,18 +58,21 @@ export class LoginComponent implements OnInit, OnDestroy {
      * @param formLogin formulario de login
      */
     onSubmit(formLogin: NgForm): void {
-        /*this.authService.login(this.usuario)
+        this.authService.login(this.usuario)
             .subscribe(
-                data => {
-                    this.token = (data as any);
-                    sessionStorage.setItem("token", this.token.accessToken);
-                    sessionStorage.setItem("user", this.token.email);
-                    this.router.navigate(["/admin-layout/usuarios"]);
+                (data: any) => {
+                    console.log(data)
+                    this.user = (data as any);
+                    sessionStorage.setItem("token", this.user.token);
+                    sessionStorage.setItem("user", this.user.email);
+                    sessionStorage.setItem("foto",this.user.foto);
+                    //sessionStorage.setItem("userFoto", this.user.foto);
+                    this.router.navigateByUrl("/admin-layout/usuarios");
                 },
-                err => {
+                (err: any) => {
                     console.log(err);
                     this.tService.error("Usuario o Contraseña Incorrecta.", "Error en inicio de sesion");
                 }
-            );*/
+            );
     }
 }

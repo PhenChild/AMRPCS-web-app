@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subject } from "rxjs";
-import { User } from "../../models/user";
 import {ViewEncapsulation} from "@angular/core";
-//import {DbService} from "../../services/database/db.service";
+import {DbService} from "../../services/database/db.service";
 import { NgForm } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
+import { User } from "src/app/models/user";
 
 /**
  * Componente para la pagina de usuarios.
@@ -35,7 +35,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
      * @param tService
      */
     constructor( 
-        //private dbService: DbService,
+        private dbService: DbService,
         private tService: ToastrService
     ) {}
 
@@ -50,14 +50,14 @@ export class UsuariosComponent implements OnInit, OnDestroy {
             responsive: true,
         };
 
-        /*this.dbService.getUsuarios()
-            .subscribe( data => {
+        this.dbService.getUsuarios()
+            .subscribe( (data: User[]) => {
                 this.usuarios = data;
                 console.log(this.usuarios);
                 this.dtTrigger.next();
-            }, err => {
+            }, (err: any) => {
                 console.log(err);
-            });*/
+            });
     }
 
     /**
