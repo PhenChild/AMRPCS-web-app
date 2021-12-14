@@ -28,23 +28,23 @@ export class DbService {
      * Cabezera
      * @returns
      */
-    getHeader(): any{
-        if ( sessionStorage.getItem("token") != null){
+    getHeader(): any {
+        if (sessionStorage.getItem("token") != null) {
             return {
                 "x-access-token": sessionStorage.getItem("token")
             };
-        }else{
+        } else {
             return {};
         }
     }
 
-    
+
     /**
     * Obtención de usuarios
     * @returns respuesta del servidor
     */
-     getUsuarios(): any{
-        return this.http.get(this.dbURL + "getAll", {headers: this.getHeader()});
+    getUsuarios(): any {
+        return this.http.get(this.dbURL + "getAll", { headers: this.getHeader() });
     }
 
     //*******************************************************
@@ -54,8 +54,8 @@ export class DbService {
      * @param usuario usuarios
      * @returns respuesta del servidor
      */
-    addUsuario(usuario: User): any{
-        return this.http.post(this.dbURL + "auth/signup", usuario, {headers: this.getHeader()});
+    addUsuario(usuario: User): any {
+        return this.http.post(this.dbURL + "users/signup", usuario, { headers: this.getHeader() });
     }
     /* req.body.email, req.body.password, req.body.nombre, req.body.apellido, req.body.telefono*/
 
@@ -65,26 +65,17 @@ export class DbService {
      * @param usuario usuarios que seran elimiandos
      * @returns respuesta del servidor
      */
-    deleteUsuario(usuario: User): any{
-        return this.http.get(this.dbURL + "users/delete/" + usuario.id, {headers: this.getHeader()});
+    deleteUsuario(usuario: User): any {
+        return this.http.post(this.dbURL + "users/delete", { "id": usuario.id }, { headers: this.getHeader() });
     }
-
-    /**
-     * Asignar roles
-     * @param contenido
-     * @returns respuesta del servidor
-     */
-    asignarRol(contenido: any): any{
-        return this.http.post(this.dbURL + "users/updateRole", contenido, {headers: this.getHeader()});
-    } // aqui solo se requiere req.body.usuario, req.body.role, req.body.estacion
 
     /**
      * Actualización de usuarios
      * @param usuario usuarios
      * @returns respuesta del servidor
      */
-    updateUsuario(usuario: any): any{
-        return this.http.post(this.dbURL + "updateUser", usuario, {headers: this.getHeader()});
+    updateUsuario(usuario: any): any {
+        return this.http.post(this.dbURL + "users/updateUser", usuario, { headers: this.getHeader() });
     }// req.body.id, req.body.email, req.body.password, req.body.nombre, req.body.apellido, req.body.telefono
 
     // OBSERVERS ENDPOINTS
@@ -94,8 +85,8 @@ export class DbService {
      * @param estacion estación
      * @returns respuesta del servidor
      */
-    getObservadores(estacion: { codigo: string; }): any{
-        return this.http.get(this.dbURL + "observers/getObsByEst/" + estacion.codigo, {headers: this.getHeader()});
+    getObservadores(estacion: { codigo: string; }): any {
+        return this.http.get(this.dbURL + "observers/getObsByEst/" + estacion.codigo, { headers: this.getHeader() });
     }
 
     /**
@@ -103,8 +94,8 @@ export class DbService {
      * @param observador observador
      * @returns respuesta del servidor
      */
-    addObservador(observador: any): any{
-        return this.http.post(this.dbURL + "observers/new", observador, {headers: this.getHeader()});
+    addObservador(observador: any): any {
+        return this.http.post(this.dbURL + "observers/new", observador, { headers: this.getHeader() });
     }// aqui solo se requiere req.body.codigoestacion, req.body.userid,
 
     // ESTACIONES ENDPOINTS
@@ -113,8 +104,8 @@ export class DbService {
      * Obtener Estaciones
      * @returns respuesta del servidor
      */
-    getEstaciones(): any{
-        return this.http.get(this.dbURL + "estacion/getAll", {headers: this.getHeader()});
+    getEstaciones(): any {
+        return this.http.get(this.dbURL + "estacion/getAll", { headers: this.getHeader() });
     }
 
     /**
@@ -122,8 +113,8 @@ export class DbService {
      * @param estacion
      * @returns respuesta del servidor
      */
-    deleteEstacion(estacion: { codigo: string; }): any{
-        return this.http.get(this.dbURL + "estaciones/delete/" + estacion.codigo, {headers: this.getHeader()});
+    deleteEstacion(estacion: { id: number; }): any {
+        return this.http.post(this.dbURL + "estacion/delete", { "id": estacion.id }, { headers: this.getHeader() });
     }
 
     /**
@@ -131,8 +122,8 @@ export class DbService {
      * @param estacion estacion
      * @returns respuesta del servidor
      */
-    addEstacion(estacion: any): any{
-        return this.http.post(this.dbURL + "estaciones/new", estacion, {headers: this.getHeader()});
+    addEstacion(estacion: any): any {
+        return this.http.post(this.dbURL + "estacion/new", estacion, { headers: this.getHeader() });
     }// aqui req.body.codigoEstacion, req.body.nombreEstacion, req.body.latitud,
     // req.body.longitud,req.body.altitud,req.body.suelo,req.body.omm
 
@@ -141,173 +132,102 @@ export class DbService {
      * @param estacion estacion
      * @returns respuesta del servidor
      */
-    updateEstacion(estacion: any): any{
-        return this.http.post(this.dbURL + "estaciones/updateEstacion", estacion, {headers: this.getHeader()});
-    }// aqui req.body.codigo, req.body.nombreEstacion, req.body.latitud,
-    // req.body.longitud,req.body.altitud,req.body.suelo,req.body.omm, req.body.jefeid
+    updateEstacion(estacion: any): any {
+        return this.http.post(this.dbURL + "estacion/update", estacion, { headers: this.getHeader() });
+    }
 
-    // HORARIOS ENDPOINTS
+    // PAISES ENDPOINTS
 
     /**
-     * Obtener horarios
+     * Obtener Paises
      * @returns respuesta del servidor
      */
-    getHorarios(): any{
-        return this.http.get(this.dbURL + "horarios/getHorarios", {headers: this.getHeader()});
+    getPaises(): any {
+        return this.http.get(this.dbURL + "pais/getAll", { headers: this.getHeader() });
     }
 
-    // VARIABLES-ESTACION ENDPOINTS
-
     /**
-     * Obtener variables por estacion
-     * @param estacion estacion
+     * Eliminar Pais
+     * @param pais
      * @returns respuesta del servidor
      */
-    getVariablesEstacion(estacion: { codigo: string; }): any{
-        return this.http.get(this.dbURL + "vars-estaciones/getVariablesPorEstacion/" + estacion.codigo, {headers: this.getHeader()});
+    deletePais(pais: { id: number; }): any {
+        return this.http.post(this.dbURL + "pais/delete", { "id": pais.id }, { headers: this.getHeader() });
     }
 
     /**
-     * Asignar Variables por estacion
-     * @param contenido contenido
+     * Añadir Pais
+     * @param pais pais
      * @returns respuesta del servidor
      */
-    asignarVariables(contenido: any){
-        return this.http.post(this.dbURL + "vars-estaciones/assign", contenido, {headers: this.getHeader()});
-    }// req.body.codigoEstacion, req.body.variables cada variable tiene id, idHora
-
-    /**
-     * Agregar nuevo horario
-     * @param horario Nuevo horario
-     * @returns response
-     */
-    addHorario(horario: any){
-        return this.http.post(this.dbURL + "horarios/newHorario", horario, {headers: this.getHeader()});
+    addPais(pais: any): any {
+        return this.http.post(this.dbURL + "pais/new", pais, { headers: this.getHeader() });
     }
 
     /**
-     * Nuevo horario
-     * @param horario Actualizar horario
-     * @returns response
-     */
-    updateHorario(horario: any){
-        return this.http.post(this.dbURL + "horarios/updateHorario", horario, {headers: this.getHeader()});
-    }
-
-    /**
-     * Eliminar horario
-     * @param horario Horario a eliminar
-     * @returns response
-     */
-    deleteHorario(horario: any){
-        return this.http.post(this.dbURL + "horarios/disableHorario", horario, {headers: this.getHeader()});
-    }
-
-
-    /**
-     * Obtener los instrumentos.
-     * @returns Response
-     */
-    getInstrumentos(): any{
-        return this.http.get(this.dbURL + "instrumentos/getInstrumentos", {headers: this.getHeader()});
-    }
-
-    /**
-     * Agregar nuevo instrumento.
-     * @param instrumento Nuevo instrumento
-     * @returns response
-     */
-    addInstrumento(instrumento: any){
-        return this.http.post(this.dbURL + "instrumentos/newInstrumento", instrumento, {headers: this.getHeader()});
-    }
-
-    /**
-     * Actualizar instrumento
-     * @param instrumento Instrumento a actualizar
-     * @returns response.
-     */
-    updateInstrumento(instrumento: any){
-        return this.http.post(this.dbURL + "instrumentos/updateInstrumento", instrumento, {headers: this.getHeader()});
-    }
-
-    /**
-     * ELiminar instrumento
-     * @param instrumento Insturmento a eliminar
-     * @returns response
-     */
-    deleteInstrumento(instrumento: any){
-        return this.http.post(this.dbURL + "instrumentos/disableInstrumento", instrumento, {headers: this.getHeader()});
-    }
-
-    /**
-     * Obtener instrumentos por estacion
-     * @param estacion Estacion para obtener instrumentos
-     * @returns response
-     */
-    getInstrumentosEstacion(estacion: any){
-        return this.http.post(this.dbURL + "instrumentos/getInstrumentoPorEstacion", estacion, {headers: this.getHeader()});
-    }
-
-    // REGISTROS ENDPOINTS
-
-    /**
-     * Obtener registros
+     * Actualizar Pais
+     * @param pais pais
      * @returns respuesta del servidor
      */
-    getRegistros(): any{
-        return this.http.get(this.dbURL + "registry/getRegistrosEstacion");
+    updatePais(pais: any): any {
+        return this.http.post(this.dbURL + "pais/update", pais, { headers: this.getHeader() });
+    }
+
+    // DIVISIONES ENDPOINTS
+
+    /**
+     * Obtener divisiones
+     * @returns respuesta del servidor
+     */
+    getDivisiones(): any {
+        return this.http.get(this.dbURL + "division/getAll", { headers: this.getHeader() });
     }
 
     /**
-     * Envia el filtro y retorna los registros que estan dentro del filtro.
-     * @param filter Filtros para los registros
-     * @returns Informacion de los registros.
+     * Eliminar division
+     * @param division
+     * @returns respuesta del servidor
      */
-    registroDiagrama(filter: any): any{
-        return this.http.post(this.dbURL + "registry/estVarHoraFilter", filter);
+    deleteDivision(division: { id: number; }): any {
+        return this.http.post(this.dbURL + "division/delete", { "id": division.id }, { headers: this.getHeader() });
     }
 
     /**
-     * Actualiza un registro.
-     * @param registro Registro a actualizar
-     * @returns response
+     * Añadir division
+     * @param division division
+     * @returns respuesta del servidor
      */
-    updateRegistro(registro: any){
-        return this.http.post(this.dbURL + "registry/updateRegistry", registro, {headers: this.getHeader()});
+    addDivision(division: any): any {
+        return this.http.post(this.dbURL + "division/new", division, { headers: this.getHeader() });
     }
 
     /**
-     * Get de los tipos de instrumentos.
-     * @returns Tipos de instrumentos
+     * Actualizar division
+     * @param division division
+     * @returns respuesta del servidor
      */
-    getTiposInstrumentos(){
-        return this.http.get(this.dbURL + "tipo/getAll", {headers: this.getHeader()});
+    updateDivision(division: any): any {
+        return this.http.post(this.dbURL + "division/update", division, { headers: this.getHeader() });
     }
 
     /**
-     * Agregar nuevo instrumento a la base.
-     * @param instrumento Nuevo instrumento.
-     * @returns response
-     */
-    addTipoInstrumento(instrumento: any){
-        return this.http.post(this.dbURL + "tipo/newTipo", instrumento, {headers: this.getHeader()});
+    * Obtener las divisiones superiores por pais y nivel
+    * @param idPais id del pais
+    * @param nivel nivel de la nueva division
+    * @returns respuesta del servidor
+    */
+    getDivisionesSuperiores(idPais: number, nivel: number) {
+        return this.http.post(this.dbURL + "division/getDivisionesSuperiores", { "idPais": idPais, "nivel": nivel }, { headers: this.getHeader() });
     }
 
-    /**
-     * Actualizar infomaracion de un instrumento.
-     * @param instrumento Instrumento a actualizar.
-     * @returns response
-     */
-    updateTipoInstrumento(instrumento: any){
-        return this.http.post(this.dbURL + "tipo/updateTipo", instrumento, {headers: this.getHeader()});
-    }
+    // REPORTES ENDPOINTS
 
     /**
-     * Eliminar un instrumento.
-     * @param instrumento Instrumento a eliminar.
-     * @returns response
+     * Obtener reportes
+     * @returns respuesta del servidor
      */
-    deleteTipoInstrumento(instrumento: any){
-        return this.http.post(this.dbURL + "tipo/disableTipo", instrumento, {headers: this.getHeader()});
+     getReportes(): any {
+        return this.http.get(this.dbURL + "precipitacion/getAll", { headers: this.getHeader() });
     }
+
 }

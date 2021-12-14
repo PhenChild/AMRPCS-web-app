@@ -95,27 +95,37 @@
                         </div>
                         <div class="form-group">
                             <label for="altitud">Latitud</label><br>
-                            <input type="text" class="form-control" name="latitud" id="latitud"
+                            <input type="number" class="form-control" name="latitud" id="latitud"
                                 [(ngModel)]="estacion.latitud">
                         </div>
                         <div class="form-group">
                             <label for="longitud">Longitud</label><br>
-                            <input type="email" class="form-control" name="longitud" id="longitud "
+                            <input type="number" class="form-control" name="longitud" id="longitud "
                                 [(ngModel)]="estacion.longitud">
                         </div>
                         <div class="form-group">
                             <label for="altitud">Altitud</label><br>
-                            <input type="text" class="form-control" name="altitud" id="altitud"
+                            <input type="number" class="form-control" name="altitud" id="altitud"
                                 [(ngModel)]="estacion.altitud">
+                        </div>
+                        <div class="form-group">
+                            <label for="direccion">Direccion</label><br>
+                            <input type="text" class="form-control" name="direccion" id="direccion " [(ngModel)]="estacion.direccion">
+                        </div>
+                        <div class="form-group">
+                            <label for="referencias">Referencias</label><br>
+                            <input type="text" class="form-control" name="referencias" id="referencias " [(ngModel)]="estacion.referencias">
                         </div>
                         <div class="form-group">
                             <label for="foto">Foto</label><br>
                             <input type="file" class="form-control" name="foto" id="foto">
                         </div>
                         <div class="form-group">
-                            <label for="tipoSuelo">Tipo de Suelo</label><br>
-                            <input type="text" class="form-control" name="tipoSuelo" id="tipoSuelo"
-                                [(ngModel)]="estacion.suelo">
+                            <label for="hasPluviometro">Tiene Pluviometro</label><br>
+                            <select class="form-control form-select form-select-sm" name="hasPluviometro" id="hasPluviometro"  [(ngModel)]="estacion.hasPluviometro">
+                                <option value = true >Si</option>
+                                <option value = false >No</option>
+                            </select>
                         </div>
                         <div>
                             <button class="btn btn-secondary float-left"

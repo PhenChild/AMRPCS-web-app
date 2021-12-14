@@ -23,7 +23,7 @@ export class AuthService {
      * @param http http
      */
     constructor(private http: HttpClient) { }
-        
+
     /**
      * uduarios administrador
      * @param usuario administrador

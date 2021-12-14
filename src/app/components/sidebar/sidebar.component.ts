@@ -23,14 +23,9 @@ export const ROUTES: RouteInfo[] = [
     { path: "/admin-layout/form-usuario", title: "Nuevo Usuario",  icon: "ni-badge text-white", class: "" },
     { path: "/admin-layout/estaciones", title: "Estaciones",  icon: "ni-building text-white", class: "" },
     { path: "/admin-layout/form-estacion", title: "Nueva Estación",  icon: "ni-fat-add text-white", class: "" },
-    /*{ path: "/admin-layout/variables", title: "Variables",  icon: "ni-collection text-white", class: "" },
-    { path: "/admin-layout/form-variable", title: "Nueva Variable",  icon: "ni-sound-wave text-white", class: "" },
-    { path: "/admin-layout/asignacion", title: "Asignar Variables",  icon: "ni-tag text-white", class: "" },
-    { path: "/admin-layout/roles", title: "Asignar/Editar Roles",  icon: "ni-badge text-white", class: "" },
-    { path: "/admin-layout/horarios", title: "Horarios",  icon: "ni-watch-time text-white", class: "" },
-    { path: "/admin-layout/instrumentos", title: "Instrumentos",  icon: "ni-ruler-pencil text-white", class: "" },
-    { path: "/admin-layout/tiposInstrumentos", title: "Tipos de Instrumentos",  icon: "ni-box-2 text-white", class: "" },
-    { path: "/admin-layout/registros", title: "Editar Registros",  icon: "ni-collection text-white", class: "" },*/
+    { path: "/admin-layout/paises", title: "Paises",  icon: "ni-collection text-white", class: "" },
+    { path: "/admin-layout/divisiones", title: "Divisiones Políticas",  icon: "ni-collection text-white", class: "" },
+    { path: "/admin-layout/reportes", title: "Reportes",  icon: "ni-collection text-white", class: "" },
 ];
 
 /**

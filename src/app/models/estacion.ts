@@ -31,15 +31,6 @@ export class Estacion {
     /** Altitud de la estación. */
     altitud!: number;
 
-    /** Tipo de suelo de la estación. */
-    suelo!: string;
-
-    /** Codigo OMM de la estación. */
-    omm!: string;
-
-    /** Id del jefe de la estación. */
-    jefeId!: string;
-
     /** Fecha de creación de la estación. */
     audCreatedAt!: string;
 

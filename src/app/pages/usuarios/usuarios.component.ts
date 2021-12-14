@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subject } from "rxjs";
-import {ViewEncapsulation} from "@angular/core";
-import {DbService} from "../../services/database/db.service";
+import { ViewEncapsulation } from "@angular/core";
+import { DbService } from "../../services/database/db.service";
 import { NgForm } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { User } from "src/app/models/user";
@@ -34,10 +34,10 @@ export class UsuariosComponent implements OnInit, OnDestroy {
      * @param dbService
      * @param tService
      */
-    constructor( 
+    constructor(
         private dbService: DbService,
         private tService: ToastrService
-    ) {}
+    ) { }
 
 
     /**
@@ -51,7 +51,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         };
 
         this.dbService.getUsuarios()
-            .subscribe( (data: User[]) => {
+            .subscribe((data: User[]) => {
                 this.usuarios = data;
                 console.log(this.usuarios);
                 this.dtTrigger.next();
@@ -63,7 +63,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     /**
      * Elimina los operadores de los datatables
      */
-    ngOnDestroy(): void{
+    ngOnDestroy(): void {
         this.dtTrigger.unsubscribe();
     }
 
@@ -71,27 +71,28 @@ export class UsuariosComponent implements OnInit, OnDestroy {
      * Edición de usuarios
      * @param usuario usuario con datos para la actualizacion del usuario
      */
-    editarUsuario(usuario: any): void{
-        /*this.usuario = usuario;
+    editarUsuario(usuario: any): void {
+        this.usuario = usuario;
         this.usuario.password = "";
         const table = (<HTMLInputElement>document.getElementById("table"));
         const form = (<HTMLInputElement>document.getElementById("form-usuario"));
         table.style.display = "none";
-        form.style.display = "block";*/
+        form.style.display = "block";
     }
 
     /**
      * Eliminación de usuarios
      * @param usuario usuario a eliminar
      */
-    deleteUsuario(usuario: any): void{
-        /*this.usuario = usuario;
+    deleteUsuario(usuario: any): void {
+        this.usuario = usuario;
         this.dbService.deleteUsuario(this.usuario).subscribe((data: any) => {
             this.tService.success("Estacion guardada con exito.", "Envio exitoso");
+            window.location.reload();
         },
-            (        err: any) => {
-            this.tService.error("", "Ha ocurrido un error");
-        });*/
+            (err: any) => {
+                this.tService.error("", "Ha ocurrido un error");
+            });
     }
 
     /**
@@ -99,30 +100,30 @@ export class UsuariosComponent implements OnInit, OnDestroy {
      * @param formUsuario formulario de usuario
      */
     submit(formUsuario: NgForm): void {
-        /*this.dbService.updateUsuario(this.usuario)
+        this.dbService.updateUsuario(this.usuario)
             .subscribe(
-                (                data: any) => {
+                (data: any) => {
                     this.tService.success("Usuario registrado con exito.", "Envio exitoso");
                     formUsuario.reset();
                 },
-                (                err: any) => {
+                (err: any) => {
                     console.log(err);
                     this.tService.error("", "Ha ocurrido un error");
                     formUsuario.reset();
                 }
-            );*/
+            );
     }
 
     /**
      * Cancelar la actualización
      * @param formUser formulario de usuario
      */
-    cancelar(formUser: NgForm): void{
-        /*const table = (<HTMLInputElement>document.getElementById("table"));
+    cancelar(formUser: NgForm): void {
+        const table = (<HTMLInputElement>document.getElementById("table"));
         const form = (<HTMLInputElement>document.getElementById("form-usuario"));
         table.style.display = "block";
         form.style.display = "none";
-        this.usuario = new Usuario();
-        formUser.reset();*/
+        this.usuario = new User();
+        formUser.reset();
     }
 }

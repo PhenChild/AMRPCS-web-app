@@ -63,7 +63,6 @@ export class NavbarComponent implements OnInit {
 
     hasImage(): boolean{
         var foto = sessionStorage.getItem("foto")
-        console.log(foto)
         if ( foto != "undefined"){
             return true;
         }else{

@@ -1,8 +1,8 @@
 import { Component, OnInit } from "@angular/core";
-import { FormsModule, NgForm} from "@angular/forms";
+import { FormsModule, NgForm } from "@angular/forms";
 import { Estacion } from "../../models/estacion";
 import { Injectable } from "@angular/core";
-//import {DbService} from "../../services/database/db.service";
+import { DbService } from "../../services/database/db.service";
 import { ToastrService } from "ngx-toastr";
 
 /**
@@ -32,7 +32,7 @@ export class FormEstacionComponent implements OnInit {
      * @param tService
      */
     constructor(
-        //private dbService: DbService,
+        private dbService: DbService,
         private tService: ToastrService
     ) { }
 
@@ -47,17 +47,18 @@ export class FormEstacionComponent implements OnInit {
      * @param formEstacion
      */
     onSubmit(formEstacion: NgForm): void {
-        /*this.dbService.addEstacion(this.estacion).subscribe(
-            data => {
+        console.log(this.estacion);
+        this.dbService.addEstacion(this.estacion).subscribe(
+            (data: any) => {
                 this.tService.success("Estacion guardada con exito.", "Envio exitoso");
                 formEstacion.reset();
             },
-            err => {
+            (err: any) => {
                 this.tService.error("", "Ha ocurrido un error");
                 console.log(err);
                 formEstacion.reset();
             }
-        );*/
+        );
     }
 
 
