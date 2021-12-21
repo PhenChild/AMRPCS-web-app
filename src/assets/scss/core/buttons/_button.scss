@@ -48,6 +48,10 @@
 
 
 // Size variations
+.btn-xs {
+   font-size: $input-btn-font-size-xs;
+   padding: 5px 10px;
+}
 
 .btn-sm {
    font-size: $input-btn-font-size-sm;

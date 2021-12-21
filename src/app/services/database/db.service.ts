@@ -15,8 +15,8 @@ export class DbService {
     usuarios: User[] = [];
 
     /** Url de conexión */
-    dbURL = "https://ciifen.loca.lt/api/";
-    //dbURL = "";
+    //dbURL = "https://ciifen.loca.lt/api/";
+    dbURL = "http://73ab-2800-bf0-8040-14f5-4bd7-7701-adaa-6265.ngrok.io/api/";
 
     /**
      * Constructor
@@ -43,8 +43,16 @@ export class DbService {
     * Obtención de usuarios
     * @returns respuesta del servidor
     */
-    getUsuarios(): any {
-        return this.http.get(this.dbURL + "getAll", { headers: this.getHeader() });
+    getUsuarios(filtro: any): any {
+        var query = ""
+        if(filtro.nombre != ""){
+            query += "nombre=" + filtro.nombre+"&"
+        }if(filtro.email != ""){
+            query += "correo=" + filtro.email+"&"
+        }if(filtro.rol != ""){
+            query += "role=" + filtro.rol+"&"
+        }
+        return this.http.get(this.dbURL + "getAll/filtro?"+query, { headers: this.getHeader() });
     }
 
     //*******************************************************
@@ -54,7 +62,8 @@ export class DbService {
      * @param usuario usuarios
      * @returns respuesta del servidor
      */
-    addUsuario(usuario: User): any {
+    addUsuario(usuario: User, estaciones: any): any {
+        usuario.estaciones = estaciones
         return this.http.post(this.dbURL + "users/signup", usuario, { headers: this.getHeader() });
     }
     /* req.body.email, req.body.password, req.body.nombre, req.body.apellido, req.body.telefono*/
@@ -86,17 +95,8 @@ export class DbService {
      * @returns respuesta del servidor
      */
     getObservadores(estacion: { codigo: string; }): any {
-        return this.http.get(this.dbURL + "observers/getObsByEst/" + estacion.codigo, { headers: this.getHeader() });
+        return this.http.post(this.dbURL + "observers/getObsEstacion", estacion, { headers: this.getHeader() });
     }
-
-    /**
-     * Añadir observadores
-     * @param observador observador
-     * @returns respuesta del servidor
-     */
-    addObservador(observador: any): any {
-        return this.http.post(this.dbURL + "observers/new", observador, { headers: this.getHeader() });
-    }// aqui solo se requiere req.body.codigoestacion, req.body.userid,
 
     // ESTACIONES ENDPOINTS
 
@@ -104,8 +104,16 @@ export class DbService {
      * Obtener Estaciones
      * @returns respuesta del servidor
      */
-    getEstaciones(): any {
-        return this.http.get(this.dbURL + "estacion/getAll", { headers: this.getHeader() });
+    getEstaciones(filtro: any): any {
+        var query = ""
+        if(filtro.nombre != ""){
+            query += "nombre=" + filtro.nombre+"&"
+        }if(filtro.codigo != ""){
+            query += "codigo=" + filtro.codigo+"&"
+        }if(filtro.pais != ""){
+            query += "nombrePais=" + filtro.pais+"&"
+        }
+        return this.http.get(this.dbURL + "estacion/getAll/filtro?"+query, { headers: this.getHeader() });
     }
 
     /**
@@ -146,6 +154,16 @@ export class DbService {
         return this.http.get(this.dbURL + "pais/getAll", { headers: this.getHeader() });
     }
 
+    getFiltroPaises(filtro: any): any{
+        var query = ""
+        if(filtro.nombre != ""){
+            query += "nombre=" + filtro.nombre+"&"
+        }if(filtro.siglas != ""){
+            query += "siglas=" + filtro.siglas+"&"
+        }
+        return this.http.get(this.dbURL + "pais/getAll/filtro?"+query, { headers: this.getHeader() });
+    }
+
     /**
      * Eliminar Pais
      * @param pais
@@ -181,6 +199,18 @@ export class DbService {
      */
     getDivisiones(): any {
         return this.http.get(this.dbURL + "division/getAll", { headers: this.getHeader() });
+    }
+
+    getFiltroDivisiones(filtro:any): any {
+        var query = ""
+        if(filtro.nombre != ""){
+            query += "nombre=" + filtro.nombre+"&"
+        }if(filtro.pais != ""){
+            query += "pais=" + filtro.pais+"&"
+        }if(filtro.nivel != ""){
+            query += "nivel=" + filtro.nivel+"&"
+        }
+        return this.http.get(this.dbURL + "division/getAll/filtro?" + query, { headers: this.getHeader() });
     }
 
     /**
@@ -226,8 +256,36 @@ export class DbService {
      * Obtener reportes
      * @returns respuesta del servidor
      */
-     getReportes(): any {
-        return this.http.get(this.dbURL + "precipitacion/getAll", { headers: this.getHeader() });
+     getReportes(filtro:any): any {
+        var query = ""
+        if(filtro.observador != ""){
+            query += "observador=" + filtro.observador+"&"
+        }if(filtro.estacion != ""){
+            query += "estacion=" + filtro.estacion+"&"
+        }if(filtro.fechaInicio != ""){
+            query += "fechaInicio=" + filtro.fechaInicio+"&"
+        }if(filtro.fechaFin != ""){
+            query += "fechaFin=" + filtro.fechaFin+"&"
+        }
+        return this.http.get(this.dbURL + "precipitacion/getAll/filtro?"+query, { headers: this.getHeader() });
+    }
+
+    /**
+     * Obtener reportes
+     * @returns respuesta del servidor
+     */
+     getReportesAcumulados(filtro:any): any {
+        var query = ""
+        if(filtro.observador != ""){
+            query += "observador=" + filtro.observador+"&"
+        }if(filtro.estacion != ""){
+            query += "estacion=" + filtro.estacion+"&"
+        }if(filtro.fechaInicio != ""){
+            query += "fechaInicio=" + filtro.fechaInicio+"&"
+        }if(filtro.fechaFin != ""){
+            query += "fechaFin=" + filtro.fechaFin+"&"
+        }
+        return this.http.get(this.dbURL + "acumulado/getAll/filtro?"+query, { headers: this.getHeader() });
     }
 
 }

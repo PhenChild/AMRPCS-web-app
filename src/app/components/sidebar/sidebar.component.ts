@@ -25,7 +25,10 @@ export const ROUTES: RouteInfo[] = [
     { path: "/admin-layout/form-estacion", title: "Nueva Estación",  icon: "ni-fat-add text-white", class: "" },
     { path: "/admin-layout/paises", title: "Paises",  icon: "ni-collection text-white", class: "" },
     { path: "/admin-layout/divisiones", title: "Divisiones Políticas",  icon: "ni-collection text-white", class: "" },
-    { path: "/admin-layout/reportes", title: "Reportes",  icon: "ni-collection text-white", class: "" },
+    { path: "/admin-layout/reportes", title: "Precipitación",  icon: "ni-collection text-white", class: "" },
+    { path: "/admin-layout/acumulados", title: "Precipitación Acumulada",  icon: "ni-collection text-white", class: "" },
+    { path: "/admin-layout/perfil", title: "Perfil",  icon: "ni-collection text-white", class: "" },
+    { path: "/admin-layout/acercade", title: "Acerca de",  icon: "ni-collection text-white", class: "active-pro" },
 ];
 
 /**

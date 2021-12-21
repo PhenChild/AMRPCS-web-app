@@ -5,11 +5,9 @@ export class Observador{
     id!: string;
 
     /** Nombre del usuario observador */
-    nombre!: string;
-
-    /** Apellido del usuario observador. */
-    apellido!: string;
-
-    /** Email del observador. */
-    email!: string;
+    User!: {
+        nombre: string;
+        apellido: string;
+        email: string;
+    }
 }

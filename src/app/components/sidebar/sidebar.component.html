@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <!-- Toggler -->
     <button class="navbar-toggler" type="button" (click)="isCollapsed=!isCollapsed"
-       aria-controls="sidenav-collapse-main">
+      aria-controls="sidenav-collapse-main">
       <span class="navbar-toggler-icon"></span>
     </button>
     <!-- Brand -->
@@ -36,12 +36,12 @@
       </li>
     </ul>
     <!-- Collapse -->
-    <div class="collapse navbar-collapse bg-default navbar-dark"  [ngbCollapse]="isCollapsed" id="sidenav-collapse-main">
+    <div class="collapse navbar-collapse bg-default navbar-dark" [ngbCollapse]="isCollapsed" id="sidenav-collapse-main">
       <!-- Collapse header -->
       <div class="navbar-collapse-header d-md-none">
         <div class="row">
           <div class="col-6 collapse-brand">
-            <a  routerLinkActive="active" routerLink="/dashboard">
+            <a routerLinkActive="active" routerLink="/dashboard">
               <img src="./assets/img/brand/Logo.png">
             </a>
           </div>
@@ -55,14 +55,24 @@
       </div>
       <!-- Form -->
       <!-- Navigation -->
-      <ul class="navbar-nav"> 
-          <li *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item ">
-              <a routerLinkActive="active" routerLink="{{menuItem.path}}" class="nav-link text-white">
-                  <i class="ni {{menuItem.icon}}"></i>
-                  {{menuItem.title}}
-              </a>
-          </li>
+      <ul class="navbar-nav">
+        <li *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item ">
+          <a routerLinkActive="active" routerLink="{{menuItem.path}}" class="nav-link text-white">
+            <i class="ni {{menuItem.icon}}"></i>
+            {{menuItem.title}}
+          </a>
+        </li>
       </ul>
+      <hr class="text-white bg-white my-3">
+      <!-- Divider 
+      <h6 class="navbar-heading text-muted">Información</h6>
+      <ul class="navbar-nav mb-md-3">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/acerca-de']" >
+            <i class="ni ni-spaceship" ></i> Acerca de
+          </a>
+        </li>
+      </ul>-->
     </div>
   </div>
 </nav>

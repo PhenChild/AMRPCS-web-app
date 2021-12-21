@@ -15,6 +15,9 @@ import { PaisesComponent } from "src/app/pages/paises/paises.component";
 import { DataTablesModule } from "angular-datatables";
 import { DivisionesComponent } from "src/app/pages/divisiones/divisiones.component";
 import { ReportesComponent } from "src/app/pages/reportes/reportes.component";
+import { AcumuladosComponent } from 'src/app/pages/acumulados/acumulados.component';
+import { PerfilComponent } from 'src/app/pages/perfil/perfil.component';
+import { AcercadeComponent } from 'src/app/pages/acercade/acercade.component';
 
 @NgModule({
     imports: [
@@ -33,7 +36,10 @@ import { ReportesComponent } from "src/app/pages/reportes/reportes.component";
         FormEstacionComponent,
         PaisesComponent,
         DivisionesComponent,
-        ReportesComponent
+        ReportesComponent,
+        AcumuladosComponent,
+        PerfilComponent,
+        AcercadeComponent
     ]
 })
 

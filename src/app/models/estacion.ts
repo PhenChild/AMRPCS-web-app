@@ -5,6 +5,12 @@ export class Estacion {
     /** Codigo de la estación. */
     codigo!: string;
 
+    Division!:{
+        Pai:{
+            nombre: String;
+        }
+        nombre: String;
+    }
     /** Nombre de la estación. */
     nombre!: string;
 

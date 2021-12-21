@@ -16,11 +16,33 @@
                             <h3 class="mb-0">Lista de Estaciones</h3>
                         </div>
                         <div class="col-3 text-right text-default">
-                            <a [routerLink]="['/admin-layout/form-estacion']" class="btn btn-sm btn-default">Nueva Estacion</a>
+                            <a [routerLink]="['/admin-layout/form-estacion']" class="btn btn-sm btn-default">Nueva
+                                Estacion</a>
                         </div>
                     </div>
                 </div>
                 <div class="container">
+                    <div class="row align-items-center">
+                        <div class="form-group col-md-3">
+                            <label for="nombre">Nombre</label><br>
+                            <input type="text" class="form-control" name="nombre" id="fnombre"
+                                [(ngModel)]="filtro.nombre">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="codigo">Codigo</label><br>
+                            <input type="text" class="form-control" name="codigo" id="fcodigo"
+                                [(ngModel)]="filtro.codigo">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="pais">Pais</label><br>
+                            <input type="text" class="form-control" name="pais" id="fpais" [(ngModel)]="filtro.pais">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <button class="btn btn-default float-right" (click)="getData()">Buscar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="container" id="tablaEstaciones" style="display: none;">
                     <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger1"
                         class="table align-items-center table-flush row-border hover">
                         <thead class="thead-light">
@@ -30,6 +52,7 @@
                                 <th scope="col">Latitud</th>
                                 <th scope="col">Longitud</th>
                                 <th scope="col">Altitud</th>
+                                <th scope="col">Ubicación</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -53,6 +76,9 @@
                                 </td>
                                 <td>
                                     {{estacion.altitud}}
+                                </td>
+                                <td>
+                                    {{estacion.Division.Pai.nombre + ", " + estacion.Division.nombre}}
                                 </td>
                                 <td class="text-right">
                                     <div ngbDropdown placement="bottom-right">
@@ -110,22 +136,47 @@
                         </div>
                         <div class="form-group">
                             <label for="direccion">Direccion</label><br>
-                            <input type="text" class="form-control" name="direccion" id="direccion " [(ngModel)]="estacion.direccion">
+                            <input type="text" class="form-control" name="direccion" id="direccion "
+                                [(ngModel)]="estacion.direccion">
                         </div>
                         <div class="form-group">
                             <label for="referencias">Referencias</label><br>
-                            <input type="text" class="form-control" name="referencias" id="referencias " [(ngModel)]="estacion.referencias">
-                        </div>
-                        <div class="form-group">
-                            <label for="foto">Foto</label><br>
-                            <input type="file" class="form-control" name="foto" id="foto">
+                            <input type="text" class="form-control" name="referencias" id="referencias "
+                                [(ngModel)]="estacion.referencias">
                         </div>
                         <div class="form-group">
                             <label for="hasPluviometro">Tiene Pluviometro</label><br>
-                            <select class="form-control form-select form-select-sm" name="hasPluviometro" id="hasPluviometro"  [(ngModel)]="estacion.hasPluviometro">
-                                <option value = true >Si</option>
-                                <option value = false >No</option>
+                            <select class="form-control form-select form-select-sm" name="hasPluviometro"
+                                id="hasPluviometro" [(ngModel)]="estacion.hasPluviometro">
+                                <option value=true>Si</option>
+                                <option value=false>No</option>
                             </select>
+                        </div>
+                        <div class="container pb-3" id="tablaEstaciones">
+                            <label for="hasPluviometro">Observadores</label><br>
+                            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger2"
+                                class="table align-items-center table-flush row-border hover">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">Nombre</th>
+                                        <th scope="col">Correo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let usuario of usuarios">
+                                        <th scope="row">
+                                            <div class="media align-items-center">
+                                                <div class="media-body">
+                                                    <span class="mb-0 text-sm">{{usuario.User.nombre + " " + usuario.User.apellido}}</span>
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <td>
+                                            {{usuario.User.email}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <div>
                             <button class="btn btn-secondary float-left"

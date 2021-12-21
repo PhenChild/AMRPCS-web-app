@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import { Subject } from "rxjs";
 import { Estacion } from "../../models/estacion";
 import { DbService } from "../../services/database/db.service";
 import { NgForm } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { Observador } from "../../models/observador";
+import { DataTableDirective } from "angular-datatables";
 
 /**
  * Componente para la pagina de edición de estaciones.
@@ -15,9 +16,18 @@ import { Observador } from "../../models/observador";
     styleUrls: ["./estaciones.component.css"],
 })
 export class EstacionesComponent implements OnInit, OnDestroy {
-    /** Opciones para los datatbles. */
-    dtOptions: DataTables.Settings = {};
 
+    @ViewChild(DataTableDirective, { static: false })
+    dtElement!: DataTableDirective;
+
+    /** Opciones para los datatbles. */
+    dtOptions: DataTables.Settings = {
+        pagingType: "full_numbers",
+        pageLength: 7,
+        responsive: true,
+        searching: false,
+        lengthChange: false,
+    };
     /** Lista de estaciones */
     estaciones: Estacion[] = [];
     /** Lista de usuarios observadores */
@@ -33,7 +43,15 @@ export class EstacionesComponent implements OnInit, OnDestroy {
 
     /** Operador del datatable de las estaciones */
     dtTrigger1: Subject<any> = new Subject<any>();
+    dtTrigger2: Subject<any> = new Subject<any>();
 
+    filtro = {
+        nombre: "",
+        codigo: "",
+        pais: ""
+    }
+
+    isDtInitialized: boolean = false
 
     /**
      * Constructor
@@ -47,16 +65,6 @@ export class EstacionesComponent implements OnInit, OnDestroy {
      * Obtencion de las estaciónes desde la base de datos
      */
     ngOnInit(): void {
-        this.dtOptions = {
-            pagingType: "full_numbers",
-            pageLength: 7
-        };
-        this.dbService.getEstaciones()
-            .subscribe((data: any) => {
-                this.estaciones = (data as any);
-                console.log(this.estaciones);
-                this.dtTrigger1.next();
-            });
     }
 
     /**
@@ -66,11 +74,41 @@ export class EstacionesComponent implements OnInit, OnDestroy {
         this.dtTrigger1.unsubscribe();
     }
 
+    getData(): void {
+        const table = (<HTMLInputElement>document.getElementById("tablaEstaciones"));
+        table.style.display = "none";
+        if (this.isDtInitialized) {
+            this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+                dtInstance.destroy()
+            })
+        } else {
+            this.isDtInitialized = true;
+        }
+
+        this.dbService.getEstaciones(this.filtro)
+            .subscribe((data: any) => {
+                this.estaciones = (data as any);
+                console.log(this.estaciones);
+                this.dtTrigger1.next();
+                const table = (<HTMLInputElement>document.getElementById("tablaEstaciones"));
+                table.style.display = "block";
+            });
+    }
+
     /**
      * Editar una estación
      * @param estacion estacion a editar
      */
     editarEstacion(estacion: any): void {
+        this.dbService.getObservadores(estacion)
+            .subscribe((data: any) => {
+                this.usuarios = (data as any);
+                console.log(this.usuarios);
+                this.dtTrigger2.next();
+                const table = (<HTMLInputElement>document.getElementById("tablaEstaciones"));
+                table.style.display = "block";
+            });
+
         this.estacion = estacion;
         this.estacion.latitud = estacion.posicion.coordinates[0];
         this.estacion.longitud = estacion.posicion.coordinates[1];

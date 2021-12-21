@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { DataTableDirective } from 'angular-datatables';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { Division } from 'src/app/models/division';
@@ -13,8 +14,16 @@ import { DbService } from 'src/app/services/database/db.service';
 })
 export class DivisionesComponent implements OnInit {
 
+  @ViewChild(DataTableDirective, { static: false })
+  dtElement!: DataTableDirective;
+
   /** Opciones para los datatbles. */
-  dtOptions: DataTables.Settings = {};
+  dtOptions: DataTables.Settings = {
+      pagingType: "full_numbers",
+      pageLength: 7,
+      responsive: true,
+      searching: false,
+  };
 
   /** Lista de divisiones */
   divisiones: Division[] = [];
@@ -31,6 +40,14 @@ export class DivisionesComponent implements OnInit {
 
   isUpdating: boolean = false;
 
+  
+  filtro = {
+    nombre: "",
+    pais: "",
+    nivel: "",
+  }
+
+  isDtInitialized: boolean = false
 
   constructor(
     private dbService: DbService,
@@ -38,20 +55,6 @@ export class DivisionesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
-    this.dtOptions = {
-      pagingType: "full_numbers",
-      pageLength: 7
-    };
-    this.dbService.getDivisiones()
-      .subscribe((data: any) => {
-        this.divisiones = (data as any);
-        console.log(this.divisiones);
-        this.dtTrigger1.next();
-      },
-        (err: any) => {
-          console.log(err)
-        });
   }
 
   /**
@@ -59,6 +62,27 @@ export class DivisionesComponent implements OnInit {
    */
   ngOnDestroy(): void {
     this.dtTrigger1.unsubscribe();
+  }
+
+  getData(): void {
+    const table = (<HTMLInputElement>document.getElementById("tablaDivisiones"));
+    table.style.display = "none";
+    if (this.isDtInitialized) {
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.destroy()
+      })
+    } else {
+      this.isDtInitialized = true;
+    }
+    
+    this.dbService.getFiltroDivisiones(this.filtro)
+      .subscribe((data: any) => {
+        this.divisiones = (data as any);
+        console.log(this.divisiones);
+        this.dtTrigger1.next();
+        const table = (<HTMLInputElement>document.getElementById("tablaDivisiones"));
+        table.style.display = "block";
+      });
   }
 
   /**

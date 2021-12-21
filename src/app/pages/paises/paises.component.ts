@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { DataTableDirective } from 'angular-datatables';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { Pais } from 'src/app/models/pais';
@@ -12,10 +13,16 @@ import { DbService } from 'src/app/services/database/db.service';
 })
 export class PaisesComponent implements OnInit, OnDestroy {
 
+  @ViewChild(DataTableDirective, { static: false })
+  dtElement!: DataTableDirective;
 
   /** Opciones para los datatbles. */
-  dtOptions: DataTables.Settings = {};
-
+  dtOptions: DataTables.Settings = {
+      pagingType: "full_numbers",
+      pageLength: 7,
+      responsive: true,
+      searching: false,
+  };
   /** Lista de paises */
   paises: Pais[] = [];
 
@@ -27,24 +34,18 @@ export class PaisesComponent implements OnInit, OnDestroy {
 
   isUpdating: boolean = false;
 
+  filtro = {
+    nombre: "",
+    siglas: "",
+  }
+  isDtInitialized: boolean = false
+
   constructor(
     private dbService: DbService,
     private tService: ToastrService
   ) { }
 
   ngOnInit(): void {
-
-    this.dtOptions = {
-      pagingType: "full_numbers",
-      pageLength: 7
-    };
-    this.dbService.getPaises()
-      .subscribe((data: any) => {
-        this.paises = (data as any);
-        console.log(this.paises);
-        this.dtTrigger1.next();
-      });
-
   }
 
 
@@ -53,6 +54,28 @@ export class PaisesComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.dtTrigger1.unsubscribe();
+  }
+
+  getData(): void {
+    const table = (<HTMLInputElement>document.getElementById("tablaPaises"));
+    table.style.display = "none";
+    if (this.isDtInitialized) {
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+        dtInstance.destroy()
+      })
+    } else {
+      this.isDtInitialized = true;
+    }
+    
+    this.dbService.getFiltroPaises(this.filtro)
+      .subscribe((data: any) => {
+        this.paises = (data as any);
+        console.log(this.paises);
+        this.dtTrigger1.next();
+        const table = (<HTMLInputElement>document.getElementById("tablaPaises"));
+        table.style.display = "block";
+      });
+
   }
 
   /**

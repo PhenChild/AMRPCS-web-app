@@ -3,15 +3,15 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
-import { Reporte } from 'src/app/models/reporte';
+import { ReporteAcumulado } from 'src/app/models/reporteAcumulado';
 import { DbService } from 'src/app/services/database/db.service';
 
 @Component({
-  selector: 'app-reportes',
-  templateUrl: './reportes.component.html',
-  styleUrls: ['./reportes.component.scss']
+  selector: 'app-acumulados',
+  templateUrl: './acumulados.component.html',
+  styleUrls: ['./acumulados.component.scss']
 })
-export class ReportesComponent implements OnInit {
+export class AcumuladosComponent implements OnInit {
 
 
 
@@ -20,23 +20,23 @@ export class ReportesComponent implements OnInit {
 
   /** Opciones para los datatbles. */
   dtOptions: DataTables.Settings = {
-      pagingType: "full_numbers",
-      pageLength: 7,
-      responsive: true,
-      searching: false,
+    pagingType: "full_numbers",
+    pageLength: 7,
+    responsive: true,
+    searching: false,
   };
 
   /** Lista de reportes seleccionados*/
-  reportes: Reporte[] = [];
+  reportes: ReporteAcumulado[] = [];
 
   /** Operador del datatable de los registros */
   dtTrigger: Subject<any> = new Subject<any>();
-  
+
   filtro = {
     observador: "",
     estacion: "",
-    fechaInicio:"",
-    fechaFin:""
+    fechaInicio: "",
+    fechaFin: ""
   }
   isDtInitialized: boolean = false
 
@@ -60,7 +60,7 @@ export class ReportesComponent implements OnInit {
       this.isDtInitialized = true;
     }
 
-    this.dbService.getReportes(this.filtro)
+    this.dbService.getReportesAcumulados(this.filtro)
       .subscribe((data: any) => {
         this.reportes = (data as any);
         console.log(this.reportes);
@@ -68,7 +68,7 @@ export class ReportesComponent implements OnInit {
         const table = (<HTMLInputElement>document.getElementById("tablaReportes"));
         table.style.display = "block";
       });
-    
+
 
   }
 
@@ -77,29 +77,29 @@ export class ReportesComponent implements OnInit {
      * @param s String de la fecha
      * @returns String de la fecha rectificada.
      */
-   rectifyFormat(s: string) {
+  rectifyFormat(s: string) {
     const b = s.split(/\D/);
     return b[0] + "-" + b[1] + "-" + b[2] + "T" +
-           b[3] + ":" + b[4] + ":" + b[5] + "." +
-           b[6].substr(0, 3) + "+00:00";
-}
-/**
- * Obtiene la hora de la fecha rectificada.
- * @param s String de la fecha
- * @returns La hora de la fecha
- */
-time(s: any){
+      b[3] + ":" + b[4] + ":" + b[5] + "." +
+      b[6].substr(0, 3) + "+00:00";
+  }
+  /**
+   * Obtiene la hora de la fecha rectificada.
+   * @param s String de la fecha
+   * @returns La hora de la fecha
+   */
+  time(s: any) {
     const fecha = new Date(this.rectifyFormat(s));
     return fecha.toTimeString().split(" ").slice(0, 1);
-}
-/**
- * Obtiene el dia de la fecha rectificada.
- * @param s Fecha entregada
- * @returns Dia de la fecha
- */
-date(s: any){
+  }
+  /**
+   * Obtiene el dia de la fecha rectificada.
+   * @param s Fecha entregada
+   * @returns Dia de la fecha
+   */
+  date(s: any) {
     const fecha = this.rectifyFormat(s);
     return fecha.split("T")[0];
-}
+  }
 
 }

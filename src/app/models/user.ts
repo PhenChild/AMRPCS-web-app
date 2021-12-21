@@ -27,6 +27,8 @@ export class User{
     
     foto!: string;
 
+    estaciones!: [];
+
     /** Fecha de creación */
     audCreatedAt!: string;
 

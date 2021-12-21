@@ -13,7 +13,7 @@
                 <div class="card-header border-0">
                     <div class="row align-items-center">
                         <div class="col-9">
-                            <h3 class="mb-0">Lista de Reportes de Precipitación</h3>
+                            <h3 class="mb-0">Lista de Reportes de Precipitación Acumulada</h3>
                         </div>
                     </div>
                 </div>
@@ -51,7 +51,8 @@
                             <tr>
                                 <th scope="col">Observador</th>
                                 <th scope="col">Estación</th>
-                                <th scope="col">Fecha</th>
+                                <th scope="col">Fecha Inicio</th>
+                                <th scope="col">Fecha Fin</th>
                                 <th scope="col">Valor</th>
                                 <th scope="col">Comentario</th>
                                 <th scope="col"></th>
@@ -71,7 +72,10 @@
                                     {{reporte.Observador.Estacion.nombre }}
                                 </td>
                                 <td>
-                                    {{ date(reporte.fecha)+ " " + time(reporte.fecha)}}
+                                    {{reporte.fechaInicio}}
+                                </td>
+                                <td>
+                                    {{ date(reporte.fechaFin)}}
                                 </td>
                                 <td>
                                     {{reporte.valor}}
@@ -97,20 +101,3 @@
         </div>
     </div>
 </div>
-
-<!--
-<ng-template #contenido let-modal>
-    <div class="modal-header">
-        <h4 class="modal-title">Editar el valor del registro {{registro.estacion}} {{time(registro.fecha)}} {{date(registro.fecha)}}</h4>
-        <button class="close" aria-label="close" type="button" (click)="modal.close()">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body">
-        <label for="valor">Valor del registro</label><br>
-        <input type="number" name="valor" id="valor" class="form-control" [(ngModel)]="registro.valor">
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" (click)="saveValor();modal.close()">Save</button>
-    </div>
-</ng-template>-->

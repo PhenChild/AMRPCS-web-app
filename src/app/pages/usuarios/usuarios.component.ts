@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import { Subject } from "rxjs";
 import { ViewEncapsulation } from "@angular/core";
 import { DbService } from "../../services/database/db.service";
 import { NgForm } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { User } from "src/app/models/user";
+import { DataTableDirective } from "angular-datatables";
 
 /**
  * Componente para la pagina de usuarios.
@@ -17,8 +18,16 @@ import { User } from "src/app/models/user";
 })
 export class UsuariosComponent implements OnInit, OnDestroy {
 
+    @ViewChild(DataTableDirective, { static: false })
+    dtElement!: DataTableDirective;
+
     /** Opciones para los datatbles. */
-    dtOptions!: DataTables.Settings;
+    dtOptions: DataTables.Settings = {
+        pagingType: "full_numbers",
+        pageLength: 7,
+        responsive: true,
+        searching: false,
+    };;
 
     /** Lista de usuarios*/
     usuarios: User[] = [];
@@ -28,6 +37,14 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
     /** Operador del datatable de los usuarios */
     dtTrigger: Subject<any> = new Subject<any>();
+
+    isDtInitialized: boolean = false
+
+    filtro = {
+        nombre: "",
+        email: "",
+        rol: "",
+    };
 
     /**
      * Constructor
@@ -44,20 +61,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
      * Obtencion de los usuarios desde la base de datos
      */
     ngOnInit(): void {
-        this.dtOptions = {
-            pagingType: "full_numbers",
-            pageLength: 7,
-            responsive: true,
-        };
-
-        this.dbService.getUsuarios()
-            .subscribe((data: User[]) => {
-                this.usuarios = data;
-                console.log(this.usuarios);
-                this.dtTrigger.next();
-            }, (err: any) => {
-                console.log(err);
-            });
     }
 
     /**
@@ -65,6 +68,28 @@ export class UsuariosComponent implements OnInit, OnDestroy {
      */
     ngOnDestroy(): void {
         this.dtTrigger.unsubscribe();
+    }
+
+    getData(): void {
+        const table = (<HTMLInputElement>document.getElementById("tablaUsuarios"));
+        table.style.display = "none";
+        if (this.isDtInitialized) {
+            this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+                dtInstance.destroy()
+            })
+        } else {
+            this.isDtInitialized = true;
+        }
+        this.dbService.getUsuarios(this.filtro)
+            .subscribe((data: User[]) => {
+                this.usuarios = data;
+                console.log(this.usuarios);
+                this.dtTrigger.next();
+                const table = (<HTMLInputElement>document.getElementById("tablaUsuarios"));
+                table.style.display = "block";
+            }, (err: any) => {
+                console.log(err);
+            });
     }
 
     /**
