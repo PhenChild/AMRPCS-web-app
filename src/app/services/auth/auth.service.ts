@@ -16,7 +16,7 @@ import { User } from "src/app/models/user";
 export class AuthService {
     /** Url de conexión */
     //dbURL = "https://ciifen.loca.lt/api/"
-    dbURL = "http://47c7-181-199-40-123.ngrok.io/api/";
+    dbURL = "http://44d2-181-199-40-123.ngrok.io/api/";
 
     /**
      * Constructor

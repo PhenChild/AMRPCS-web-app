@@ -8,6 +8,8 @@ import { User } from "src/app/models/user";
 import { DataTableDirective } from "angular-datatables";
 import { Pais } from "src/app/models/pais";
 import { FileUploader } from 'ng2-file-upload';
+import { Estacion } from "src/app/models/estacion";
+import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
 
 
 /**
@@ -56,14 +58,29 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
     /** Operador del datatable de los usuarios */
     dtTrigger: Subject<any> = new Subject<any>();
+    dtTrigger1: Subject<any> = new Subject<any>();
 
-    isDtInitialized: boolean = false
-
+    isDtInitialized: boolean = false;
+    isDtInitialized2: boolean = false;
     filtro = {
         nombre: "",
         email: "",
         rol: "",
     };
+
+    filtroEstacion = {
+        nombre: "",
+        codigo: "",
+        pais: ""
+    }
+
+
+
+    estaciones: Estacion[] = [];
+
+    selectedEstaciones: Estacion[] = [];
+    addedEstaciones: Estacion[] = [];
+    deletedEstaciones: Estacion[] = []
 
     /**
      * Constructor
@@ -125,6 +142,15 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         this.dtTrigger.unsubscribe();
     }
 
+    tableEstacion() {
+        const table = (<HTMLInputElement>document.getElementById("form-estacion"));
+        if (this.usuario.role == "observer") {
+            table.style.display = "block";
+        } else {
+            table.style.display = "none";
+        }
+    }
+
     getData(): void {
         const table = (<HTMLInputElement>document.getElementById("tablaUsuarios"));
         table.style.display = "none";
@@ -147,6 +173,27 @@ export class UsuariosComponent implements OnInit, OnDestroy {
             });
     }
 
+    getDataEstaciones(): void {
+        const table = (<HTMLInputElement>document.getElementById("tablaEstaciones"));
+        table.style.display = "none";
+        if (this.isDtInitialized2) {
+            this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+                dtInstance.destroy()
+            })
+        } else {
+            this.isDtInitialized2 = true;
+        }
+
+        this.dbService.getEstacionesParaUsuario(this.filtroEstacion)
+            .subscribe((data: any) => {
+                this.estaciones = (data as any);
+                console.log(this.estaciones);
+                this.dtTrigger1.next();
+                const table = (<HTMLInputElement>document.getElementById("tablaEstaciones"));
+                table.style.display = "block";
+            });
+    }
+
     /**
      * Edición de usuarios
      * @param usuario usuario con datos para la actualizacion del usuario
@@ -155,10 +202,21 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         this.dbService.getPaises()
             .subscribe((data: any) => {
                 this.paises = (data as any);
-                console.log(this.paises);
+            });
+        this.dbService.getEstacionesUsuario(usuario)
+            .subscribe((data: any[]) => {
+                console.log(data)
+                this.selectedEstaciones = data.map((a) => a.Estacion)
+                console.log(this.selectedEstaciones);
             });
         this.usuario = usuario;
         this.usuario.password = "";
+        const tableE = (<HTMLInputElement>document.getElementById("form-estacion"));
+        if (usuario.role == "observer") {
+            tableE.style.display = "block"
+        } else {
+            tableE.style.display = "none"
+        }
         const table = (<HTMLInputElement>document.getElementById("table"));
         const form = (<HTMLInputElement>document.getElementById("form-usuario"));
         table.style.display = "none";
@@ -194,7 +252,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
      * @param formUsuario formulario de usuario
      */
     submit(formUsuario: NgForm): void {
-        this.dbService.updateUsuario(this.usuario)
+        this.dbService.updateUsuario(this.usuario, this.addedEstaciones, this.deletedEstaciones)
             .subscribe(
                 (data: any) => {
                     const table = (<HTMLInputElement>document.getElementById("table"));
@@ -208,6 +266,9 @@ export class UsuariosComponent implements OnInit, OnDestroy {
                 (err: any) => {
                     console.log(err);
                     this.tService.error("", "Ha ocurrido un error");
+                    this.addedEstaciones = [];
+                    this.deletedEstaciones = [];
+                    this.selectedEstaciones = [];
                     formUsuario.reset();
                 }
             );
@@ -291,5 +352,45 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         table.style.display = "block";
         form.style.display = "none";
         this.usuario = new User();
+    }
+
+
+    /**
+     * Selecciona una estación a la que pertenecer el nuevo observador.
+     * @param estacion Estacion escojida.
+     */
+    selectEstacion(estacion: Estacion): void {
+        if (!this.selectedEstaciones.some(e => e.id == estacion.id) && !this.deletedEstaciones.some(e => e.id == estacion.id)) {
+            this.selectedEstaciones.push(estacion);
+            this.addedEstaciones.push(estacion);
+            console.log(this.selectedEstaciones)
+            console.log(this.addedEstaciones)
+            console.log(this.deletedEstaciones)
+        } else if (!this.selectedEstaciones.some(e => e.id == estacion.id) && this.deletedEstaciones.some(e => e.id == estacion.id)) {
+            this.selectedEstaciones.push(estacion);
+            this.deletedEstaciones = this.deletedEstaciones.filter(obj => obj !== estacion);
+            console.log(this.selectedEstaciones)
+            console.log(this.addedEstaciones)
+            console.log(this.deletedEstaciones)
+
+        }
+    }
+
+    /**
+     * Deselecciona una estacion, para seleccionar otra para el observador.
+     */
+    unselectEstacion(estacion: Estacion): void {
+        this.selectedEstaciones = this.selectedEstaciones.filter(obj => obj !== estacion);
+        if (!this.deletedEstaciones.includes(estacion) && !this.addedEstaciones.includes(estacion)) {
+            this.deletedEstaciones.push(estacion);
+            console.log(this.selectedEstaciones)
+            console.log(this.addedEstaciones)
+            console.log(this.deletedEstaciones)
+        } else if (!this.deletedEstaciones.includes(estacion) && this.addedEstaciones.includes(estacion)) {
+            this.addedEstaciones = this.addedEstaciones.filter(obj => obj !== estacion);
+            console.log(this.selectedEstaciones)
+            console.log(this.addedEstaciones)
+            console.log(this.deletedEstaciones)
+        }
     }
 }

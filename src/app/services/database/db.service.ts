@@ -16,7 +16,7 @@ export class DbService {
 
     /** Url de conexión */
     //dbURL = "https://ciifen.loca.lt/api/";
-    dbURL = "http://47c7-181-199-40-123.ngrok.io/api/";
+    dbURL = "http://44d2-181-199-40-123.ngrok.io/api/";
 
     /**
      * Constructor
@@ -45,14 +45,14 @@ export class DbService {
     */
     getUsuarios(filtro: any): any {
         var query = ""
-        if(filtro.nombre != ""){
-            query += "nombre=" + filtro.nombre+"&"
-        }if(filtro.email != ""){
-            query += "correo=" + filtro.email+"&"
-        }if(filtro.rol != ""){
-            query += "role=" + filtro.rol+"&"
+        if (filtro.nombre != "") {
+            query += "nombre=" + filtro.nombre + "&"
+        } if (filtro.email != "") {
+            query += "correo=" + filtro.email + "&"
+        } if (filtro.rol != "") {
+            query += "role=" + filtro.rol + "&"
         }
-        return this.http.get(this.dbURL + "getAll/filtro?"+query, { headers: this.getHeader() });
+        return this.http.get(this.dbURL + "getAll/filtro?" + query, { headers: this.getHeader() });
     }
 
     //*******************************************************
@@ -83,11 +83,11 @@ export class DbService {
      * @param usuario usuarios
      * @returns respuesta del servidor
      */
-    updateUsuario(usuario: any): any {
-        return this.http.post(this.dbURL + "users/updateUser", usuario, { headers: this.getHeader() });
+    updateUsuario(usuario: any, addedEstaciones: any, deletedEstaciones: any): any {
+        return this.http.post(this.dbURL + "users/updateUser", {usuario, addedEstaciones, deletedEstaciones}, { headers: this.getHeader() });
     }// req.body.id, req.body.email, req.body.password, req.body.nombre, req.body.apellido, req.body.telefono
 
-    getFoto(usuario: any): any{
+    getFoto(usuario: any): any {
         return this.http.post(this.dbURL + "users/getPicture", { "id": usuario.id }, { headers: this.getHeader() });
     }
     // OBSERVERS ENDPOINTS
@@ -109,14 +109,28 @@ export class DbService {
      */
     getEstaciones(filtro: any): any {
         var query = ""
-        if(filtro.nombre != ""){
-            query += "nombre=" + filtro.nombre+"&"
-        }if(filtro.codigo != ""){
-            query += "codigo=" + filtro.codigo+"&"
-        }if(filtro.pais != ""){
-            query += "nombrePais=" + filtro.pais+"&"
+        if (filtro.nombre != "") {
+            query += "nombre=" + filtro.nombre + "&"
+        } if (filtro.codigo != "") {
+            query += "codigo=" + filtro.codigo + "&"
+        } if (filtro.pais != "") {
+            query += "nombrePais=" + filtro.pais + "&"
         }
-        return this.http.get(this.dbURL + "estacion/getAll/filtro?"+query, { headers: this.getHeader() });
+        return this.http.get(this.dbURL + "estacion/getAll/filtro?" + query, { headers: this.getHeader() });
+    }
+
+    getEstacionesParaUsuario(filtro: any) {
+        var query = ""
+        if (filtro.nombre != "") {
+            query += "nombre=" + filtro.nombre + "&"
+        } if (filtro.codigo != "") {
+            query += "codigo=" + filtro.codigo + "&"
+        }
+        return this.http.get(this.dbURL + "estacion/getAll/filtroSinDivision?" + query, { headers: this.getHeader() });
+    }
+
+    getEstacionesUsuario(usuario: any): any {
+        return this.http.post(this.dbURL + "observers/getUserEstacion", { "id": usuario.id }, { headers: this.getHeader() });
     }
 
     /**
@@ -157,14 +171,14 @@ export class DbService {
         return this.http.get(this.dbURL + "pais/getAll", { headers: this.getHeader() });
     }
 
-    getFiltroPaises(filtro: any): any{
+    getFiltroPaises(filtro: any): any {
         var query = ""
-        if(filtro.nombre != ""){
-            query += "nombre=" + filtro.nombre+"&"
-        }if(filtro.siglas != ""){
-            query += "siglas=" + filtro.siglas+"&"
+        if (filtro.nombre != "") {
+            query += "nombre=" + filtro.nombre + "&"
+        } if (filtro.siglas != "") {
+            query += "siglas=" + filtro.siglas + "&"
         }
-        return this.http.get(this.dbURL + "pais/getAll/filtro?"+query, { headers: this.getHeader() });
+        return this.http.get(this.dbURL + "pais/getAll/filtro?" + query, { headers: this.getHeader() });
     }
 
     /**
@@ -204,14 +218,14 @@ export class DbService {
         return this.http.get(this.dbURL + "division/getAll", { headers: this.getHeader() });
     }
 
-    getFiltroDivisiones(filtro:any): any {
+    getFiltroDivisiones(filtro: any): any {
         var query = ""
-        if(filtro.nombre != ""){
-            query += "nombre=" + filtro.nombre+"&"
-        }if(filtro.pais != ""){
-            query += "pais=" + filtro.pais+"&"
-        }if(filtro.nivel != ""){
-            query += "nivel=" + filtro.nivel+"&"
+        if (filtro.nombre != "") {
+            query += "nombre=" + filtro.nombre + "&"
+        } if (filtro.pais != "") {
+            query += "pais=" + filtro.pais + "&"
+        } if (filtro.nivel != "") {
+            query += "nivel=" + filtro.nivel + "&"
         }
         return this.http.get(this.dbURL + "division/getAll/filtro?" + query, { headers: this.getHeader() });
     }
@@ -259,53 +273,53 @@ export class DbService {
      * Obtener reportes
      * @returns respuesta del servidor
      */
-     getReportes(filtro:any): any {
+    getReportes(filtro: any): any {
         var query = ""
-        if(filtro.observador != ""){
-            query += "observador=" + filtro.observador+"&"
-        }if(filtro.estacion != ""){
-            query += "estacion=" + filtro.estacion+"&"
-        }if(filtro.fechaInicio != ""){
-            query += "fechaInicio=" + filtro.fechaInicio+"&"
-        }if(filtro.fechaFin != ""){
-            query += "fechaFin=" + filtro.fechaFin+"&"
+        if (filtro.observador != "") {
+            query += "observador=" + filtro.observador + "&"
+        } if (filtro.estacion != "") {
+            query += "estacion=" + filtro.estacion + "&"
+        } if (filtro.fechaInicio != "") {
+            query += "fechaInicio=" + filtro.fechaInicio + "&"
+        } if (filtro.fechaFin != "") {
+            query += "fechaFin=" + filtro.fechaFin + "&"
         }
-        return this.http.get(this.dbURL + "precipitacion/getAll/filtro?"+query, { headers: this.getHeader() });
+        return this.http.get(this.dbURL + "precipitacion/getAll/filtro?" + query, { headers: this.getHeader() });
     }
 
     /**
      * Obtener reportes
      * @returns respuesta del servidor
      */
-     getReportesAcumulados(filtro:any): any {
+    getReportesAcumulados(filtro: any): any {
         var query = ""
-        if(filtro.observador != ""){
-            query += "observador=" + filtro.observador+"&"
-        }if(filtro.estacion != ""){
-            query += "estacion=" + filtro.estacion+"&"
-        }if(filtro.fechaInicio != ""){
-            query += "fechaInicio=" + filtro.fechaInicio+"&"
-        }if(filtro.fechaFin != ""){
-            query += "fechaFin=" + filtro.fechaFin+"&"
+        if (filtro.observador != "") {
+            query += "observador=" + filtro.observador + "&"
+        } if (filtro.estacion != "") {
+            query += "estacion=" + filtro.estacion + "&"
+        } if (filtro.fechaInicio != "") {
+            query += "fechaInicio=" + filtro.fechaInicio + "&"
+        } if (filtro.fechaFin != "") {
+            query += "fechaFin=" + filtro.fechaFin + "&"
         }
-        return this.http.get(this.dbURL + "acumulado/getAll/filtro?"+query, { headers: this.getHeader() });
+        return this.http.get(this.dbURL + "acumulado/getAll/filtro?" + query, { headers: this.getHeader() });
     }
 
-    updateUserPassword(usuario:any): any{
+    updateUserPassword(usuario: any): any {
         return this.http.post(this.dbURL + "users/updatePass", usuario, { headers: this.getHeader() });
     }
 
 
-    getDivisionesPaises(pais: any): any{
-        return this.http.post(this.dbURL + "division/getDivisionesPaisNivelOne", {"idPais": pais}, { headers: this.getHeader() });
+    getDivisionesPaises(pais: any): any {
+        return this.http.post(this.dbURL + "division/getDivisionesPaisNivelOne", { "idPais": pais }, { headers: this.getHeader() });
     }
 
-    getDivDivisiones(division: any, nivel: any): any{
-        return this.http.post(this.dbURL + "division/getDivisionesInferiores", {"id": division, "nivel":nivel}, { headers: this.getHeader() });
+    getDivDivisiones(division: any, nivel: any): any {
+        return this.http.post(this.dbURL + "division/getDivisionesInferiores", { "id": division, "nivel": nivel }, { headers: this.getHeader() });
     }
 
-    getFotoEstacion(estacion: any){
-        return this.http.post(this.dbURL + "estacion/getPicture", estacion , { headers: this.getHeader() });
+    getFotoEstacion(estacion: any) {
+        return this.http.post(this.dbURL + "estacion/getPicture", estacion, { headers: this.getHeader() });
     }
 
 

@@ -14,11 +14,11 @@
                     <div class="row align-items-center">
                         <div class="col-9">
                             <h3 class="mb-0">Lista de Usuarios</h3>
-                        </div>
-                        <div class="col-3 text-right text-default">
-                            <a [routerLink]="['/admin-layout/form-usuario']" class="btn btn-sm btn-default">Nuevo
-                                Usuario</a>
-                        </div>
+                            </div>
+                            <div class="col-3 text-right text-default">
+                                <a [routerLink]="['/admin-layout/form-usuario']" class="btn btn-sm btn-default">Nuevo
+                                    Usuario</a>
+                            </div>
                     </div>
                 </div>
                 <div class="container">
@@ -134,6 +134,83 @@
                             <label for="correo">Correo</label><br>
                             <input type="email" class="form-control" name="correo" id="correo"
                                 [(ngModel)]="usuario.email">
+                        </div>
+                        <div class="form-group">
+                            <label for="rol">Rol de Usuario</label><br>
+                            <select class="form-control form-select form-select-sm" name="rol" id="rol"
+                                [(ngModel)]="usuario.role" (change)="tableEstacion()">
+                                <option value="observer">Observador</option>
+                                <option value="admin">Administrador</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="form-estacion">
+                            <label for="estacion">Estaciones</label><br>
+                            <div class="container my-3">
+                                <table class="table hover">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Codigo</th>
+                                            <th scope="col">Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let sEstacion of selectedEstaciones">
+                                            <td scope="row" width="50%" class="text-wrap">{{sEstacion.nombre}}
+                                            </td>
+                                            <td scope="row" width="30%" class="text-wrap">{{sEstacion.codigo}}</td>
+                                            <td scope="row" class="">
+                                                <button type="button" class="btn btn-danger btn-xs"
+                                                    (click)="unselectEstacion(sEstacion)">
+                                                    <i class="fa fa-trash"></i>Remove
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="container">
+                                <div class="row align-items-center">
+                                    <div class="form-group col-md-4">
+                                        <label for="nombre">Nombre</label><br>
+                                        <input type="text" class="form-control" name="nombre" id="fnombre"
+                                            [(ngModel)]="filtroEstacion.nombre">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="codigo">Codigo</label><br>
+                                        <input type="text" class="form-control" name="codigo" id="fcodigo"
+                                            [(ngModel)]="filtroEstacion.codigo">
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <button class="btn btn-default float-right" (click)="getDataEstaciones()">Buscar</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="container" id="tablaEstaciones" style="display: none;">
+                                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger1"
+                                    class="table align-items-center table-flush row-border hover">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">C&oacute;digo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let estacion of estaciones" (click)="selectEstacion(estacion)">
+                                            <th scope="row">
+                                                <div class="media align-items-center">
+                                                    <div class="media-body">
+                                                        <span class="mb-0 text-sm">{{estacion.nombre}}</span>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                            <td>
+                                                {{estacion.codigo}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div>
                             <button class="btn btn-secondary float-left"
