@@ -6,6 +6,7 @@ import { NgForm } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { Observador } from "../../models/observador";
 import { DataTableDirective } from "angular-datatables";
+import { FileUploader } from "ng2-file-upload";
 
 /**
  * Componente para la pagina de edición de estaciones.
@@ -13,7 +14,7 @@ import { DataTableDirective } from "angular-datatables";
 @Component({
     selector: "app-estaciones",
     templateUrl: "./estaciones.component.html",
-    styleUrls: ["./estaciones.component.css"],
+    styleUrls: ["./estaciones.component.scss"],
 })
 export class EstacionesComponent implements OnInit, OnDestroy {
 
@@ -28,6 +29,19 @@ export class EstacionesComponent implements OnInit, OnDestroy {
         searching: false,
         lengthChange: false,
     };
+
+    /* Data for upload image */
+    url!: string | ArrayBuffer | null;
+    format!: string;
+
+    uploader!: FileUploader;
+
+    response!: string;
+
+    isSuccess!: boolean;
+    isCancel!: boolean;
+    isError!: boolean;
+
     /** Lista de estaciones */
     estaciones: Estacion[] = [];
     /** Lista de usuarios observadores */
@@ -59,12 +73,53 @@ export class EstacionesComponent implements OnInit, OnDestroy {
     constructor(
         private dbService: DbService,
         private tService: ToastrService
-    ) { }
+    ) {
+
+
+        this.uploader = new FileUploader({
+            url: dbService.dbURL + "estacion/updatePicture",
+            method: "POST",
+            itemAlias: "file",
+            queueLimit: 1,
+            headers: [{
+                name: "x-access-token", value:
+                    sessionStorage.getItem("token")!
+            }]
+        });
+
+        this.response = '';
+
+        this.uploader.response.subscribe(res => this.response = res);
+    }
 
     /**
      * Obtencion de las estaciónes desde la base de datos
      */
     ngOnInit(): void {
+
+        this.isCancel = false;
+        this.isError = false;
+        this.isSuccess = false;
+
+
+
+        this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
+
+        this.uploader.onBeforeUploadItem = (item: any) => {
+            this.uploader.options.additionalParameter = {
+                id: this.estacion.id
+            };
+        };
+
+        this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
+            const table = (<HTMLInputElement>document.getElementById("table"));
+            const form = (<HTMLInputElement>document.getElementById("form-update-foto"));
+            table.style.display = "block";
+            form.style.display = "none";
+            this.tService.success("Foto actualizada con exito.", "Envio exitoso");
+            this.uploader.clearQueue()
+            console.log("ImageUpload:uploaded:", item, status, response);
+        };
     }
 
     /**
@@ -170,4 +225,43 @@ export class EstacionesComponent implements OnInit, OnDestroy {
         this.estacion = new Estacion();
         formEstacion.reset();
     }
+
+
+
+    editarFoto(estacion: Estacion): void {
+        this.estacion = estacion;
+        this.dbService.getFotoEstacion(this.estacion)
+            .subscribe(
+                (data: any) => {
+                    this.estacion.foto = data.foto
+                    const table = (<HTMLInputElement>document.getElementById("table"));
+                    const form = (<HTMLInputElement>document.getElementById("form-update-foto"));
+                    table.style.display = "none";
+                    form.style.display = "block";
+                },
+                (err: any) => {
+                    const table = (<HTMLInputElement>document.getElementById("table"));
+                    const form = (<HTMLInputElement>document.getElementById("form-update-foto"));
+                    table.style.display = "none";
+                    form.style.display = "block";
+                }
+            );
+    }
+
+
+    cancelarFoto(): void {
+        const table = (<HTMLInputElement>document.getElementById("table"));
+        const form = (<HTMLInputElement>document.getElementById("form-update-foto"));
+        table.style.display = "block";
+        form.style.display = "none";
+        this.estacion = new Estacion();
+    }
+
+
+    subirFoto() {
+        if (this.uploader.queue.length != 0) {
+            this.uploader.queue[0].upload()
+        }
+    }
+
 }

@@ -22,7 +22,7 @@ export class Estacion {
 
     hasPluviometro!: boolean;
 
-    idUbicacion!: number;
+    idUbicacion!: string;
 
     posicion!: {
         coordinates: number[];

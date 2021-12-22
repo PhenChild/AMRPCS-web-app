@@ -18,6 +18,7 @@ import { ReportesComponent } from "src/app/pages/reportes/reportes.component";
 import { AcumuladosComponent } from 'src/app/pages/acumulados/acumulados.component';
 import { PerfilComponent } from 'src/app/pages/perfil/perfil.component';
 import { AcercadeComponent } from 'src/app/pages/acercade/acercade.component';
+import {FileUploadModule} from "ng2-file-upload"; 
 
 @NgModule({
     imports: [
@@ -27,7 +28,8 @@ import { AcercadeComponent } from 'src/app/pages/acercade/acercade.component';
         ReactiveFormsModule,
         HttpClientModule,
         NgbModule,
-        DataTablesModule
+        DataTablesModule,
+        FileUploadModule
     ],
     declarations: [
         UsuariosComponent,

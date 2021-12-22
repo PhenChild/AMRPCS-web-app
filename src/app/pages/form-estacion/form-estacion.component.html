@@ -1,9 +1,10 @@
-<div class="header pb-8 pt-5 pt-md-8" style="min-height: 300px; background-image: url(assets/img/theme/chimborazo.jpg); background-size: cover; background-position: 0px -120px;">
+<div class="header pb-8 pt-5 pt-md-8"
+    style="min-height: 300px; background-image: url(assets/img/theme/chimborazo.jpg); background-size: cover; background-position: 0px -120px;">
     <span class="mask bg-default opacity-6"></span>
     <div class="container-fluid">
         <div class="header-body">
         </div>
-    </div> 
+    </div>
 </div>
 <div class="container-fluid mt--9">
     <div class="row">
@@ -14,44 +15,75 @@
                     <h3 class="card-title">Nueva Estaci&oacute;n</h3>
                 </div>
                 <div class="card-body">
-                    <form  #formEstacion="ngForm" (ngSubmit)="onSubmit(formEstacion)" >
+                    <form #formEstacion="ngForm" (ngSubmit)="onSubmit(formEstacion)">
                         <div class="form-group">
                             <label for="nombre">Nombre</label><br>
-                            <input type="text" class="form-control" name="nombre" id="nombre" [(ngModel)]="estacion.nombre">
+                            <input type="text" class="form-control" name="nombre" id="nombre"
+                                [(ngModel)]="estacion.nombre">
                         </div>
                         <div class="form-group">
                             <label for="codigo">C&oacute;digo</label><br>
-                            <input type="text" class="form-control" name="codigo" id="codigo" [(ngModel)]="estacion.codigo">
+                            <input type="text" class="form-control" name="codigo" id="codigo"
+                                [(ngModel)]="estacion.codigo">
+                        </div>
+                        <div class="form-group">
+                            <label for="pais">País</label><br>
+                            <select name="pais" id="pais" class="form-control" [(ngModel)]="pais"
+                                (change)="getDivisiones(pais)">
+                                <option *ngFor="let pais of paises" [value]="pais.id">{{pais.nombre}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group" *ngIf="divisiones1.length >= 1">
+                            <label for="division1">División Política Nivel 1</label><br>
+                            <select name="division1" id="division1" class="form-control" [(ngModel)]="division1"
+                                (change)="getDivDivisiones(division1,1)">
+                                <option *ngFor="let d1 of divisiones1" [value]="d1.id">{{d1.nombre}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group" *ngIf="divisiones2.length >= 1">
+                            <label for="division2">División Política Nivel 2</label><br>
+                            <select name="division2" id="division2" class="form-control" [(ngModel)]="division2"
+                                (change)="getDivDivisiones(division2,2)">
+                                <option *ngFor="let d2 of divisiones2" [value]="d2.id">{{d2.nombre}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group" *ngIf="divisiones3.length >= 1">
+                            <label for="division3">División Política Nivel 3</label><br>
+                            <select name="division3" id="division3" class="form-control" [(ngModel)]="division3">
+                                <option *ngFor="let d3 of divisiones3" [value]="d3.id">{{d3.nombre}}</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="altitud">Latitud</label><br>
-                            <input type="text" class="form-control" name="altitud" id="altitud" [(ngModel)]="estacion.latitud">
+                            <input type="text" class="form-control" name="altitud" id="altitud"
+                                [(ngModel)]="estacion.latitud">
                         </div>
                         <div class="form-group">
                             <label for="longitud">Longitud</label><br>
-                            <input type="email" class="form-control" name="longitud" id="longitud " [(ngModel)]="estacion.longitud">
+                            <input type="email" class="form-control" name="longitud" id="longitud "
+                                [(ngModel)]="estacion.longitud">
                         </div>
                         <div class="form-group">
                             <label for="altitud">Altitud</label><br>
-                            <input type="text" class="form-control" name="altitud" id="altitud" [(ngModel)]="estacion.altitud">
+                            <input type="text" class="form-control" name="altitud" id="altitud"
+                                [(ngModel)]="estacion.altitud">
                         </div>
                         <div class="form-group">
                             <label for="direccion">Direccion</label><br>
-                            <input type="text" class="form-control" name="direccion" id="direccion " [(ngModel)]="estacion.direccion">
+                            <input type="text" class="form-control" name="direccion" id="direccion "
+                                [(ngModel)]="estacion.direccion">
                         </div>
                         <div class="form-group">
                             <label for="referencias">Referencias</label><br>
-                            <input type="text" class="form-control" name="referencias" id="referencias " [(ngModel)]="estacion.referencias">
-                        </div>
-                        <div class="form-group">
-                            <label for="foto">Foto</label><br>
-                            <input type="file" class="form-control" name="foto" id="foto">
+                            <input type="text" class="form-control" name="referencias" id="referencias "
+                                [(ngModel)]="estacion.referencias">
                         </div>
                         <div class="form-group">
                             <label for="hasPluviometro">Tiene Pluviometro</label><br>
-                            <select class="form-control form-select form-select-sm" name="hasPluviometro" id="hasPluviometro"  [(ngModel)]="estacion.hasPluviometro">
-                                <option value = "true" >Si</option>
-                                <option value = "false">No</option>
+                            <select class="form-control form-select form-select-sm" name="hasPluviometro"
+                                id="hasPluviometro" [(ngModel)]="estacion.hasPluviometro">
+                                <option value="true">Si</option>
+                                <option value="false">No</option>
                             </select>
                         </div>
                         <div>

@@ -86,7 +86,8 @@
                                             <i class="fas fa-ellipsis-v"></i>
                                         </a>
                                         <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
-                                            <a class="dropdown-item" (click)="editarEstacion(estacion)">Editar</a>
+                                            <a class="dropdown-item" (click)="editarEstacion(estacion)">Ver/Editar Información</a>
+                                            <a class="dropdown-item" (click)="editarFoto(estacion)">Ver/Editar Foto</a>
                                             <a class="dropdown-item" (click)="deleteEstacion(estacion)">Eliminar</a>
                                         </div>
                                     </div>
@@ -182,6 +183,97 @@
                             <button class="btn btn-secondary float-left"
                                 (click)="cancelar(formEstacion)">Cancelar</button>
                             <button class="btn btn-default float-right" (click)="submit(formEstacion)">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid mt--9" id="form-update-foto" style="display: none;">
+    <div class="row">
+        <div class="col-xl-2"></div>
+        <div class="col-xl-8 mb-5 mb-xl-0">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Actualizar Foto Estacion</h3>
+                </div>
+                <div class="card-body">
+                    <form #formPassUsuario="ngForm">
+                        <div class="form-group">
+                            <label for="codigo">Codigo Estacion</label><br>
+                            <input type="text" disabled class="form-control" name="codigo" id="codigo"
+                                [(ngModel)]="estacion.codigo">
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-md-5">
+                                <img *ngIf="!estacion.foto" src="../../../assets/img/more/default-building.jpg"
+                                    class=" img-fluid" alt="user image">
+                                <img *ngIf="estacion.foto" src="data:image/png;base64,{{estacion.foto}}"
+                                    class="img-fluid" alt="user image">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="file">Archivo</label><br>
+                                <input *ngIf="uploader.queue.length == 0" type="file"
+                                    class="input-group custom-file-upload mb-4" ng2FileSelect [uploader]="uploader" />
+                            </div>
+                            <div class="col-12" *ngIf="uploader.queue.length != 0">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Size</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of uploader.queue">
+                                            <td scope="row" class="text-wrap"><strong>{{ item?.file?.name }}</strong>
+                                            </td>
+                                            <td *ngIf="uploader.options.isHTML5" nowrap>{{ item?.file?.size/1024/1024 |
+                                                number:'.2' }} MB</td>
+                                            <td class="text-center">
+                                                <span *ngIf="item.isUploading"><i class="fa fa-spinner"></i></span>
+                                                <span *ngIf="item.isSuccess"><i class="fa fa-check-circle"></i></span>
+                                                <span *ngIf="item.isCancel"><i
+                                                        class="fa fa-times-circle text-black"></i></span>
+                                                <span *ngIf="item.isError"><i
+                                                        class="fa fa-exclamation-circle text-black"></i></span>
+                                            </td>
+                                            <td nowrap>
+                                                <button type="button" class="btn btn-danger btn-xs"
+                                                    (click)="item.remove()">
+                                                    <span class="fa fa-trash"></span> Remove
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="progress-wrapper pt-0">
+                                    <div class="progress-info">
+                                        <div class="progress-label">
+                                            <span>Progreso</span>
+                                        </div>
+                                        <div class="progress-percentage">
+                                            <span>{{uploader.progress + "%"}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar"
+                                            [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-secondary float-left"
+                                (click)="cancelarFoto()">Cancelar</button>
+                            <button class="btn btn-default float-right"
+                                (click)="subirFoto()">Guardar</button>
                         </div>
                     </form>
                 </div>

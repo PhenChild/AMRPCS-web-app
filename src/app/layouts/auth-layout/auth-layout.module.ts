@@ -12,7 +12,7 @@ import { ToastrModule } from "ngx-toastr";
         CommonModule,
         RouterModule.forChild(authLayoutRoutes),
         FormsModule,
-        ToastrModule.forRoot()
+        ToastrModule.forRoot(),
     ],
     declarations: [
         LoginComponent,

@@ -16,7 +16,8 @@
                             <h3 class="mb-0">Lista de Usuarios</h3>
                         </div>
                         <div class="col-3 text-right text-default">
-                            <a [routerLink]="['/admin-layout/form-usuario']" class="btn btn-sm btn-default">Nuevo Usuario</a>
+                            <a [routerLink]="['/admin-layout/form-usuario']" class="btn btn-sm btn-default">Nuevo
+                                Usuario</a>
                         </div>
                     </div>
                 </div>
@@ -24,15 +25,18 @@
                     <div class="row align-items-center">
                         <div class="form-group col-md-3">
                             <label for="nombre">Nombre</label><br>
-                            <input type="text" class="form-control" name="nombre" id="fnombre" [(ngModel)]="filtro.nombre">
+                            <input type="text" class="form-control" name="nombre" id="fnombre"
+                                [(ngModel)]="filtro.nombre">
                         </div>
                         <div class="form-group col-md-3">
                             <label for="correo">Correo</label><br>
-                            <input type="text" class="form-control" name="correo" id="fcorreo" [(ngModel)]="filtro.email">
+                            <input type="text" class="form-control" name="correo" id="fcorreo"
+                                [(ngModel)]="filtro.email">
                         </div>
                         <div class="form-group col-md-3">
                             <label for="rol">Rol</label><br>
-                            <select class="form-control form-select form-select-sm" name="frol" id="rol" [(ngModel)]="filtro.rol">
+                            <select class="form-control form-select form-select-sm" name="frol" id="rol"
+                                [(ngModel)]="filtro.rol">
                                 <option value="observer">Observador</option>
                                 <option value="admin">Administrador</option>
                             </select>
@@ -43,14 +47,15 @@
                     </div>
                 </div>
                 <div class="container" style="display: none;" id="tablaUsuarios">
-                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="table align-items-center table-flush row-border hover">
+                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                        class="table align-items-center table-flush row-border hover">
                         <thead class="thead-light">
                             <tr>
-                                <th scope="col">Nombre</th>
+                                <th width="30%" scope="col">Nombre</th>
                                 <th scope="col">Tel&eacute;fono</th>
                                 <th scope="col">Correo</th>
                                 <th scope="col">Rol</th>
-                                <th scope="col" class="button"></th>
+                                <th width="5%" scope="col" class="button"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -77,7 +82,11 @@
                                             <i class="fas fa-ellipsis-v"></i>
                                         </a>
                                         <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
-                                            <a class="dropdown-item" (click)="editarUsuario(usuario)">Editar</a>
+                                            <a class="dropdown-item" (click)="editarUsuario(usuario)">Ver/Editar
+                                                Información</a>
+                                            <a class="dropdown-item" (click)="editarFoto(usuario)">Ver/Editar Foto</a>
+                                            <a class="dropdown-item" (click)="editarPassword(usuario)">Editar
+                                                Contraseña</a>
                                             <a class="dropdown-item" (click)="deleteUsuario(usuario)">Eliminar</a>
                                         </div>
                                     </div>
@@ -116,18 +125,150 @@
                                 [(ngModel)]="usuario.telefono">
                         </div>
                         <div class="form-group">
+                            <label for="pais">País</label><br>
+                            <select name="pais" id="pais" class="form-control" [(ngModel)]="usuario.idPais">
+                                <option *ngFor="let pais of paises" [value]="pais.id">{{pais.nombre}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="correo">Correo</label><br>
                             <input type="email" class="form-control" name="correo" id="correo"
                                 [(ngModel)]="usuario.email">
                         </div>
+                        <div>
+                            <button class="btn btn-secondary float-left"
+                                (click)="cancelar(formUsuario)">Cancelar</button>
+                            <button class="btn btn-default float-right" (click)="submit(formUsuario)">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid mt--9" id="form-update-password" style="display: none;">
+    <div class="row">
+        <div class="col-xl-2"></div>
+        <div class="col-xl-8 mb-5 mb-xl-0">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Actualizar Contraseña Usuario</h3>
+                </div>
+                <div class="card-body">
+                    <form #formPassUsuario="ngForm">
                         <div class="form-group">
-                            <label for="contrasena">Contraseña</label><br>
+                            <label for="nombre">Correo Usuario</label><br>
+                            <input type="text" disabled class="form-control" name="nombre" id="nombre"
+                                [(ngModel)]="usuario.email">
+                        </div>
+                        <div class="form-group">
+                            <label for="contrasena">Nueva Contraseña</label><br>
                             <input type="password" class="form-control" name="contrasena" id="contrasena"
                                 [(ngModel)]="usuario.password">
                         </div>
+                        <div class="form-group">
+                            <label for="confcontrasena">Confirmar Contraseña</label><br>
+                            <input type="password" class="form-control" name="confcontrasena" id="confcontrasena"
+                                [(ngModel)]="confpassword">
+                        </div>
                         <div>
-                            <button class="btn btn-secondary float-left" (click)="cancelar(formUsuario)">Cancelar</button>
-                            <button class="btn btn-default float-right" (click)="submit(formUsuario)">Guardar</button>
+                            <button class="btn btn-secondary float-left"
+                                (click)="cancelarPassword(formPassUsuario)">Cancelar</button>
+                            <button class="btn btn-default float-right"
+                                (click)="submitPassword(formPassUsuario)">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid mt--9" id="form-update-foto" style="display: none;">
+    <div class="row">
+        <div class="col-xl-2"></div>
+        <div class="col-xl-8 mb-5 mb-xl-0">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Actualizar Foto Usuario</h3>
+                </div>
+                <div class="card-body">
+                    <form #formPassUsuario="ngForm">
+                        <div class="form-group">
+                            <label for="nombre">Correo Usuario</label><br>
+                            <input type="text" disabled class="form-control" name="nombre" id="nombre"
+                                [(ngModel)]="usuario.email">
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-md-5">
+                                <img *ngIf="!usuario.foto" src="../../../assets/img/more/default-user.jpg"
+                                    class=" img-fluid rounded-circle" alt="user image">
+                                <img *ngIf="usuario.foto" src="data:image/png;base64,{{usuario.foto}}"
+                                    class="img-fluid rounded-circle" alt="user image">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="file">Archivo</label><br>
+                                <input *ngIf="uploader.queue.length == 0" type="file"
+                                    class="input-group custom-file-upload mb-4" ng2FileSelect [uploader]="uploader" />
+                            </div>
+                            <div class="col-12" *ngIf="uploader.queue.length != 0">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Size</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of uploader.queue">
+                                            <td scope="row" class="text-wrap"><strong>{{ item?.file?.name }}</strong>
+                                            </td>
+                                            <td *ngIf="uploader.options.isHTML5" nowrap>{{ item?.file?.size/1024/1024 |
+                                                number:'.2' }} MB</td>
+                                            <td class="text-center">
+                                                <span *ngIf="item.isUploading"><i class="fa fa-spinner"></i></span>
+                                                <span *ngIf="item.isSuccess"><i class="fa fa-check-circle"></i></span>
+                                                <span *ngIf="item.isCancel"><i
+                                                        class="fa fa-times-circle text-black"></i></span>
+                                                <span *ngIf="item.isError"><i
+                                                        class="fa fa-exclamation-circle text-black"></i></span>
+                                            </td>
+                                            <td nowrap>
+                                                <button type="button" class="btn btn-danger btn-xs"
+                                                    (click)="item.remove()">
+                                                    <span class="fa fa-trash"></span> Remove
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="progress-wrapper pt-0">
+                                    <div class="progress-info">
+                                        <div class="progress-label">
+                                            <span>Progreso</span>
+                                        </div>
+                                        <div class="progress-percentage">
+                                            <span>{{uploader.progress + "%"}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar"
+                                            [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-secondary float-left"
+                                (click)="cancelarFoto()">Cancelar</button>
+                            <button class="btn btn-default float-right"
+                                (click)="subirFoto()">Guardar</button>
                         </div>
                     </form>
                 </div>

@@ -4,6 +4,8 @@ import { Estacion } from "../../models/estacion";
 import { Injectable } from "@angular/core";
 import { DbService } from "../../services/database/db.service";
 import { ToastrService } from "ngx-toastr";
+import { Pais } from "src/app/models/pais";
+import { Division } from "src/app/models/division";
 
 /**
  * Componente para el from de usuarios.
@@ -11,7 +13,7 @@ import { ToastrService } from "ngx-toastr";
 @Component({
     selector: "app-form-estacion",
     templateUrl: "./form-estacion.component.html",
-    styleUrls: ["./form-estacion.component.css"]
+    styleUrls: ["./form-estacion.component.scss"]
 })
 
 /**
@@ -25,6 +27,16 @@ export class FormEstacionComponent implements OnInit {
 
     /** estación seleccionada */
     estacion = new Estacion();
+
+    pais = "";
+    division1 = "";
+    division2 = "";
+    division3 = "";
+
+    paises: Pais[] = [];
+    divisiones1: Division[] = [];
+    divisiones2: Division[] = [];
+    divisiones3: Division[] = [];
 
     /**
      * Constructor
@@ -40,6 +52,12 @@ export class FormEstacionComponent implements OnInit {
      * Inicialización
      */
     ngOnInit(): void {
+
+        this.dbService.getPaises()
+            .subscribe((data: any) => {
+                this.paises = (data as any);
+                console.log(this.paises);
+            });
     }
 
     /**
@@ -47,7 +65,7 @@ export class FormEstacionComponent implements OnInit {
      * @param formEstacion
      */
     onSubmit(formEstacion: NgForm): void {
-        console.log(this.estacion);
+        this.estacion.idUbicacion = this.division3;
         this.dbService.addEstacion(this.estacion).subscribe(
             (data: any) => {
                 this.tService.success("Estacion guardada con exito.", "Envio exitoso");
@@ -61,6 +79,28 @@ export class FormEstacionComponent implements OnInit {
         );
     }
 
+    getDivisiones(pais: any) {
+        this.dbService.getDivisionesPaises(pais)
+            .subscribe((data: any) => {
+                this.divisiones1 = (data as any);
+            });
+    }
+
+    getDivDivisiones(division: any, nivel: number) {
+        console.log(division)
+        if (nivel == 1) {
+            this.dbService.getDivDivisiones(division,nivel)
+                .subscribe((data: any) => {
+                    console.log(data)
+                    this.divisiones2 = (data as any);
+                });
+        } else if (nivel == 2) {
+            this.dbService.getDivDivisiones(division,nivel)
+                .subscribe((data: any) => {
+                    this.divisiones3 = (data as any);
+                });
+        }
+    }
 
 
 }
