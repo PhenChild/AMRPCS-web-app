@@ -11,6 +11,7 @@ import { FormUsuarioComponent } from "../../pages/form-usuario/form-usuario.comp
 import { EstacionesComponent } from "../../pages/estaciones/estaciones.component";
 import { FormEstacionComponent } from "../../pages/form-estacion/form-estacion.component";
 import { PaisesComponent } from "src/app/pages/paises/paises.component";
+import { GraficosComponent } from '../../pages/graficos/graficos.component';
 
 import { DataTablesModule } from "angular-datatables";
 import { DivisionesComponent } from "src/app/pages/divisiones/divisiones.component";
@@ -19,6 +20,7 @@ import { AcumuladosComponent } from 'src/app/pages/acumulados/acumulados.compone
 import { PerfilComponent } from 'src/app/pages/perfil/perfil.component';
 import { AcercadeComponent } from 'src/app/pages/acercade/acercade.component';
 import {FileUploadModule} from "ng2-file-upload"; 
+import { PagesModule } from "src/app/pages/pages.module";
 
 @NgModule({
     imports: [
@@ -29,19 +31,10 @@ import {FileUploadModule} from "ng2-file-upload";
         HttpClientModule,
         NgbModule,
         DataTablesModule,
-        FileUploadModule
+        FileUploadModule,
+        PagesModule
     ],
     declarations: [
-        UsuariosComponent,
-        FormUsuarioComponent,
-        EstacionesComponent,
-        FormEstacionComponent,
-        PaisesComponent,
-        DivisionesComponent,
-        ReportesComponent,
-        AcumuladosComponent,
-        PerfilComponent,
-        AcercadeComponent
     ]
 })
 

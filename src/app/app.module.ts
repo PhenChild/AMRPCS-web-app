@@ -15,12 +15,14 @@ import { ToastrModule } from "ngx-toastr";
 import { AppRoutingModule } from "././app-routing.module";
 import { ComponentsModule } from "./components/components.module";
 import { CommonModule } from "@angular/common";
+import { ObsLayoutComponent } from './layouts/obs-layout/obs-layout.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AdminLayoutComponent,
     AuthLayoutComponent,
+    ObsLayoutComponent
   ],
   imports: [
     BrowserModule,

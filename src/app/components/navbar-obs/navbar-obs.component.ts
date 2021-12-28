@@ -1,16 +1,16 @@
 import { Component, OnInit, ElementRef } from "@angular/core";
-import { ROUTES } from "../sidebar/sidebar.component";
+import { ROUTES } from "../sidebar-obs/sidebar-obs.component";
 import { Location } from "@angular/common";
 import { Router } from "@angular/router";
 import { AuthService } from "../../services/auth/auth.service";
 
 /** Barra de navegacion de la página. */
 @Component({
-    selector: "app-navbar",
-    templateUrl: "./navbar.component.html",
-    styleUrls: ["./navbar.component.scss"]
+    selector: "app-navbar-obs",
+    templateUrl: "./navbar-obs.component.html",
+    styleUrls: ["./navbar-obs.component.scss"]
 })
-export class NavbarComponent implements OnInit {
+export class NavbarObsComponent implements OnInit {
     /** Página actual. */
     public focus: any;
 
@@ -41,10 +41,10 @@ export class NavbarComponent implements OnInit {
         if (titlee.charAt(0) === "#"){
             titlee = titlee.slice( 1 );
         }
-        if(titlee === "/admin-layout/acercade"){
+        if(titlee === "/obs-layout/acercade"){
             return "Acerca De"
         }
-        else if(titlee === "/admin-layout/perfil"){
+        else if(titlee === "/obs-layout/perfil"){
             return "Mi Perfil"
         }
         if(this.listTitles != undefined){

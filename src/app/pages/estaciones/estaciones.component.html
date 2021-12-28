@@ -86,7 +86,8 @@
                                             <i class="fas fa-ellipsis-v"></i>
                                         </a>
                                         <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
-                                            <a class="dropdown-item" (click)="editarEstacion(estacion)">Ver/Editar Información</a>
+                                            <a class="dropdown-item" (click)="editarEstacion(estacion)">Ver/Editar
+                                                Información</a>
                                             <a class="dropdown-item" (click)="editarFoto(estacion)">Ver/Editar Foto</a>
                                             <a class="dropdown-item" (click)="deleteEstacion(estacion)">Eliminar</a>
                                         </div>
@@ -109,6 +110,14 @@
                     <h3 class="card-title">Editar Estaci&oacute;n</h3>
                 </div>
                 <div class="card-body">
+                    <div class="row justify-content-center">
+                        <div class="col-md-5">
+                            <img *ngIf="!estacion.foto" src="../../../assets/img/more/default-building.jpg"
+                                class=" img-fluid" alt="user image">
+                            <img *ngIf="estacion.foto" src="data:image/png;base64,{{estacion.foto}}" class="img-fluid"
+                                alt="user image">
+                        </div>
+                    </div>
                     <form #formEstacion="ngForm">
                         <div class="form-group">
                             <label for="nombre">Nombre</label><br>
@@ -155,8 +164,7 @@
                         </div>
                         <div class="container pb-3" id="tablaEstaciones">
                             <label for="hasPluviometro">Observadores</label><br>
-                            <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger2"
-                                class="table align-items-center table-flush row-border hover">
+                            <table class="table align-items-center table-flush row-border hover">
                                 <thead class="thead-light">
                                     <tr>
                                         <th scope="col">Nombre</th>
@@ -168,7 +176,8 @@
                                         <th scope="row">
                                             <div class="media align-items-center">
                                                 <div class="media-body">
-                                                    <span class="mb-0 text-sm">{{usuario.User.nombre + " " + usuario.User.apellido}}</span>
+                                                    <span class="mb-0 text-sm">{{usuario.User.nombre + " " +
+                                                        usuario.User.apellido}}</span>
                                                 </div>
                                             </div>
                                         </th>
@@ -270,10 +279,8 @@
                             </div>
                         </div>
                         <div>
-                            <button class="btn btn-secondary float-left"
-                                (click)="cancelarFoto()">Cancelar</button>
-                            <button class="btn btn-default float-right"
-                                (click)="subirFoto()">Guardar</button>
+                            <button class="btn btn-secondary float-left" (click)="cancelarFoto()">Cancelar</button>
+                            <button class="btn btn-default float-right" (click)="subirFoto()">Guardar</button>
                         </div>
                     </form>
                 </div>

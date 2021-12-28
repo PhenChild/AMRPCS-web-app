@@ -19,26 +19,22 @@ declare interface RouteInfo {
 
 /** Componente para la barra lateral de navegación del administrador. */
 export const ROUTES: RouteInfo[] = [
-    { path: "/admin-layout/usuarios", title: "Usuarios", icon: "ni-single-02 text-white", class: "" },
-    { path: "/admin-layout/form-usuario", title: "Nuevo Usuario", icon: "ni-badge text-white", class: "" },
-    { path: "/admin-layout/estaciones", title: "Estaciones", icon: "ni-building text-white", class: "" },
-    { path: "/admin-layout/form-estacion", title: "Nueva Estación", icon: "ni-fat-add text-white", class: "" },
-    { path: "/admin-layout/paises", title: "Paises", icon: "ni-collection text-white", class: "" },
-    { path: "/admin-layout/divisiones", title: "Divisiones Políticas", icon: "ni-collection text-white", class: "" },
-    { path: "/admin-layout/reportes", title: "Precipitación", icon: "ni-collection text-white", class: "" },
-    { path: "/admin-layout/acumulados", title: "Precipitación Acumulada", icon: "ni-collection text-white", class: "" },
-    { path: "/admin-layout/graficos", title: "Graficos", icon: "ni-collection text-white", class: "" },
+    { path: "/obs-layout/usuarios", title: "Usuarios", icon: "ni-single-02 text-white", class: "" },
+    { path: "/obs-layout/estaciones", title: "Estaciones", icon: "ni-building text-white", class: "" },
+    { path: "/obs-layout/reportes", title: "Precipitación", icon: "ni-collection text-white", class: "" },
+    { path: "/obs-layout/acumulados", title: "Precipitación Acumulada", icon: "ni-collection text-white", class: "" },
+    { path: "/obs-layout/graficos", title: "Graficos", icon: "ni-collection text-white", class: "" },
 ];
 
 /**
  * Componente de sidebar
  */
 @Component({
-    selector: "app-sidebar",
-    templateUrl: "./sidebar.component.html",
-    styleUrls: ["./sidebar.component.scss"]
+    selector: "app-sidebar-obs",
+    templateUrl: "./sidebar-obs.component.html",
+    styleUrls: ["./sidebar-obs.component.scss"]
 })
-export class SidebarComponent implements OnInit {
+export class SidebarObsComponent implements OnInit {
 
     /** Items del menu */
     public menuItems!: any[];

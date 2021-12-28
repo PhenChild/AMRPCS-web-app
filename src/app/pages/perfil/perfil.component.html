@@ -6,20 +6,21 @@
         </div>
     </div>
 </div>
-<div class="container-fluid mt--9">
+<div class="container-fluid mt--9" id="perfil">
     <div class="row justify-content-center">
-        <div class="col-xl-6 mb-5 mb-xl-0">
+        <div class="col-xl-6 mb-5">
             <div class="card card-profile shadow">
                 <div class="row justify-content-center">
-                    <div class="col-lg-3 order-lg-2">
+                    <div class="col-md-3 ">
                         <div class="card-profile-image">
-                            <img *ngIf="true" src="../../../assets/img/more/default-user.jpg" class="rounded-circle"
-                                alt="user image">
-                            <img *ngIf="false" src="data:image/png;base64,{}" class="rounded-circle" alt="user image">
+                            <img *ngIf="!usuario.foto" src="../../../assets/img/more/default-user.jpg"
+                                class=" img-fluid rounded-circle" alt="user image">
+                            <img *ngIf="usuario.foto" src="data:image/png;base64,{{usuario.foto}}"
+                                class="img-fluid rounded-circle" alt="user image">
                         </div>
                     </div>
                 </div>
-                <div class="card-body pt-0 px-7 pt-md-8">
+                <div class="card-body px-lg-7 pt-8">
                     <form #formUsuario="ngForm" (ngSubmit)="{}">
                         <div class="form-group">
                             <label for="nombre">Nombre</label><br>
@@ -42,16 +43,55 @@
                                 [(ngModel)]="usuario.email">
                         </div>
                         <div class="form-group">
-                            <label for="contrasena">Contraseña</label><br>
-                            <input type="password" class="form-control" name="contrasena" id="contrasena"
-                                [(ngModel)]="usuario.password">
+                            <label for="correo">Contraseña</label><br>
+                            <button class="btn btn-secondary" (click)="editarPassword()">Cambiar contraseña</button>
                         </div>
                         <div>
-                            <button class="btn btn-secondary float-left">Cancelar</button>
-                            <button class="btn btn-default float-right">Guardar</button>
+                            <button class="btn btn-default float-right" (click)="submit(formUsuario)">Guardar</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+
+
+<div class="container-fluid mt--9" id="form-update-password" style="display: none;">
+    <div class="row">
+        <div class="col-xl-2"></div>
+        <div class="col-xl-8 mb-5 mb-xl-0">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Actualizar Contraseña Usuario</h3>
+                </div>
+                <div class="card-body">
+                    <form #formPassUsuario="ngForm">
+                        <div class="form-group">
+                            <label for="nombre">Correo Usuario</label><br>
+                            <input type="text" disabled class="form-control" name="nombre" id="nombre"
+                                [(ngModel)]="usuario.email">
+                        </div>
+                        <div class="form-group">
+                            <label for="contrasena">Nueva Contraseña</label><br>
+                            <input type="password" class="form-control" name="contrasena" id="contrasena"
+                                [(ngModel)]="usuario.password">
+                        </div>
+                        <div class="form-group">
+                            <label for="confcontrasena">Confirmar Contraseña</label><br>
+                            <input type="password" class="form-control" name="confcontrasena" id="confcontrasena"
+                                [(ngModel)]="confpassword">
+                        </div>
+                        <div>
+                            <button class="btn btn-secondary float-left"
+                                (click)="cancelarPassword(formPassUsuario)">Cancelar</button>
+                            <button class="btn btn-default float-right"
+                                (click)="submitPassword(formPassUsuario)">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

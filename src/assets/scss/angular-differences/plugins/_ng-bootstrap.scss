@@ -5,8 +5,8 @@
     }
     .dropdown-menu{
       .dropdown-item.active{
-        background-color: inherit;
-        color: inherit;
+        background-color: $default;
+        color: $secondary;
         text-decoration: inherit;
       }
     }

@@ -57,7 +57,6 @@ export class EstacionesComponent implements OnInit, OnDestroy {
 
     /** Operador del datatable de las estaciones */
     dtTrigger1: Subject<any> = new Subject<any>();
-    dtTrigger2: Subject<any> = new Subject<any>();
 
     filtro = {
         nombre: "",
@@ -158,12 +157,15 @@ export class EstacionesComponent implements OnInit, OnDestroy {
         this.dbService.getObservadores(estacion)
             .subscribe((data: any) => {
                 this.usuarios = (data as any);
-                console.log(this.usuarios);
-                this.dtTrigger2.next();
-                const table = (<HTMLInputElement>document.getElementById("tablaEstaciones"));
-                table.style.display = "block";
+                this.dbService.getFotoEstacion(this.estacion)
+                    .subscribe(
+                        (data: any) => {
+                            if(data.foto != undefined){
+                                this.estacion.foto = data.foto
+                            }
+                        }
+                    );
             });
-
         this.estacion = estacion;
         this.estacion.latitud = estacion.posicion.coordinates[0];
         this.estacion.longitud = estacion.posicion.coordinates[1];

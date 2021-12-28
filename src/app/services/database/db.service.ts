@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { User } from "../../models/user";
 import { environment } from "src/environments/environment";
+import { NgbPaginationNumber } from "@ng-bootstrap/ng-bootstrap";
 
 /**
  * Root
@@ -16,7 +17,7 @@ export class DbService {
 
     /** Url de conexión */
     //dbURL = "https://ciifen.loca.lt/api/";
-    dbURL = "http://44d2-181-199-40-123.ngrok.io/api/";
+    dbURL = "http://ca3b-181-199-40-123.ngrok.io/api/";
 
     /**
      * Constructor
@@ -84,8 +85,28 @@ export class DbService {
      * @returns respuesta del servidor
      */
     updateUsuario(usuario: any, addedEstaciones: any, deletedEstaciones: any): any {
-        return this.http.post(this.dbURL + "users/updateUser", {usuario, addedEstaciones, deletedEstaciones}, { headers: this.getHeader() });
+        return this.http.post(this.dbURL + "users/updateUser", { usuario, addedEstaciones, deletedEstaciones }, { headers: this.getHeader() });
     }// req.body.id, req.body.email, req.body.password, req.body.nombre, req.body.apellido, req.body.telefono
+
+
+    updateUserProfile(usuario: any): any {
+        return this.http.post(this.dbURL + "user/update",
+            {
+                "id": usuario.id,
+                "nombre": usuario.nombre,
+                "apellido": usuario.apellido,
+                "email": usuario.email,
+                "telefono": usuario.telefono
+            }, { headers: this.getHeader() });
+    }
+
+    editUserPassword(usuario: any): any {
+        return this.http.post(this.dbURL + "user/pass", 
+        {
+            "id": usuario.id,
+            "password": usuario.password
+        }, { headers: this.getHeader() });
+    }
 
     getFoto(usuario: any): any {
         return this.http.post(this.dbURL + "users/getPicture", { "id": usuario.id }, { headers: this.getHeader() });
@@ -158,6 +179,7 @@ export class DbService {
      * @returns respuesta del servidor
      */
     updateEstacion(estacion: any): any {
+        delete estacion.foto;
         return this.http.post(this.dbURL + "estacion/update", estacion, { headers: this.getHeader() });
     }
 
@@ -287,6 +309,18 @@ export class DbService {
         return this.http.get(this.dbURL + "precipitacion/getAll/filtro?" + query, { headers: this.getHeader() });
     }
 
+    getReportesGraficos(filtro: any): any {
+        var query = ""
+        if (filtro.estacion != "") {
+            query += "estacion=" + filtro.estacion + "&"
+        } if (filtro.fechaInicio != "") {
+            query += "fechaInicio=" + filtro.fechaInicio + "&"
+        } if (filtro.fechaFin != "") {
+            query += "fechaFin=" + filtro.fechaFin + "&"
+        }
+        return this.http.get(this.dbURL + "precipitacion/getAll/filtroGrafico?" + query, { headers: this.getHeader() });
+    }
+
     /**
      * Obtener reportes
      * @returns respuesta del servidor
@@ -322,5 +356,8 @@ export class DbService {
         return this.http.post(this.dbURL + "estacion/getPicture", estacion, { headers: this.getHeader() });
     }
 
+    getProfile() {
+        return this.http.get(this.dbURL + "getMe", { headers: this.getHeader() });
+    }
 
 }
