@@ -19,15 +19,16 @@ declare interface RouteInfo {
 
 /** Componente para la barra lateral de navegación del administrador. */
 export const ROUTES: RouteInfo[] = [
-    { path: "/admin-layout/usuarios", title: "Usuarios", icon: "ni-single-02 text-white", class: "" },
-    { path: "/admin-layout/form-usuario", title: "Nuevo Usuario", icon: "ni-badge text-white", class: "" },
-    { path: "/admin-layout/estaciones", title: "Estaciones", icon: "ni-building text-white", class: "" },
-    { path: "/admin-layout/form-estacion", title: "Nueva Estación", icon: "ni-fat-add text-white", class: "" },
-    { path: "/admin-layout/paises", title: "Paises", icon: "ni-collection text-white", class: "" },
-    { path: "/admin-layout/divisiones", title: "Divisiones Políticas", icon: "ni-collection text-white", class: "" },
-    { path: "/admin-layout/reportes", title: "Precipitación", icon: "ni-collection text-white", class: "" },
-    { path: "/admin-layout/acumulados", title: "Precipitación Acumulada", icon: "ni-collection text-white", class: "" },
-    { path: "/admin-layout/graficos", title: "Graficos", icon: "ni-collection text-white", class: "" },
+    { path: "/admin-layout/usuarios", title: "Usuarios", icon: "fa-user", class: "" },
+    { path: "/admin-layout/form-usuario", title: "Nuevo Usuario", icon: "fa-user-plus", class: "" },
+    { path: "/admin-layout/estaciones", title: "Estaciones", icon: "fa-building", class: "" },
+    { path: "/admin-layout/form-estacion", title: "Nueva Estación", icon: "fa-plus-circle", class: "" },
+    { path: "/admin-layout/paises", title: "Paises", icon: "fa-globe", class: "" },
+    { path: "/admin-layout/divisiones", title: "Divisiones Políticas", icon: "fa-flag", class: "" },
+    { path: "/admin-layout/reportes", title: "Precipitación", icon: "fa-file-alt", class: "" },
+    { path: "/admin-layout/acumulados", title: "Precipitación Acumulada", icon: "fa-file-alt", class: "" },
+    { path: "/admin-layout/graficos", title: "Graficos", icon: "fa-chart-bar", class: "" },
+    { path: "/admin-layout/acercade", title: "Acerca de", icon: "fa-info-circle", class: "active-pro" },
 ];
 
 /**

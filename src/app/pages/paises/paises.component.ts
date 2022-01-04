@@ -18,10 +18,10 @@ export class PaisesComponent implements OnInit, OnDestroy {
 
   /** Opciones para los datatbles. */
   dtOptions: DataTables.Settings = {
-      pagingType: "full_numbers",
-      pageLength: 7,
-      responsive: true,
-      searching: false,
+    pagingType: "full_numbers",
+    pageLength: 7,
+    responsive: true,
+    searching: false,
   };
   /** Lista de paises */
   paises: Pais[] = [];
@@ -66,7 +66,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
     } else {
       this.isDtInitialized = true;
     }
-    
+
     this.dbService.getFiltroPaises(this.filtro)
       .subscribe((data: any) => {
         this.paises = (data as any);
@@ -109,15 +109,17 @@ export class PaisesComponent implements OnInit, OnDestroy {
      * @param estacion estación que será eliminada
      */
   deletePais(pais: any): void {
-    this.pais = pais;
-    this.dbService.deletePais(this.pais).subscribe((data: any) => {
-      this.tService.success("Pais eliminada con exito.", "Envio exitoso");
-      window.location.reload();
-    },
-      (err: any) => {
-        console.log(err);
-        this.tService.error("", "Ha ocurrido un error");
-      });
+    if (confirm("¿Está seguro de eliminar este país?")) {
+      this.pais = pais;
+      this.dbService.deletePais(this.pais).subscribe((data: any) => {
+        this.tService.success("Pais eliminada con exito.", "Envio exitoso");
+        window.location.reload();
+      },
+        (err: any) => {
+          console.log(err);
+          this.tService.error("", "Ha ocurrido un error");
+        });
+    }
   }
 
   /**
@@ -125,40 +127,46 @@ export class PaisesComponent implements OnInit, OnDestroy {
      * @param formPais formulario de estación
      */
   submit(formPais: NgForm): void {
-    if (this.isUpdating) {
-      this.dbService.updatePais(this.pais)
-        .subscribe(
-          (data: any) => {
-            this.tService.success("Pais actualizado con exito.", "Envio exitoso");
-            formPais.reset();
-            const table = (<HTMLInputElement>document.getElementById("table"));
-            const form = (<HTMLInputElement>document.getElementById("form-pais"));
-            table.style.display = "block";
-            form.style.display = "none";
-            window.location.reload();
-          },
-          (err: any) => {
-            console.log(err);
-            this.tService.error("", "Ha ocurrido un error");
-          }
-        );
-    } else {
-      this.dbService.addPais(this.pais)
-        .subscribe(
-          (data: any) => {
-            this.tService.success("Pais creado con exito.", "Envio exitoso");
-            formPais.reset();
-            const table = (<HTMLInputElement>document.getElementById("table"));
-            const form = (<HTMLInputElement>document.getElementById("form-pais"));
-            table.style.display = "block";
-            form.style.display = "none";
-            window.location.reload();
-          },
-          (err: any) => {
-            console.log(err);
-            this.tService.error("", "Ha ocurrido un error");
-          }
-        );
+    if (formPais.valid) {
+      if (this.isUpdating) {
+        if (confirm("¿Está seguro de actualizar la información de este país?")) {
+          this.dbService.updatePais(this.pais)
+            .subscribe(
+              (data: any) => {
+                this.tService.success("Pais actualizado con exito.", "Envio exitoso");
+                formPais.reset();
+                const table = (<HTMLInputElement>document.getElementById("table"));
+                const form = (<HTMLInputElement>document.getElementById("form-pais"));
+                table.style.display = "block";
+                form.style.display = "none";
+                window.location.reload();
+              },
+              (err: any) => {
+                console.log(err);
+                this.tService.error("", "Ha ocurrido un error");
+              }
+            );
+        }
+      } else {
+        if (confirm("¿Está seguro de crear un nuevo país?")) {
+          this.dbService.addPais(this.pais)
+            .subscribe(
+              (data: any) => {
+                this.tService.success("Pais creado con exito.", "Envio exitoso");
+                formPais.reset();
+                const table = (<HTMLInputElement>document.getElementById("table"));
+                const form = (<HTMLInputElement>document.getElementById("form-pais"));
+                table.style.display = "block";
+                form.style.display = "none";
+                window.location.reload();
+              },
+              (err: any) => {
+                console.log(err);
+                this.tService.error("", "Ha ocurrido un error");
+              }
+            );
+        }
+      }
     }
   }
 

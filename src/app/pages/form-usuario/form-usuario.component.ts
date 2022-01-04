@@ -140,35 +140,37 @@ export class FormUsuarioComponent implements OnInit {
      */
     onSubmit(formUsuario: NgForm) {
         if (this.confpassword == this.usuario.password) {
-            this.dbService.addUsuario(this.usuario, this.selectedEstaciones)
-                .subscribe(
-                    (data: any) => {
-                        this.tService.success("Usuario registrado con exito.", "Envio exitoso");
-                        formUsuario.reset();
-                        this.selectedEstaciones = [];
-                        this.estaciones = [];
-                        if (this.isDtInitialized) {
-                            this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-                                dtInstance.destroy()
-                            })
-                        } else {
-                            this.isDtInitialized = true;
+            if (confirm("¿Está seguro de crear un nuevo usuario?")) {
+                this.dbService.addUsuario(this.usuario, this.selectedEstaciones)
+                    .subscribe(
+                        (data: any) => {
+                            this.tService.success("Usuario registrado con exito.", "Envio exitoso");
+                            formUsuario.reset();
+                            this.selectedEstaciones = [];
+                            this.estaciones = [];
+                            if (this.isDtInitialized) {
+                                this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+                                    dtInstance.destroy()
+                                })
+                            } else {
+                                this.isDtInitialized = true;
+                            }
+                            this.dtTrigger1.next();
+                        },
+                        (err: any) => {
+                            console.log(err);
+                            this.tService.error("", "Ha ocurrido un error");
+                            formUsuario.reset();
                         }
-                        this.dtTrigger1.next();
-                    },
-                    (err: any) => {
-                        console.log(err);
-                        this.tService.error("", "Ha ocurrido un error");
-                        formUsuario.reset();
-                    }
-                );
+                    );
+            }
         } else {
             this.tService.error("", "Las contraseñas deben coincidir");
 
         }
     }
 
-    cancelar(formUsuario:NgForm){
+    cancelar(formUsuario: NgForm) {
         const table = (<HTMLInputElement>document.getElementById("form-estacion-new"));
         table.style.display = "none"
         formUsuario.reset()

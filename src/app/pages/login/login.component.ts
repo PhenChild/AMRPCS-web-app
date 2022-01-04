@@ -67,7 +67,11 @@ export class LoginComponent implements OnInit, OnDestroy {
                     sessionStorage.setItem("user", this.user.email);
                     sessionStorage.setItem("foto",this.user.foto);
                     //sessionStorage.setItem("userFoto", this.user.foto);
-                    this.router.navigateByUrl("/admin-layout/usuarios");
+                    if(this.user.role == 'admin'){
+                        this.router.navigateByUrl("/admin-layout/usuarios");
+                    }else if(this.user.role == 'observer'){
+                        this.router.navigateByUrl("/obs-layout/usuarios");
+                    }
                 },
                 (err: any) => {
                     console.log(err);

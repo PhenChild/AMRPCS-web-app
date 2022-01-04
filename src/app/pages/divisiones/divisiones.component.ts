@@ -19,10 +19,10 @@ export class DivisionesComponent implements OnInit {
 
   /** Opciones para los datatbles. */
   dtOptions: DataTables.Settings = {
-      pagingType: "full_numbers",
-      pageLength: 7,
-      responsive: true,
-      searching: false,
+    pagingType: "full_numbers",
+    pageLength: 7,
+    responsive: true,
+    searching: false,
   };
 
   /** Lista de divisiones */
@@ -40,7 +40,7 @@ export class DivisionesComponent implements OnInit {
 
   isUpdating: boolean = false;
 
-  
+
   filtro = {
     nombre: "",
     pais: "",
@@ -74,7 +74,7 @@ export class DivisionesComponent implements OnInit {
     } else {
       this.isDtInitialized = true;
     }
-    
+
     this.dbService.getFiltroDivisiones(this.filtro)
       .subscribe((data: any) => {
         this.divisiones = (data as any);
@@ -96,6 +96,9 @@ export class DivisionesComponent implements OnInit {
         console.log(this.paises);
       });
     this.division = division;
+    this.isUpdating = true;
+    
+    this.getDivisionesSuperiores()
     const table = (<HTMLInputElement>document.getElementById("table"));
     const form = (<HTMLInputElement>document.getElementById("form-division"));
     table.style.display = "none";
@@ -112,7 +115,6 @@ export class DivisionesComponent implements OnInit {
         this.paises = (data as any);
         console.log(this.paises);
       });
-
     this.division = new Division();
     const table = (<HTMLInputElement>document.getElementById("table"));
     const form = (<HTMLInputElement>document.getElementById("form-division"));
@@ -125,15 +127,17 @@ export class DivisionesComponent implements OnInit {
      * @param estacion estación que será eliminada
      */
   deleteDivision(division: any): void {
-    this.division = division;
-    this.dbService.deleteDivision(this.division).subscribe((data: any) => {
-      this.tService.success("División eliminada con exito.", "Envio exitoso");
-      window.location.reload();
-    },
-      (err: any) => {
-        console.log(err);
-        this.tService.error("", "Ha ocurrido un error");
-      });
+    if (confirm("¿Está seguro de eliminar esta division política?")) {
+      this.division = division;
+      this.dbService.deleteDivision(this.division).subscribe((data: any) => {
+        this.tService.success("División eliminada con exito.", "Envio exitoso");
+        window.location.reload();
+      },
+        (err: any) => {
+          console.log(err);
+          this.tService.error("", "Ha ocurrido un error");
+        });
+    }
   }
 
   /**
@@ -142,39 +146,43 @@ export class DivisionesComponent implements OnInit {
      */
   submit(formDivision: NgForm): void {
     if (this.isUpdating) {
-      this.dbService.updateDivision(this.division)
-        .subscribe(
-          (data: any) => {
-            this.tService.success("División actualizada con exito.", "Envio exitoso");
-            formDivision.reset();
-            const table = (<HTMLInputElement>document.getElementById("table"));
-            const form = (<HTMLInputElement>document.getElementById("form-division"));
-            table.style.display = "block";
-            form.style.display = "none";
-            window.location.reload();
-          },
-          (err: any) => {
-            console.log(err);
-            this.tService.error("", "Ha ocurrido un error");
-          }
-        );
+      if (confirm("¿Está seguro de actualizar la información de esta division política?")) {
+        this.dbService.updateDivision(this.division)
+          .subscribe(
+            (data: any) => {
+              this.tService.success("División actualizada con exito.", "Envio exitoso");
+              formDivision.reset();
+              const table = (<HTMLInputElement>document.getElementById("table"));
+              const form = (<HTMLInputElement>document.getElementById("form-division"));
+              table.style.display = "block";
+              form.style.display = "none";
+              window.location.reload();
+            },
+            (err: any) => {
+              console.log(err);
+              this.tService.error("", "Ha ocurrido un error");
+            }
+          );
+      }
     } else {
-      this.dbService.addDivision(this.division)
-        .subscribe(
-          (data: any) => {
-            this.tService.success("División creada con exito.", "Envio exitoso");
-            formDivision.reset();
-            const table = (<HTMLInputElement>document.getElementById("table"));
-            const form = (<HTMLInputElement>document.getElementById("form-division"));
-            table.style.display = "block";
-            form.style.display = "none";
-            window.location.reload();
-          },
-          (err: any) => {
-            console.log(err);
-            this.tService.error("", "Ha ocurrido un error");
-          }
-        );
+      if (confirm("¿Está seguro de crear una nueva division política?")) {
+        this.dbService.addDivision(this.division)
+          .subscribe(
+            (data: any) => {
+              this.tService.success("División creada con exito.", "Envio exitoso");
+              formDivision.reset();
+              const table = (<HTMLInputElement>document.getElementById("table"));
+              const form = (<HTMLInputElement>document.getElementById("form-division"));
+              table.style.display = "block";
+              form.style.display = "none";
+              window.location.reload();
+            },
+            (err: any) => {
+              console.log(err);
+              this.tService.error("", "Ha ocurrido un error");
+            }
+          );
+      }
     }
   }
 

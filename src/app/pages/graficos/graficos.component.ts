@@ -41,8 +41,8 @@ export class GraficosComponent implements OnInit {
         const fechas = this.reportes.map((a:any) => a.fecha)
         const valores = this.reportes.map((a:any) => {
           if(a.valor == 0){
-            return 0.1
-          }else if(a.valor == -777){
+            return 0.01
+          }else if(a.valor == -888){
             return 0
           }else{
             return a.valor

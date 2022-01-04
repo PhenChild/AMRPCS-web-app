@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminLayoutComponent } from "./layouts/admin-layout/admin-layout.component";
 import { AuthLayoutComponent } from "./layouts/auth-layout/auth-layout.component";
 import { ObsLayoutComponent } from './layouts/obs-layout/obs-layout.component';
+import { ViewLayoutComponent } from './layouts/view-layout/view-layout.component';
 
 const routes: Routes = [
   {
@@ -40,10 +41,19 @@ const routes: Routes = [
             loadChildren: () => import("./layouts/obs-layout/obs-layout.module").then(m => m.ObsLayoutModule)
         }
     ]
+},{
+    path: "view-layout",
+    component: ViewLayoutComponent,
+    children: [
+        {
+            path: "",
+            loadChildren: () => import("./layouts/view-layout/view-layout.module").then(m => m.ViewLayoutModule)
+        }
+    ]
 },
 {
     path: "**",
-    redirectTo: "dashboard"
+    redirectTo: "/auth-layout/login"
 }
 ];
 

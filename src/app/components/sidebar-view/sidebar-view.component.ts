@@ -19,23 +19,23 @@ declare interface RouteInfo {
 
 /** Componente para la barra lateral de navegación del administrador. */
 export const ROUTES: RouteInfo[] = [
-    { path: "/obs-layout/usuarios", title: "Usuarios", icon: "fa-user", class: "" },
-    { path: "/obs-layout/estaciones", title: "Estaciones", icon: "fa-building", class: "" },
-    { path: "/obs-layout/reportes", title: "Precipitación", icon: "fa-file-alt", class: "" },
-    { path: "/obs-layout/acumulados", title: "Precipitación Acumulada", icon: "fa-file-alt", class: "" },
-    { path: "/obs-layout/graficos", title: "Graficos", icon: "fa-chart-bar", class: "" },
-    { path: "/obs-layout/acercade", title: "Acerca de", icon: "fa-info-circle", class: "active-pro" },
+    { path: "/view-layout/usuarios", title: "Usuarios", icon: "fa-user", class: "" },
+    { path: "/view-layout/estaciones", title: "Estaciones", icon: "fa-building", class: "" },
+    { path: "/view-layout/reportes", title: "Precipitación", icon: "fa-file-alt", class: "" },
+    { path: "/view-layout/acumulados", title: "Precipitación Acumulada", icon: "fa-file-alt", class: "" },
+    { path: "/view-layout/graficos", title: "Graficos", icon: "fa-chart-bar", class: "" },
+    { path: "/view-layout/acercade", title: "Acerca de", icon: "fa-info-circle", class: "active-pro" },
 ];
 
 /**
  * Componente de sidebar
  */
 @Component({
-    selector: "app-sidebar-obs",
-    templateUrl: "./sidebar-obs.component.html",
-    styleUrls: ["./sidebar-obs.component.scss"]
+    selector: "app-sidebar-view",
+    templateUrl: "./sidebar-view.component.html",
+    styleUrls: ["./sidebar-view.component.scss"]
 })
-export class SidebarObsComponent implements OnInit {
+export class SidebarViewComponent implements OnInit {
 
     /** Items del menu */
     public menuItems!: any[];

@@ -17,7 +17,7 @@ export class DbService {
 
     /** Url de conexión */
     //dbURL = "https://ciifen.loca.lt/api/";
-    dbURL = "http://ca3b-181-199-40-123.ngrok.io/api/";
+    dbURL = "http://e825-181-199-40-123.ngrok.io/api/";
 
     /**
      * Constructor
@@ -288,7 +288,7 @@ export class DbService {
     getDivisionesSuperiores(idPais: number, nivel: number) {
         return this.http.post(this.dbURL + "division/getDivisionesSuperiores", { "idPais": idPais, "nivel": nivel }, { headers: this.getHeader() });
     }
-
+    
     // REPORTES ENDPOINTS
 
     /**
@@ -358,6 +358,14 @@ export class DbService {
 
     getProfile() {
         return this.http.get(this.dbURL + "getMe", { headers: this.getHeader() });
+    }
+
+    updateReporteValor(reporte: any){
+        return this.http.post(this.dbURL + "precipitacion/update", reporte,{ headers: this.getHeader() })
+    }
+    
+    updateReporteValorAcumulado(reporte: any){
+        return this.http.post(this.dbURL + "acumulado/update", reporte,{ headers: this.getHeader() })
     }
 
 }

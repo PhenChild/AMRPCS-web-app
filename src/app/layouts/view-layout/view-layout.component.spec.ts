@@ -1,16 +1,16 @@
 import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { DataTablesModule } from "angular-datatables";
-import { ObsLayoutComponent } from "./obs-layout.component";
+import { ViewLayoutComponent } from "./view-layout.component";
 
 
-describe("ObsLayoutComponent", () => {
-    let component: ObsLayoutComponent;
-    let fixture: ComponentFixture<ObsLayoutComponent>;
+describe("ViewLayoutComponent", () => {
+    let component: ViewLayoutComponent;
+    let fixture: ComponentFixture<ViewLayoutComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [ ObsLayoutComponent, DataTablesModule ],
+            declarations: [ ViewLayoutComponent, DataTablesModule ],
             imports: [
                 HttpClientTestingModule
             ]
@@ -19,7 +19,7 @@ describe("ObsLayoutComponent", () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(ObsLayoutComponent);
+        fixture = TestBed.createComponent(ViewLayoutComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

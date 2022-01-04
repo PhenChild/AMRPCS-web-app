@@ -3,6 +3,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
+import { Reporte } from 'src/app/models/reporte';
 import { ReporteAcumulado } from 'src/app/models/reporteAcumulado';
 import { DbService } from 'src/app/services/database/db.service';
 
@@ -39,6 +40,9 @@ export class AcumuladosComponent implements OnInit {
     fechaFin: ""
   }
   isDtInitialized: boolean = false
+
+  reporte!: ReporteAcumulado;
+
 
   constructor(
     private dbService: DbService,
@@ -100,6 +104,24 @@ export class AcumuladosComponent implements OnInit {
   date(s: any) {
     const fecha = this.rectifyFormat(s);
     return fecha.split("T")[0];
+  }
+
+  
+
+  openModal(contenido: any, reporte: ReporteAcumulado): void {
+    this.reporte = reporte;
+    this.modal.open(contenido, { size: "lg" });
+  }
+
+  saveValor() {
+    if (confirm("¿Desea actualizar la información del reporte?")) {
+      this.dbService.updateReporteValorAcumulado(this.reporte)
+        .subscribe((data: any) => {
+          this.tService.success("Valor actualizado con exito", "Envio exitoso");
+        }, (err: any) => {
+          this.tService.error("", "Ha ocurrido un error");
+        })
+    }
   }
 
 }

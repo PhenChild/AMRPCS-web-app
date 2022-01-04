@@ -2,7 +2,6 @@
 // Table
 //
 
-
 // General styles
 
 .table {
@@ -33,7 +32,6 @@
         white-space: nowrap;
     }
 
-
     // Vetical align table content
 
     &.align-items-center {
@@ -43,16 +41,14 @@
         }
     }
 
+    // Styles for dark table
 
-   // Styles for dark table
-
-   .thead-dark {
+    .thead-dark {
         th {
             background-color: $table-dark-head-bg;
             color: $table-dark-head-color;
         }
     }
-
 
     // Styles for light table
 
@@ -64,7 +60,6 @@
     }
 }
 
-
 // Add transition for hover state
 
 .table-hover {
@@ -72,7 +67,6 @@
         @include transition($transition-base);
     }
 }
-
 
 // Flush tables
 
@@ -102,7 +96,6 @@
     }
 }
 
-
 // Tables inside cards
 
 .card {
@@ -114,5 +107,25 @@
             padding-left: $card-spacer-x;
             padding-right: $card-spacer-x;
         }
+    }
+}
+
+.table-responsive {
+    .thead-light {
+        th {
+            background-color: #f6f9fc;
+            color: #8898aa;
+        }
+    }
+    th {
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+        font-size: 0.65rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-bottom: 1px solid #e9ecef;
+    }
+    td {
+        font-size: 0.8125rem;
     }
 }

@@ -65,18 +65,20 @@ export class FormEstacionComponent implements OnInit {
      * @param formEstacion
      */
     onSubmit(formEstacion: NgForm): void {
-        this.estacion.idUbicacion = this.division3;
-        this.dbService.addEstacion(this.estacion).subscribe(
-            (data: any) => {
-                this.tService.success("Estacion guardada con exito.", "Envio exitoso");
-                formEstacion.reset();
-            },
-            (err: any) => {
-                this.tService.error("", "Ha ocurrido un error");
-                console.log(err);
-                formEstacion.reset();
-            }
-        );
+        if (confirm("¿Está seguro de crear una nueva estación?")) {
+            this.estacion.idUbicacion = this.division3;
+            this.dbService.addEstacion(this.estacion).subscribe(
+                (data: any) => {
+                    this.tService.success("Estacion guardada con exito.", "Envio exitoso");
+                    formEstacion.reset();
+                },
+                (err: any) => {
+                    this.tService.error("", "Ha ocurrido un error");
+                    console.log(err);
+                    formEstacion.reset();
+                }
+            );
+        }
     }
 
     getDivisiones(pais: any) {
@@ -89,13 +91,13 @@ export class FormEstacionComponent implements OnInit {
     getDivDivisiones(division: any, nivel: number) {
         console.log(division)
         if (nivel == 1) {
-            this.dbService.getDivDivisiones(division,nivel)
+            this.dbService.getDivDivisiones(division, nivel)
                 .subscribe((data: any) => {
                     console.log(data)
                     this.divisiones2 = (data as any);
                 });
         } else if (nivel == 2) {
-            this.dbService.getDivDivisiones(division,nivel)
+            this.dbService.getDivDivisiones(division, nivel)
                 .subscribe((data: any) => {
                     this.divisiones3 = (data as any);
                 });

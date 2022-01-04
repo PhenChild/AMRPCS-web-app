@@ -6,14 +6,14 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { FileUploadModule } from "ng2-file-upload";
-import { obsLayoutRoutes } from "./obs-layout.routing";
 import { DataTablesModule } from "angular-datatables";
 import { PagesModule } from "src/app/pages/pages.module";
+import { viewLayoutRoutes } from "./view-layout.routing";
 
 @NgModule({
-    imports: [
+    imports: [ 
         CommonModule,
-        RouterModule.forChild(obsLayoutRoutes),
+        RouterModule.forChild(viewLayoutRoutes),
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
@@ -26,4 +26,4 @@ import { PagesModule } from "src/app/pages/pages.module";
     ]
 })
 
-export class ObsLayoutModule { }
+export class ViewLayoutModule { }

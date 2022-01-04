@@ -45,4 +45,8 @@ export class Estacion {
 
     audUpdatedAt!: string;
 
+    division1: any;
+    division2: any;
+    division3: any;
+
 }

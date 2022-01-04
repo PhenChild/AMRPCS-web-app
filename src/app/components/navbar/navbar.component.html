@@ -1,8 +1,7 @@
 <nav class="navbar navbar-top navbar-expand-md navbar-dark" id="navbar-main">
   <div class="container-fluid">
     <!-- Brand -->
-    <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" routerLinkActive="active"
-      routerLink="/auth-layout/login">{{getTitle()}}</a>
+    <a class="h4 mb-0 text-white text-uppercase d-none d-lg-inline-block" routerLinkActive="active">{{getTitle()}}</a>
     <!-- User -->
     <ul class="navbar-nav align-items-center d-none d-md-flex">
       <li class="nav-item" ngbDropdown placement="bottom-right">
@@ -22,12 +21,12 @@
             <h6 class="text-overflow m-0">Bienvenido!</h6>
           </div>
           <a routerLinkActive="active" class="dropdown-item" [routerLink]="['/admin-layout/perfil']">
-            <i class="ni ni-single-02"></i>
+            <i class="fa fa-address-card"></i>
             <span>Mi perfil</span>
           </a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" (click)="logout()">
-            <i class="ni ni-user-run"></i>
+            <i class="fa fa-sign-out-alt"></i>
             <span>Cerrar Sesi&oacute;n</span>
           </a>
         </div>

@@ -9,7 +9,7 @@ import { DataTableDirective } from "angular-datatables";
 import { Pais } from "src/app/models/pais";
 import { FileUploader } from 'ng2-file-upload';
 import { Estacion } from "src/app/models/estacion";
-import { THIS_EXPR } from "@angular/compiler/src/output/output_ast";
+import { Location } from "@angular/common";
 
 
 /**
@@ -75,6 +75,9 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     }
 
 
+    public location!: Location;
+    isAdmin = false;
+
 
     estaciones: Estacion[] = [];
 
@@ -88,10 +91,11 @@ export class UsuariosComponent implements OnInit, OnDestroy {
      * @param tService
      */
     constructor(
+        location: Location,
         private dbService: DbService,
         private tService: ToastrService
     ) {
-
+        this.location = location;
 
         this.uploader = new FileUploader({
             url: dbService.dbURL + "users/updatePicture",
@@ -110,11 +114,18 @@ export class UsuariosComponent implements OnInit, OnDestroy {
      * Obtencion de los usuarios desde la base de datos
      */
     ngOnInit(): void {
+        console.log(this.location.path())
+        let titlee = this.location.prepareExternalUrl(this.location.path());
+        if (titlee.charAt(0) === "#") {
+            titlee = titlee.slice(1);
+        }
+        titlee = titlee.split("/")[1]
+        if (titlee === "admin-layout") {
+            this.isAdmin = true;
+        }
         this.isCancel = false;
         this.isError = false;
         this.isSuccess = false;
-
-
 
         this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
 
@@ -238,13 +249,15 @@ export class UsuariosComponent implements OnInit, OnDestroy {
      */
     deleteUsuario(usuario: any): void {
         this.usuario = usuario;
-        this.dbService.deleteUsuario(this.usuario).subscribe((data: any) => {
-            this.tService.success("Estacion guardada con exito.", "Envio exitoso");
-            window.location.reload();
-        },
-            (err: any) => {
-                this.tService.error("", "Ha ocurrido un error");
-            });
+        if (confirm("¿Está seguro de eliminar el usuario?")) {
+            this.dbService.deleteUsuario(this.usuario).subscribe((data: any) => {
+                this.tService.success("Estacion guardada con exito.", "Envio exitoso");
+                window.location.reload();
+            },
+                (err: any) => {
+                    this.tService.error("", "Ha ocurrido un error");
+                });
+        }
     }
 
     /**
@@ -252,26 +265,28 @@ export class UsuariosComponent implements OnInit, OnDestroy {
      * @param formUsuario formulario de usuario
      */
     submit(formUsuario: NgForm): void {
-        this.dbService.updateUsuario(this.usuario, this.addedEstaciones, this.deletedEstaciones)
-            .subscribe(
-                (data: any) => {
-                    const table = (<HTMLInputElement>document.getElementById("table"));
-                    const form = (<HTMLInputElement>document.getElementById("form-usuario"));
-                    table.style.display = "block";
-                    form.style.display = "none";
-                    this.usuario = new User();
-                    this.tService.success("Usuario actualizado con exito.", "Envio exitoso");
-                    formUsuario.reset();
-                },
-                (err: any) => {
-                    console.log(err);
-                    this.tService.error("", "Ha ocurrido un error");
-                    this.addedEstaciones = [];
-                    this.deletedEstaciones = [];
-                    this.selectedEstaciones = [];
-                    formUsuario.reset();
-                }
-            );
+        if (confirm("¿Está seguro de actualizar la contraseña del usuario?")) {
+            this.dbService.updateUsuario(this.usuario, this.addedEstaciones, this.deletedEstaciones)
+                .subscribe(
+                    (data: any) => {
+                        const table = (<HTMLInputElement>document.getElementById("table"));
+                        const form = (<HTMLInputElement>document.getElementById("form-usuario"));
+                        table.style.display = "block";
+                        form.style.display = "none";
+                        this.usuario = new User();
+                        this.tService.success("Usuario actualizado con exito.", "Envio exitoso");
+                        formUsuario.reset();
+                    },
+                    (err: any) => {
+                        console.log(err);
+                        this.tService.error("", "Ha ocurrido un error");
+                        this.addedEstaciones = [];
+                        this.deletedEstaciones = [];
+                        this.selectedEstaciones = [];
+                        formUsuario.reset();
+                    }
+                );
+        }
     }
 
 
@@ -289,25 +304,31 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     }
 
     submitPassword(formPasswordUsuario: NgForm): void {
-        if (this.confpassword == this.usuario.password) {
-            this.dbService.updateUserPassword(this.usuario)
-                .subscribe(
-                    (data: any) => {
-                        const table = (<HTMLInputElement>document.getElementById("table"));
-                        const form = (<HTMLInputElement>document.getElementById("form-update-password"));
-                        table.style.display = "block";
-                        form.style.display = "none";
-                        this.tService.success("Contraseña actualizada con exito.", "Envio exitoso");
-                        formPasswordUsuario.reset();
-                    },
-                    (err: any) => {
-                        console.log(err);
-                        this.tService.error("", "Ha ocurrido un error");
-                        formPasswordUsuario.reset();
-                    }
-                );
-        } else {
+        if (this.confpassword == "" || this.usuario.password == "") {
+            this.tService.error("", "Debe llenar todos los campos");
+        } else if (this.confpassword != this.usuario.password) {
             this.tService.error("", "Las contraseñas deben coincidir");
+        }
+        else {
+            if (confirm("¿Está seguro de actualizar el usuario?")) {
+
+                this.dbService.updateUserPassword(this.usuario)
+                    .subscribe(
+                        (data: any) => {
+                            const table = (<HTMLInputElement>document.getElementById("table"));
+                            const form = (<HTMLInputElement>document.getElementById("form-update-password"));
+                            table.style.display = "block";
+                            form.style.display = "none";
+                            this.tService.success("Contraseña actualizada con exito.", "Envio exitoso");
+                            formPasswordUsuario.reset();
+                        },
+                        (err: any) => {
+                            console.log(err);
+                            this.tService.error("", "Ha ocurrido un error");
+                            formPasswordUsuario.reset();
+                        }
+                    );
+            }
         }
     }
 
@@ -342,7 +363,11 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
     subirFoto() {
         if (this.uploader.queue.length != 0) {
-            this.uploader.queue[0].upload()
+            if (confirm("¿Estás seguro de actualizar la foto del usuario?")) {
+                this.uploader.queue[0].upload()
+            }
+        } else {
+            this.tService.error("", "Debe elegir un archivo para actualizar la foto.");
         }
     }
 

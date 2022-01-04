@@ -20,10 +20,10 @@ export class ReportesComponent implements OnInit {
 
   /** Opciones para los datatbles. */
   dtOptions: DataTables.Settings = {
-      pagingType: "full_numbers",
-      pageLength: 7,
-      responsive: true,
-      searching: false,
+    pagingType: "full_numbers",
+    pageLength: 7,
+    responsive: true,
+    searching: false,
   };
 
   /** Lista de reportes seleccionados*/
@@ -31,13 +31,15 @@ export class ReportesComponent implements OnInit {
 
   /** Operador del datatable de los registros */
   dtTrigger: Subject<any> = new Subject<any>();
-  
+
   filtro = {
     observador: "",
     estacion: "",
-    fechaInicio:"",
-    fechaFin:""
+    fechaInicio: "",
+    fechaFin: ""
   }
+
+  reporte!: Reporte;
   isDtInitialized: boolean = false
 
   constructor(
@@ -68,7 +70,7 @@ export class ReportesComponent implements OnInit {
         const table = (<HTMLInputElement>document.getElementById("tablaReportes"));
         table.style.display = "block";
       });
-    
+
 
   }
 
@@ -77,29 +79,45 @@ export class ReportesComponent implements OnInit {
      * @param s String de la fecha
      * @returns String de la fecha rectificada.
      */
-   rectifyFormat(s: string) {
+  rectifyFormat(s: string) {
     const b = s.split(/\D/);
     return b[0] + "-" + b[1] + "-" + b[2] + "T" +
-           b[3] + ":" + b[4] + ":" + b[5] + "." +
-           b[6].substr(0, 3) + "+00:00";
-}
-/**
- * Obtiene la hora de la fecha rectificada.
- * @param s String de la fecha
- * @returns La hora de la fecha
- */
-time(s: any){
+      b[3] + ":" + b[4] + ":" + b[5] + "." +
+      b[6].substr(0, 3) + "+00:00";
+  }
+  /**
+   * Obtiene la hora de la fecha rectificada.
+   * @param s String de la fecha
+   * @returns La hora de la fecha
+   */
+  time(s: any) {
     const fecha = new Date(this.rectifyFormat(s));
     return fecha.toTimeString().split(" ").slice(0, 1);
-}
-/**
- * Obtiene el dia de la fecha rectificada.
- * @param s Fecha entregada
- * @returns Dia de la fecha
- */
-date(s: any){
+  }
+  /**
+   * Obtiene el dia de la fecha rectificada.
+   * @param s Fecha entregada
+   * @returns Dia de la fecha
+   */
+  date(s: any) {
     const fecha = this.rectifyFormat(s);
     return fecha.split("T")[0];
-}
+  }
+
+  openModal(contenido: any, reporte: Reporte): void {
+    this.reporte = reporte;
+    this.modal.open(contenido, { size: "lg" });
+  }
+
+  saveValor() {
+    if (confirm("¿Desea actualizar la información del reporte?")) {
+      this.dbService.updateReporteValor(this.reporte)
+        .subscribe((data: any) => {
+          this.tService.success("Valor actualizado con exito", "Envio exitoso");
+        }, (err: any) => {
+          this.tService.error("", "Ha ocurrido un error");
+        })
+    }
+  }
 
 }
