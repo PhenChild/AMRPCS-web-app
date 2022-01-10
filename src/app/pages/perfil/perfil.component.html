@@ -15,36 +15,40 @@
                         <div class="card-profile-image">
                             <img *ngIf="!usuario.foto" src="../../../assets/img/more/default-user.jpg"
                                 class=" img-fluid rounded-circle" alt="user image">
-                            <img *ngIf="usuario.foto" src="data:image/png;base64,{{usuario.foto}}"
-                                class="img-fluid rounded-circle" alt="user image">
+                            <img *ngIf="usuario.foto" src="data:image/png;base64,{{usuario.foto}}" class="image-cropper"
+                                alt="user image">
                         </div>
                     </div>
                 </div>
                 <div class="card-body px-lg-7 pt-8">
-                    <form #formUsuario="ngForm" (ngSubmit)="{}">
+                    <form #formUsuario="ngForm" ngNativeValidate>
                         <div class="form-group">
                             <label for="nombre">Nombre</label><br>
                             <input type="text" class="form-control" name="nombre" id="nombre"
-                                [(ngModel)]="usuario.nombre">
+                                [(ngModel)]="usuario.nombre" required>
                         </div>
                         <div class="form-group">
                             <label for="apellido">Apellido</label><br>
                             <input type="text" class="form-control" name="apellido" id="apellido"
-                                [(ngModel)]="usuario.apellido">
+                                [(ngModel)]="usuario.apellido" required>
                         </div>
                         <div class="form-group">
                             <label for="telefono">Tel&eacute;fono</label><br>
                             <input type="text" class="form-control" name="telefono" id="telefono"
-                                [(ngModel)]="usuario.telefono">
+                                [(ngModel)]="usuario.telefono" required>
                         </div>
                         <div class="form-group">
                             <label for="correo">Correo</label><br>
                             <input type="email" class="form-control" name="correo" id="correo"
-                                [(ngModel)]="usuario.email">
+                                [(ngModel)]="usuario.email" required>
                         </div>
                         <div class="form-group">
-                            <label for="correo">Contraseña</label><br>
+                            <label for="contraseña">Contraseña</label><br>
                             <button class="btn btn-secondary" (click)="editarPassword()">Cambiar contraseña</button>
+                        </div>
+                        <div class="form-group">
+                            <label for="Foto">Foto</label><br>
+                            <button class="btn btn-secondary" (click)="editarFoto()">Cambiar Fotografia</button>
                         </div>
                         <div>
                             <button class="btn btn-default float-right" (click)="submit(formUsuario)">Guardar</button>
@@ -64,10 +68,10 @@
         <div class="col-xl-8 mb-5 mb-xl-0">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Actualizar Contraseña Usuario</h3>
+                    <h3 class="card-title">Actualizar mi contraseña</h3>
                 </div>
                 <div class="card-body">
-                    <form #formPassUsuario="ngForm">
+                    <form #formPassUsuario="ngForm" ngNativeValidate>
                         <div class="form-group">
                             <label for="nombre">Correo Usuario</label><br>
                             <input type="text" disabled class="form-control" name="nombre" id="nombre"
@@ -76,18 +80,110 @@
                         <div class="form-group">
                             <label for="contrasena">Nueva Contraseña</label><br>
                             <input type="password" class="form-control" name="contrasena" id="contrasena"
-                                [(ngModel)]="usuario.password">
+                                [(ngModel)]="usuario.password" required>
                         </div>
                         <div class="form-group">
                             <label for="confcontrasena">Confirmar Contraseña</label><br>
                             <input type="password" class="form-control" name="confcontrasena" id="confcontrasena"
-                                [(ngModel)]="confpassword">
+                                [(ngModel)]="confpassword" required>
                         </div>
                         <div>
                             <button class="btn btn-secondary float-left"
                                 (click)="cancelarPassword(formPassUsuario)">Cancelar</button>
                             <button class="btn btn-default float-right"
                                 (click)="submitPassword(formPassUsuario)">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container-fluid mt--9" id="form-update-foto" style="display: none;">
+    <div class="row">
+        <div class="col-xl-2"></div>
+        <div class="col-xl-8 mb-5 mb-xl-0">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Actualizar mi foto de perfil</h3>
+                </div>
+                <div class="card-body">
+                    <form #formPassUsuario="ngForm">
+                        <div class="form-group">
+                            <label for="correoFoto">Correo del Usuario</label><br>
+                            <input type="text" disabled class="form-control" name="correoFoto" id="correoFoto"
+                                [(ngModel)]="usuario.email">
+                        </div>
+                        <div class="row justify-content-center">
+                            <div class="col-md-5">
+                                <img *ngIf="!usuario.foto" src="../../../assets/img/more/default-user.jpg"
+                                    class=" img-fluid rounded-circle" alt="user image">
+                                <img *ngIf="usuario.foto" src="data:image/png;base64,{{usuario.foto}}"
+                                    class="img-fluid rounded-circle" alt="user image">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="file">Archivo</label><br>
+                                <input *ngIf="uploader.queue.length == 0" type="file"
+                                    class="input-group custom-file-upload mb-4" ng2FileSelect [uploader]="uploader"
+                                    accept=".jpg,.jpeg,.png" />
+                            </div>
+                            <div class="col-12" *ngIf="uploader.queue.length != 0">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Nombre</th>
+                                            <th scope="col">Tamaño</th>
+                                            <th scope="col">Estado</th>
+                                            <th scope="col">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of uploader.queue">
+                                            <td scope="row" class="text-wrap"><strong>{{ item?.file?.name }}</strong>
+                                            </td>
+                                            <td *ngIf="uploader.options.isHTML5" nowrap>{{ item?.file?.size/1024/1024 |
+                                                number:'.2' }} MB</td>
+                                            <td class="text-center">
+                                                <span *ngIf="item.isUploading"><i class="fa fa-spinner"></i></span>
+                                                <span *ngIf="item.isSuccess"><i class="fa fa-check-circle"></i></span>
+                                                <span *ngIf="item.isCancel"><i
+                                                        class="fa fa-times-circle text-black"></i></span>
+                                                <span *ngIf="item.isError"><i
+                                                        class="fa fa-exclamation-circle text-black"></i></span>
+                                            </td>
+                                            <td nowrap>
+                                                <button type="button" class="btn btn-danger btn-xs"
+                                                    (click)="item.remove()">
+                                                    <span class="fa fa-trash"></span> Eliminar
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="progress-wrapper pt-0">
+                                    <div class="progress-info">
+                                        <div class="progress-label">
+                                            <span>Progreso</span>
+                                        </div>
+                                        <div class="progress-percentage">
+                                            <span>{{uploader.progress + "%"}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar"
+                                            [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-secondary float-left" (click)="cancelarFoto()">Cancelar</button>
+                            <button class="btn btn-default float-right" (click)="subirFoto()">Guardar</button>
                         </div>
                     </form>
                 </div>

@@ -13,7 +13,7 @@
                 <div class="card-header border-0">
                     <div class="row align-items-center">
                         <div class="col-9">
-                            <h3 class="mb-0">Lista de Reportes de Precipitación Acumulada</h3>
+                            <h3 class="mb-0">Reportes Acumulados de Precipitación</h3>
                         </div>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
                                 [(ngModel)]="filtro.observador">
                         </div>
                         <div class="form-group col-md-3">
-                            <label for="estacion">Estacion</label><br>
+                            <label for="estacion">Estación</label><br>
                             <input type="text" class="form-control" name="estacion" id="festacion"
                                 [(ngModel)]="filtro.estacion">
                         </div>
@@ -45,57 +45,57 @@
                     </div>
                 </div>
                 <div class="container" id="tablaReportes" style="display: none;">
-                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
-                        class="table-responsive align-items-center table-flush row-border hover">
-                        <thead class="thead-light">
-                            <tr>
-                                <th scope="col">Observador</th>
-                                <th scope="col">Estación</th>
-                                <th scope="col">Fecha Inicio</th>
-                                <th scope="col">Fecha Fin</th>
-                                <th scope="col">Valor</th>
-                                <th scope="col">Comentario</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let reporte of reportes">
-                                <th scope="row">
-                                    <div class="media align-items-center">
-                                        <div class="media-body">
-                                            <span class="mb-0 text-sm">{{ reporte.Observador.User.nombre + " " +
-                                                reporte.Observador.User.apellido}}</span>
+                    <div class="">
+                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
+                            class="table-responsive align-items-center table-flush row-border hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Observador</th>
+                                    <th scope="col">Estación</th>
+                                    <th scope="col">Fecha Inicio</th>
+                                    <th scope="col">Fecha Fin</th>
+                                    <th scope="col">Valor</th>
+                                    <th scope="col">Comentario</th>
+                                    <th scope="col" *ngIf="isAdmin"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let reporte of reportes">
+                                    <th scope="row">
+                                        <span class="mb-0 text-sm">{{ reporte.Observador.User.nombre + " " +
+                                            reporte.Observador.User.apellido}}</span>
+                                    </th>
+                                    <td scope="row">
+                                        {{reporte.Observador.Estacion.nombre }}
+                                    </td>
+                                    <td scope="row">
+                                        {{reporte.fechaInicio}}
+                                    </td>
+                                    <td scope="row">
+                                        {{ date(reporte.fechaFin)}}
+                                    </td>
+                                    <td scope="row">
+                                        {{reporte.valor}}
+                                    </td>
+                                    <td scope="row" width=35%>
+                                        {{reporte.comentario}}
+                                    </td>
+                                    <td class="text-right" scope="row" *ngIf="isAdmin">
+                                        <div ngbDropdown placement="bottom-right">
+                                            <a class="btn btn-sm btn-icon-only text-light" ngbDropdownToggle>
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </a>
+                                            <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
+                                                <a class="dropdown-item"
+                                                    (click)="openModal(contenido,reporte)">Editar</a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </th>
-                                <td>
-                                    {{reporte.Observador.Estacion.nombre }}
-                                </td>
-                                <td>
-                                    {{reporte.fechaInicio}}
-                                </td>
-                                <td>
-                                    {{ date(reporte.fechaFin)}}
-                                </td>
-                                <td>
-                                    {{reporte.valor}}
-                                </td>
-                                <td>
-                                    {{reporte.comentario}}
-                                </td>
-                                <td class="text-right">
-                                    <div ngbDropdown placement="bottom-right">
-                                        <a class="btn btn-sm btn-icon-only text-light" ngbDropdownToggle>
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </a>
-                                        <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
-                                            <a class="dropdown-item" (click)="openModal(contenido,reporte)">Editar</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -104,7 +104,8 @@
 
 <ng-template #contenido let-modal>
     <div class="modal-header">
-        <h4 class="modal-title">Editar el valor del reporte {{reporte.Observador.Estacion.nombre}} {{reporte.fechaInicio}}</h4>
+        <h4 class="modal-title">Editar el valor del reporte {{reporte.Observador.Estacion.nombre}}
+            {{reporte.fechaInicio}}</h4>
         <button class="close" aria-label="close" type="button" (click)="modal.close()">
             <span aria-hidden="true">&times;</span>
         </button>

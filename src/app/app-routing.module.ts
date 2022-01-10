@@ -7,6 +7,8 @@ import { AdminLayoutComponent } from "./layouts/admin-layout/admin-layout.compon
 import { AuthLayoutComponent } from "./layouts/auth-layout/auth-layout.component";
 import { ObsLayoutComponent } from './layouts/obs-layout/obs-layout.component';
 import { ViewLayoutComponent } from './layouts/view-layout/view-layout.component';
+import { AuthGuard } from './guards/auth.guard';
+import { AuthObsGuard } from './guards/auth-obs.guard';
 
 const routes: Routes = [
   {
@@ -20,7 +22,7 @@ const routes: Routes = [
         {
             path: "",
             loadChildren: () => import("./layouts/admin-layout/admin-layout.module").then(m => m.AdminLayoutModule),
-            //canActivate: [AuthGuard]
+            canActivate: [AuthGuard]
         }
     ]
 }, {
@@ -38,7 +40,8 @@ const routes: Routes = [
     children: [
         {
             path: "",
-            loadChildren: () => import("./layouts/obs-layout/obs-layout.module").then(m => m.ObsLayoutModule)
+            loadChildren: () => import("./layouts/obs-layout/obs-layout.module").then(m => m.ObsLayoutModule),
+            canActivate: [AuthObsGuard]
         }
     ]
 },{

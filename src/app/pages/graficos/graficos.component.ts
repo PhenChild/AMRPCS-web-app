@@ -37,7 +37,6 @@ export class GraficosComponent implements OnInit {
     this.dbService.getReportesGraficos(this.filtro)
       .subscribe((data: any) => {
         this.reportes = (data as any);
-        console.log(this.reportes);
         const fechas = this.reportes.map((a:any) => a.fecha)
         const valores = this.reportes.map((a:any) => {
           if(a.valor == 0){
@@ -59,7 +58,7 @@ export class GraficosComponent implements OnInit {
             }]
           },
           options: {
-            indexAxis:'y',
+            indexAxis:'x',
             responsive: true,
           }
         });

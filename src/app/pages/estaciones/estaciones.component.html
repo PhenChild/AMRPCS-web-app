@@ -82,7 +82,8 @@
                                     {{estacion.Division.Pai.nombre}}
                                 </td>
                                 <td>
-                                    {{estacion.division1.nombre + ", " + estacion.division2.nombre + ", " + estacion.division3.nombre}}
+                                    {{estacion.division1.nombre + ", " + estacion.division2.nombre + ", " +
+                                    estacion.division3.nombre}}
                                 </td>
                                 <td class="text-right">
                                     <div ngbDropdown placement="bottom-right">
@@ -90,12 +91,16 @@
                                             <i class="fas fa-ellipsis-v"></i>
                                         </a>
                                         <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
-                                            <a class="dropdown-item" (click)="editarEstacion(estacion)" *ngIf="isAdmin">Ver/Editar
+                                            <a class="dropdown-item" (click)="editarEstacion(estacion)"
+                                                *ngIf="isAdmin">Ver/Editar
                                                 Información</a>
-                                            <a class="dropdown-item" (click)="editarEstacion(estacion)" *ngIf="!isAdmin">Ver
+                                            <a class="dropdown-item" (click)="editarEstacion(estacion)"
+                                                *ngIf="!isAdmin">Ver
                                                 Información</a>
-                                            <a class="dropdown-item" (click)="editarFoto(estacion)" *ngIf="isAdmin">Ver/Editar Foto</a>
-                                            <a class="dropdown-item" (click)="deleteEstacion(estacion)" *ngIf="isAdmin">Eliminar</a>
+                                            <a class="dropdown-item" (click)="editarFoto(estacion)"
+                                                *ngIf="isAdmin">Ver/Editar Foto</a>
+                                            <a class="dropdown-item" (click)="deleteEstacion(estacion)"
+                                                *ngIf="isAdmin">Eliminar</a>
                                         </div>
                                     </div>
                                 </td>
@@ -137,35 +142,45 @@
                         </div>
                         <div class="form-group">
                             <label for="pais">País</label><br>
+                            <input type="text" class="form-control" name="pais" id="pais" [(ngModel)]="pais"
+                                [disabled]="!isAdmin" *ngIf="!isAdmin">
                             <select name="pais" id="pais" class="form-control" [(ngModel)]="pais"
-                                (change)="getDivisiones(pais)">
+                                (change)="getDivisiones(pais)" [disabled]="!isAdmin" *ngIf="isAdmin">
                                 <option *ngFor="let pais of paises" [value]="pais.id">{{pais.nombre}}</option>
                             </select>
                         </div>
-                        <div class="form-group" *ngIf="divisiones1.length >= 1">
+                        <div class="form-group" *ngIf="divisiones1.length >= 1 || !isAdmin">
                             <label for="division1">División Política Nivel 1</label><br>
+                            <input type="text" class="form-control" name="division1" id="division1"
+                                [(ngModel)]="division1" [disabled]="!isAdmin" *ngIf="!isAdmin">
+
                             <select name="division1" id="division1" class="form-control" [(ngModel)]="division1"
-                                (change)="getDivDivisiones(division1,1)">
+                                (change)="getDivDivisiones(division1,1)" [disabled]="!isAdmin" *ngIf="isAdmin">
                                 <option *ngFor="let d1 of divisiones1" [value]="d1.id">{{d1.nombre}}</option>
                             </select>
                         </div>
-                        <div class="form-group" *ngIf="divisiones2.length >= 1">
+                        <div class="form-group" *ngIf="divisiones2.length >= 1 || !isAdmin">
                             <label for="division2">División Política Nivel 2</label><br>
+                            <input type="text" class="form-control" name="division2" id="division2"
+                                [(ngModel)]="division2" [disabled]="!isAdmin" *ngIf="!isAdmin">
                             <select name="division2" id="division2" class="form-control" [(ngModel)]="division2"
-                                (change)="getDivDivisiones(division2,2)">
+                                (change)="getDivDivisiones(division2,2)" [disabled]="!isAdmin" *ngIf="isAdmin">
                                 <option *ngFor="let d2 of divisiones2" [value]="d2.id">{{d2.nombre}}</option>
                             </select>
                         </div>
-                        <div class="form-group" *ngIf="divisiones3.length >= 1">
+                        <div class="form-group" *ngIf="divisiones3.length >= 1 || !isAdmin">
                             <label for="division3">División Política Nivel 3</label><br>
-                            <select name="division3" id="division3" class="form-control" [(ngModel)]="division3">
+                            <input type="text" class="form-control" name="division3" id="division3"
+                                [(ngModel)]="division3" [disabled]="!isAdmin" *ngIf="!isAdmin">
+                            <select name="division3" id="division3" class="form-control" [(ngModel)]="division3"
+                                [disabled]="!isAdmin" *ngIf="isAdmin">
                                 <option *ngFor="let d3 of divisiones3" [value]="d3.id">{{d3.nombre}}</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="altitud">Latitud</label><br>
                             <input type="number" class="form-control" name="latitud" id="latitud"
-                                [(ngModel)]="estacion.latitud" [disabled]="!isAdmin"> 
+                                [(ngModel)]="estacion.latitud" [disabled]="!isAdmin">
                         </div>
                         <div class="form-group">
                             <label for="longitud">Longitud</label><br>
@@ -194,6 +209,31 @@
                                 <option value=true>Si</option>
                                 <option value=false>No</option>
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="Foto">Gráficos</label><br>
+                            <button class="btn btn-secondary" (click)="verGraficos()">Ver gráficos</button>
+                        </div>
+                        <div class="container pb-3" id="tablaEstaciones">
+                            <label for="hasPluviometro">Variables Registradas en la estación</label><br>
+                            <table class="table align-items-center table-flush row-border hover">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col">Nombre</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let variable of variables">
+                                        <th scope="row">
+                                            <div class="media align-items-center">
+                                                <div class="media-body">
+                                                    <span class="mb-0 text-sm">{{variable.nombre}}</span>
+                                                </div>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                         <div class="container pb-3" id="tablaEstaciones">
                             <label for="hasPluviometro">Observadores</label><br>
@@ -224,7 +264,8 @@
                         <div>
                             <button class="btn btn-secondary float-left"
                                 (click)="cancelar(formEstacion)">Cancelar</button>
-                            <button class="btn btn-default float-right" (click)="submit(formEstacion)" *ngIf="isAdmin">Guardar</button>
+                            <button class="btn btn-default float-right" (click)="submit(formEstacion)"
+                                *ngIf="isAdmin">Guardar</button>
                         </div>
                     </form>
                 </div>
@@ -259,7 +300,8 @@
                             <div class="col-md-12">
                                 <label for="file">Archivo</label><br>
                                 <input *ngIf="uploader.queue.length == 0" type="file"
-                                    class="input-group custom-file-upload mb-4" ng2FileSelect [uploader]="uploader" />
+                                    class="input-group custom-file-upload mb-4" ng2FileSelect [uploader]="uploader"
+                                    accept=".jpg,.jpeg,.png" />
                             </div>
                             <div class="col-12" *ngIf="uploader.queue.length != 0">
                                 <table class="table">

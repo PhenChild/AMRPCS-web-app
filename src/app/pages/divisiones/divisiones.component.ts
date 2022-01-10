@@ -78,7 +78,6 @@ export class DivisionesComponent implements OnInit {
     this.dbService.getFiltroDivisiones(this.filtro)
       .subscribe((data: any) => {
         this.divisiones = (data as any);
-        console.log(this.divisiones);
         this.dtTrigger1.next();
         const table = (<HTMLInputElement>document.getElementById("tablaDivisiones"));
         table.style.display = "block";
@@ -93,16 +92,11 @@ export class DivisionesComponent implements OnInit {
     this.dbService.getPaises()
       .subscribe((data: any) => {
         this.paises = (data as any);
-        console.log(this.paises);
+        this.division = division;
+        this.isUpdating = true;
+
+        this.getDivisionesSuperiores()
       });
-    this.division = division;
-    this.isUpdating = true;
-    
-    this.getDivisionesSuperiores()
-    const table = (<HTMLInputElement>document.getElementById("table"));
-    const form = (<HTMLInputElement>document.getElementById("form-division"));
-    table.style.display = "none";
-    form.style.display = "block";
   }
 
   /**
@@ -113,7 +107,6 @@ export class DivisionesComponent implements OnInit {
     this.dbService.getPaises()
       .subscribe((data: any) => {
         this.paises = (data as any);
-        console.log(this.paises);
       });
     this.division = new Division();
     const table = (<HTMLInputElement>document.getElementById("table"));
@@ -131,10 +124,9 @@ export class DivisionesComponent implements OnInit {
       this.division = division;
       this.dbService.deleteDivision(this.division).subscribe((data: any) => {
         this.tService.success("División eliminada con exito.", "Envio exitoso");
-        window.location.reload();
+        this.getData();
       },
         (err: any) => {
-          console.log(err);
           this.tService.error("", "Ha ocurrido un error");
         });
     }
@@ -156,10 +148,11 @@ export class DivisionesComponent implements OnInit {
               const form = (<HTMLInputElement>document.getElementById("form-division"));
               table.style.display = "block";
               form.style.display = "none";
-              window.location.reload();
+              this.paises = [];
+              this.divisionesSuperiores = [];
+              this.getData();
             },
             (err: any) => {
-              console.log(err);
               this.tService.error("", "Ha ocurrido un error");
             }
           );
@@ -175,10 +168,11 @@ export class DivisionesComponent implements OnInit {
               const form = (<HTMLInputElement>document.getElementById("form-division"));
               table.style.display = "block";
               form.style.display = "none";
-              window.location.reload();
+              this.paises = [];
+              this.divisionesSuperiores = [];
+              this.getData();
             },
             (err: any) => {
-              console.log(err);
               this.tService.error("", "Ha ocurrido un error");
             }
           );
@@ -188,13 +182,20 @@ export class DivisionesComponent implements OnInit {
 
   getDivisionesSuperiores() {
     if (!!this.division.idPais && !!this.division.nivel && this.division.nivel > 1) {
-      console.log(this.division.nivel)
-      console.log(this.division)
       this.dbService.getDivisionesSuperiores(this.division.idPais, this.division.nivel)
         .subscribe((data: any) => {
-          console.log(this.divisionesSuperiores);
           this.divisionesSuperiores = (data as any);
+          const table = (<HTMLInputElement>document.getElementById("table"));
+          const form = (<HTMLInputElement>document.getElementById("form-division"));
+          table.style.display = "none";
+          form.style.display = "block";
         });
+    } else {
+      const table = (<HTMLInputElement>document.getElementById("table"));
+      const form = (<HTMLInputElement>document.getElementById("form-division"));
+      table.style.display = "none";
+      form.style.display = "block";
+
     }
   }
 
@@ -207,6 +208,8 @@ export class DivisionesComponent implements OnInit {
     const form = (<HTMLInputElement>document.getElementById("form-division"));
     table.style.display = "block";
     form.style.display = "none";
+    this.paises = [];
+    this.divisionesSuperiores = [];
     this.division = new Division();
     formDivision.reset();
   }

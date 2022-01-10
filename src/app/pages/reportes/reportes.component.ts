@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
@@ -17,11 +18,12 @@ export class ReportesComponent implements OnInit {
 
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
-
+  public location!: Location;
+  isAdmin = false;
   /** Opciones para los datatbles. */
   dtOptions: DataTables.Settings = {
     pagingType: "full_numbers",
-    pageLength: 7,
+    pageLength: 10,
     responsive: true,
     searching: false,
   };
@@ -43,12 +45,24 @@ export class ReportesComponent implements OnInit {
   isDtInitialized: boolean = false
 
   constructor(
+    location: Location,
     private dbService: DbService,
     private modal: NgbModal,
     private tService: ToastrService
-  ) { }
+  ) {
+    this.location = location;
+
+  }
 
   ngOnInit(): void {
+    let titlee = this.location.prepareExternalUrl(this.location.path());
+    if (titlee.charAt(0) === "#") {
+      titlee = titlee.slice(1);
+    }
+    titlee = titlee.split("/")[1]
+    if (titlee === "admin-layout") {
+      this.isAdmin = true;
+    }
   }
 
   getData(): void {
@@ -65,7 +79,6 @@ export class ReportesComponent implements OnInit {
     this.dbService.getReportes(this.filtro)
       .subscribe((data: any) => {
         this.reportes = (data as any);
-        console.log(this.reportes);
         this.dtTrigger.next();
         const table = (<HTMLInputElement>document.getElementById("tablaReportes"));
         table.style.display = "block";

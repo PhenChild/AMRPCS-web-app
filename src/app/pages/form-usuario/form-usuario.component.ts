@@ -82,7 +82,6 @@ export class FormUsuarioComponent implements OnInit {
         this.dbService.getPaises()
             .subscribe((data: any) => {
                 this.paises = (data as any);
-                console.log(this.paises);
             });
     }
 
@@ -110,7 +109,6 @@ export class FormUsuarioComponent implements OnInit {
         this.dbService.getEstacionesParaUsuario(this.filtro)
             .subscribe((data: any) => {
                 this.estaciones = (data as any);
-                console.log(this.estaciones);
                 this.dtTrigger1.next();
                 const table = (<HTMLInputElement>document.getElementById("tablaEstaciones"));
                 table.style.display = "block";
@@ -139,40 +137,43 @@ export class FormUsuarioComponent implements OnInit {
      * @param formUsuario
      */
     onSubmit(formUsuario: NgForm) {
-        if (this.confpassword == this.usuario.password) {
-            if (confirm("¿Está seguro de crear un nuevo usuario?")) {
-                this.dbService.addUsuario(this.usuario, this.selectedEstaciones)
-                    .subscribe(
-                        (data: any) => {
-                            this.tService.success("Usuario registrado con exito.", "Envio exitoso");
-                            formUsuario.reset();
-                            this.selectedEstaciones = [];
-                            this.estaciones = [];
-                            if (this.isDtInitialized) {
-                                this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-                                    dtInstance.destroy()
-                                })
-                            } else {
-                                this.isDtInitialized = true;
-                            }
-                            this.dtTrigger1.next();
-                        },
-                        (err: any) => {
-                            console.log(err);
-                            this.tService.error("", "Ha ocurrido un error");
-                            formUsuario.reset();
-                        }
-                    );
-            }
-        } else {
-            this.tService.error("", "Las contraseñas deben coincidir");
+        if (formUsuario.valid) {
 
+
+            if (this.confpassword == this.usuario.password) {
+                if (confirm("¿Está seguro de crear un nuevo usuario?")) {
+                    this.dbService.addUsuario(this.usuario, this.selectedEstaciones)
+                        .subscribe(
+                            (data: any) => {
+                                this.tService.success("Usuario registrado con exito.", "Envio exitoso");
+                                formUsuario.reset();
+                                this.selectedEstaciones = [];
+                                this.estaciones = [];
+                                if (this.isDtInitialized) {
+                                    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+                                        dtInstance.destroy()
+                                    })
+                                } else {
+                                    this.isDtInitialized = true;
+                                }
+                                this.dtTrigger1.next();
+                            },
+                            (err: any) => {
+                                this.tService.error("", "Ha ocurrido un error");
+                                formUsuario.reset();
+                            }
+                        );
+                }
+            } else {
+                this.tService.error("", "Las contraseñas deben coincidir");
+            }
         }
     }
 
     cancelar(formUsuario: NgForm) {
         const table = (<HTMLInputElement>document.getElementById("form-estacion-new"));
         table.style.display = "none"
+        this.usuario = new User();
         formUsuario.reset()
     }
 }

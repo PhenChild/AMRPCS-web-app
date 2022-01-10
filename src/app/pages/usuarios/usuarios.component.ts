@@ -29,7 +29,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     /** Opciones para los datatbles. */
     dtOptions: DataTables.Settings = {
         pagingType: "full_numbers",
-        pageLength: 7,
+        pageLength: 10,
         responsive: true,
         searching: false,
     };;
@@ -77,6 +77,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
     public location!: Location;
     isAdmin = false;
+    isObserver = false;
 
 
     estaciones: Estacion[] = [];
@@ -102,6 +103,10 @@ export class UsuariosComponent implements OnInit, OnDestroy {
             method: "POST",
             itemAlias: "file",
             queueLimit: 1,
+            headers: [{
+                name: "x-access-token", value:
+                    sessionStorage.getItem("token")!
+            }]
         });
 
         this.response = '';
@@ -114,7 +119,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
      * Obtencion de los usuarios desde la base de datos
      */
     ngOnInit(): void {
-        console.log(this.location.path())
         let titlee = this.location.prepareExternalUrl(this.location.path());
         if (titlee.charAt(0) === "#") {
             titlee = titlee.slice(1);
@@ -122,6 +126,8 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         titlee = titlee.split("/")[1]
         if (titlee === "admin-layout") {
             this.isAdmin = true;
+        } else if (titlee === "obs-layout") {
+            this.isObserver = true;
         }
         this.isCancel = false;
         this.isError = false;
@@ -142,7 +148,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
             form.style.display = "none";
             this.tService.success("Foto actualizada con exito.", "Envio exitoso");
             this.uploader.clearQueue()
-            console.log("ImageUpload:uploaded:", item, status, response);
         };
     }
 
@@ -175,12 +180,9 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         this.dbService.getUsuarios(this.filtro)
             .subscribe((data: User[]) => {
                 this.usuarios = data;
-                console.log(this.usuarios);
                 this.dtTrigger.next();
                 const table = (<HTMLInputElement>document.getElementById("tablaUsuarios"));
                 table.style.display = "block";
-            }, (err: any) => {
-                console.log(err);
             });
     }
 
@@ -198,7 +200,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         this.dbService.getEstacionesParaUsuario(this.filtroEstacion)
             .subscribe((data: any) => {
                 this.estaciones = (data as any);
-                console.log(this.estaciones);
                 this.dtTrigger1.next();
                 const table = (<HTMLInputElement>document.getElementById("tablaEstaciones"));
                 table.style.display = "block";
@@ -216,12 +217,11 @@ export class UsuariosComponent implements OnInit, OnDestroy {
             });
         this.dbService.getEstacionesUsuario(usuario)
             .subscribe((data: any[]) => {
-                console.log(data)
                 this.selectedEstaciones = data.map((a) => a.Estacion)
-                console.log(this.selectedEstaciones);
             });
         this.usuario = usuario;
         this.usuario.password = "";
+        const form2 = document.getElementById("formUsuario");
         const tableE = (<HTMLInputElement>document.getElementById("form-estacion"));
         if (usuario.role == "observer") {
             tableE.style.display = "block"
@@ -252,7 +252,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         if (confirm("¿Está seguro de eliminar el usuario?")) {
             this.dbService.deleteUsuario(this.usuario).subscribe((data: any) => {
                 this.tService.success("Estacion guardada con exito.", "Envio exitoso");
-                window.location.reload();
+                this.getData();
             },
                 (err: any) => {
                     this.tService.error("", "Ha ocurrido un error");
@@ -265,27 +265,28 @@ export class UsuariosComponent implements OnInit, OnDestroy {
      * @param formUsuario formulario de usuario
      */
     submit(formUsuario: NgForm): void {
-        if (confirm("¿Está seguro de actualizar la contraseña del usuario?")) {
-            this.dbService.updateUsuario(this.usuario, this.addedEstaciones, this.deletedEstaciones)
-                .subscribe(
-                    (data: any) => {
-                        const table = (<HTMLInputElement>document.getElementById("table"));
-                        const form = (<HTMLInputElement>document.getElementById("form-usuario"));
-                        table.style.display = "block";
-                        form.style.display = "none";
-                        this.usuario = new User();
-                        this.tService.success("Usuario actualizado con exito.", "Envio exitoso");
-                        formUsuario.reset();
-                    },
-                    (err: any) => {
-                        console.log(err);
-                        this.tService.error("", "Ha ocurrido un error");
-                        this.addedEstaciones = [];
-                        this.deletedEstaciones = [];
-                        this.selectedEstaciones = [];
-                        formUsuario.reset();
-                    }
-                );
+        if (formUsuario.valid) {
+            if (confirm("¿Está seguro de actualizar la contraseña del usuario?")) {
+                this.dbService.updateUsuario(this.usuario, this.addedEstaciones, this.deletedEstaciones)
+                    .subscribe(
+                        (data: any) => {
+                            const table = (<HTMLInputElement>document.getElementById("table"));
+                            const form = (<HTMLInputElement>document.getElementById("form-usuario"));
+                            table.style.display = "block";
+                            form.style.display = "none";
+                            this.usuario = new User();
+                            this.tService.success("Usuario actualizado con exito.", "Envio exitoso");
+                            formUsuario.reset();
+                        },
+                        (err: any) => {
+                            this.tService.error("", "Ha ocurrido un error");
+                            this.addedEstaciones = [];
+                            this.deletedEstaciones = [];
+                            this.selectedEstaciones = [];
+                            formUsuario.reset();
+                        }
+                    );
+            }
         }
     }
 
@@ -295,6 +296,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
      * @param formUser formulario de usuario
      */
     cancelar(formUser: NgForm): void {
+        this.paises = []
         const table = (<HTMLInputElement>document.getElementById("table"));
         const form = (<HTMLInputElement>document.getElementById("form-usuario"));
         table.style.display = "block";
@@ -304,7 +306,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     }
 
     submitPassword(formPasswordUsuario: NgForm): void {
-        if (this.confpassword == "" || this.usuario.password == "") {
+        if (!formPasswordUsuario.valid) {
             this.tService.error("", "Debe llenar todos los campos");
         } else if (this.confpassword != this.usuario.password) {
             this.tService.error("", "Las contraseñas deben coincidir");
@@ -323,7 +325,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
                             formPasswordUsuario.reset();
                         },
                         (err: any) => {
-                            console.log(err);
                             this.tService.error("", "Ha ocurrido un error");
                             formPasswordUsuario.reset();
                         }
@@ -388,16 +389,9 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         if (!this.selectedEstaciones.some(e => e.id == estacion.id) && !this.deletedEstaciones.some(e => e.id == estacion.id)) {
             this.selectedEstaciones.push(estacion);
             this.addedEstaciones.push(estacion);
-            console.log(this.selectedEstaciones)
-            console.log(this.addedEstaciones)
-            console.log(this.deletedEstaciones)
         } else if (!this.selectedEstaciones.some(e => e.id == estacion.id) && this.deletedEstaciones.some(e => e.id == estacion.id)) {
             this.selectedEstaciones.push(estacion);
             this.deletedEstaciones = this.deletedEstaciones.filter(obj => obj !== estacion);
-            console.log(this.selectedEstaciones)
-            console.log(this.addedEstaciones)
-            console.log(this.deletedEstaciones)
-
         }
     }
 
@@ -408,14 +402,8 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         this.selectedEstaciones = this.selectedEstaciones.filter(obj => obj !== estacion);
         if (!this.deletedEstaciones.includes(estacion) && !this.addedEstaciones.includes(estacion)) {
             this.deletedEstaciones.push(estacion);
-            console.log(this.selectedEstaciones)
-            console.log(this.addedEstaciones)
-            console.log(this.deletedEstaciones)
         } else if (!this.deletedEstaciones.includes(estacion) && this.addedEstaciones.includes(estacion)) {
             this.addedEstaciones = this.addedEstaciones.filter(obj => obj !== estacion);
-            console.log(this.selectedEstaciones)
-            console.log(this.addedEstaciones)
-            console.log(this.deletedEstaciones)
         }
     }
 }

@@ -19,7 +19,7 @@ declare interface RouteInfo {
 
 /** Componente para la barra lateral de navegación del administrador. */
 export const ROUTES: RouteInfo[] = [
-    { path: "/view-layout/usuarios", title: "Usuarios", icon: "fa-user", class: "" },
+    { path: "/view-layout/usuarios", title: "Observadores", icon: "fa-user", class: "" },
     { path: "/view-layout/estaciones", title: "Estaciones", icon: "fa-building", class: "" },
     { path: "/view-layout/reportes", title: "Precipitación", icon: "fa-file-alt", class: "" },
     { path: "/view-layout/acumulados", title: "Precipitación Acumulada", icon: "fa-file-alt", class: "" },

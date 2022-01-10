@@ -10,6 +10,8 @@ import { FileUploader } from "ng2-file-upload";
 import { Location } from "@angular/common";
 import { Pais } from "src/app/models/pais";
 import { Division } from "src/app/models/division";
+import { Variable } from "src/app/models/variable";
+import { Router } from "@angular/router";
 
 /**
  * Componente para la pagina de edición de estaciones.
@@ -30,7 +32,6 @@ export class EstacionesComponent implements OnInit, OnDestroy {
         pageLength: 7,
         responsive: true,
         searching: false,
-        lengthChange: false,
     };
 
     /* Data for upload image */
@@ -77,18 +78,20 @@ export class EstacionesComponent implements OnInit, OnDestroy {
     divisiones1: Division[] = [];
     divisiones2: Division[] = [];
     divisiones3: Division[] = [];
-
+    variables: Variable[] = [];
 
     isDtInitialized: boolean = false
     public location!: Location;
     isAdmin = false;
+    isObserver = false;
     /**
      * Constructor
      */
     constructor(
         location: Location,
         private dbService: DbService,
-        private tService: ToastrService
+        private tService: ToastrService,
+        private router: Router, 
     ) {
         this.location = location;
 
@@ -112,7 +115,6 @@ export class EstacionesComponent implements OnInit, OnDestroy {
      * Obtencion de las estaciónes desde la base de datos
      */
     ngOnInit(): void {
-        console.log(this.location.path())
         let titlee = this.location.prepareExternalUrl(this.location.path());
         if (titlee.charAt(0) === "#") {
             titlee = titlee.slice(1);
@@ -120,6 +122,8 @@ export class EstacionesComponent implements OnInit, OnDestroy {
         titlee = titlee.split("/")[1]
         if (titlee === "admin-layout") {
             this.isAdmin = true;
+        } if(titlee === "obs-layout"){
+            this.isObserver = true;
         }
 
         this.isCancel = false;
@@ -143,7 +147,6 @@ export class EstacionesComponent implements OnInit, OnDestroy {
             form.style.display = "none";
             this.tService.success("Foto actualizada con exito.", "Envio exitoso");
             this.uploader.clearQueue()
-            console.log("ImageUpload:uploaded:", item, status, response);
         };
     }
 
@@ -166,9 +169,8 @@ export class EstacionesComponent implements OnInit, OnDestroy {
         }
 
         this.dbService.getEstaciones(this.filtro)
-            .subscribe((data: any) => {
-                this.estaciones = (data as any);
-                console.log(this.estaciones);
+            .subscribe((data: Estacion[]) => {
+                this.estaciones = data;
                 this.dtTrigger1.next();
                 const table = (<HTMLInputElement>document.getElementById("tablaEstaciones"));
                 table.style.display = "block";
@@ -180,7 +182,6 @@ export class EstacionesComponent implements OnInit, OnDestroy {
      * @param estacion estacion a editar
      */
     editarEstacion(estacion: any): void {
-        console.log(estacion)
         this.dbService.getObservadores(estacion)
             .subscribe((data: any) => {
                 this.usuarios = (data as any);
@@ -193,21 +194,32 @@ export class EstacionesComponent implements OnInit, OnDestroy {
                         }
                     );
             });
+        this.dbService.getTipoRegistros(estacion)
+            .subscribe((data: any) => {
+                console.log(data);
+                this.variables = data;
+            });
         this.dbService.getPaises()
             .subscribe((data: any) => {
                 this.paises = (data as any);
-                console.log(this.paises);
             });
         this.estacion = estacion;
         this.estacion.latitud = estacion.posicion.coordinates[0];
         this.estacion.longitud = estacion.posicion.coordinates[1];
-        this.getDivisiones(estacion.Division.Pai.id)
-        this.getDivDivisiones(estacion.division1.id, 1)
-        this.getDivDivisiones(estacion.division2.id, 2)
-        this.pais = estacion.Division.Pai.id;
-        this.division1 = estacion.division1.id;
-        this.division2 = estacion.division2.id;
-        this.division3 = estacion.division3.id;
+        if (this.isAdmin) {
+            this.getDivisiones(estacion.Division.Pai.id)
+            this.getDivDivisiones(estacion.division1.id, 1)
+            this.getDivDivisiones(estacion.division2.id, 2)
+            this.pais = estacion.Division.Pai.id;
+            this.division1 = estacion.division1.id;
+            this.division2 = estacion.division2.id;
+            this.division3 = estacion.division3.id;
+        } else {
+            this.pais = estacion.Division.Pai.nombre;
+            this.division1 = estacion.division1.nombre;
+            this.division2 = estacion.division2.nombre;
+            this.division3 = estacion.division3.nombre;
+        }
         const table = (<HTMLInputElement>document.getElementById("table"));
         const form = (<HTMLInputElement>document.getElementById("form-estacion"));
         table.style.display = "none";
@@ -223,10 +235,9 @@ export class EstacionesComponent implements OnInit, OnDestroy {
         if (confirm("¿Está seguro de eliminar esta estación?")) {
             this.dbService.deleteEstacion(this.estacion).subscribe((data: any) => {
                 this.tService.success("Estacion eliminada con exito.", "Envio exitoso");
-                window.location.reload();
+                this.getData();
             },
                 (err: any) => {
-                    console.log(err);
                     this.tService.error("", "Ha ocurrido un error");
                 });
         }
@@ -239,7 +250,7 @@ export class EstacionesComponent implements OnInit, OnDestroy {
      */
     submit(formEstacion: NgForm): void {
         if (confirm("¿Está seguro de actualizar la información de esta estación?")) {
-
+            this.estacion.idUbicacion = this.division3;
             this.dbService.updateEstacion(this.estacion)
                 .subscribe(
                     (data: any) => {
@@ -249,10 +260,9 @@ export class EstacionesComponent implements OnInit, OnDestroy {
                         const form = (<HTMLInputElement>document.getElementById("form-estacion"));
                         table.style.display = "block";
                         form.style.display = "none";
-                        window.location.reload();
+                        this.getData();
                     },
                     (err: any) => {
-                        console.log(err);
                         this.tService.error("", "Ha ocurrido un error");
                     }
                 );
@@ -318,7 +328,6 @@ export class EstacionesComponent implements OnInit, OnDestroy {
         this.divisiones1 = [];
         this.divisiones2 = [];
         this.divisiones3 = [];
-        console.log(pais)
         this.dbService.getDivisionesPaises(pais)
             .subscribe((data: any) => {
                 this.divisiones1 = (data as any);
@@ -342,6 +351,13 @@ export class EstacionesComponent implements OnInit, OnDestroy {
                 .subscribe((data: any) => {
                     this.divisiones3 = (data as any);
                 });
+        }
+    }
+
+    verGraficos() {
+        if(this.isAdmin){
+            console.log(this.estacion.nombre)
+            this.router.navigate(['/admin-layout/graficos', { filtro: {estacion: this.estacion.nombre} }]);
         }
     }
 

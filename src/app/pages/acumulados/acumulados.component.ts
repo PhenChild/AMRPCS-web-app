@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
@@ -15,6 +16,8 @@ import { DbService } from 'src/app/services/database/db.service';
 export class AcumuladosComponent implements OnInit {
 
 
+  public location!: Location;
+  isAdmin = false;
 
   @ViewChild(DataTableDirective, { static: false })
   dtElement!: DataTableDirective;
@@ -23,7 +26,6 @@ export class AcumuladosComponent implements OnInit {
   dtOptions: DataTables.Settings = {
     pagingType: "full_numbers",
     pageLength: 7,
-    responsive: true,
     searching: false,
   };
 
@@ -45,12 +47,23 @@ export class AcumuladosComponent implements OnInit {
 
 
   constructor(
+    location: Location,
     private dbService: DbService,
     private modal: NgbModal,
     private tService: ToastrService
-  ) { }
+  ) {
+    this.location = location;
+   }
 
   ngOnInit(): void {
+    let titlee = this.location.prepareExternalUrl(this.location.path());
+    if (titlee.charAt(0) === "#") {
+      titlee = titlee.slice(1);
+    }
+    titlee = titlee.split("/")[1]
+    if (titlee === "admin-layout") {
+      this.isAdmin = true;
+    }
   }
 
   getData(): void {
@@ -67,7 +80,6 @@ export class AcumuladosComponent implements OnInit {
     this.dbService.getReportesAcumulados(this.filtro)
       .subscribe((data: any) => {
         this.reportes = (data as any);
-        console.log(this.reportes);
         this.dtTrigger.next();
         const table = (<HTMLInputElement>document.getElementById("tablaReportes"));
         table.style.display = "block";
@@ -106,7 +118,7 @@ export class AcumuladosComponent implements OnInit {
     return fecha.split("T")[0];
   }
 
-  
+
 
   openModal(contenido: any, reporte: ReporteAcumulado): void {
     this.reporte = reporte;

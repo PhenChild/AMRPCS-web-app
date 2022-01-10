@@ -113,7 +113,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
       this.pais = pais;
       this.dbService.deletePais(this.pais).subscribe((data: any) => {
         this.tService.success("Pais eliminada con exito.", "Envio exitoso");
-        window.location.reload();
+        this.getData();
       },
         (err: any) => {
           console.log(err);
@@ -139,7 +139,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
                 const form = (<HTMLInputElement>document.getElementById("form-pais"));
                 table.style.display = "block";
                 form.style.display = "none";
-                window.location.reload();
+                this.getData();
               },
               (err: any) => {
                 console.log(err);
@@ -158,7 +158,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
                 const form = (<HTMLInputElement>document.getElementById("form-pais"));
                 table.style.display = "block";
                 form.style.display = "none";
-                window.location.reload();
+                this.getData();
               },
               (err: any) => {
                 console.log(err);

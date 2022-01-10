@@ -56,7 +56,7 @@
                                 <th scope="col">Tel&eacute;fono</th>
                                 <th scope="col">Correo</th>
                                 <th scope="col">Rol</th>
-                                <th width="5%" scope="col" class="button"></th>
+                                <th scope="col" *ngIf="isAdmin || isObserver"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -77,7 +77,7 @@
                                 <td>
                                     {{usuario.role}}
                                 </td>
-                                <td class="text-right">
+                                <td class="text-right" *ngIf="isAdmin || isObserver">
                                     <div ngbDropdown placement="bottom-right">
                                         <a class="btn btn-sm btn-icon-only text-light" ngbDropdownToggle>
                                             <i class="fas fa-ellipsis-v"></i>
@@ -116,37 +116,38 @@
                     <h3 class="card-title" *ngIf="!isAdmin">Ver Información de Usuario</h3>
                 </div>
                 <div class="card-body">
-                    <form #formUsuario="ngForm">
+                    <form #formUsuario="ngForm" ngNativeValidate>
                         <div class="form-group">
-                            <label for="nombre">Nombre</label><br>
+                            <label for="nombre">Nombres</label><br>
                             <input type="text" class="form-control" name="nombre" id="nombre"
-                                [(ngModel)]="usuario.nombre" [disabled]="!isAdmin">
+                                [(ngModel)]="usuario.nombre" [disabled]="!isAdmin" required>
                         </div>
                         <div class="form-group">
-                            <label for="apellido">Apellido</label><br>
+                            <label for="apellido">Apellidos</label><br>
                             <input type="text" class="form-control" name="apellido" id="apellido"
-                                [(ngModel)]="usuario.apellido" [disabled]="!isAdmin">
+                                [(ngModel)]="usuario.apellido" [disabled]="!isAdmin" required>
                         </div>
                         <div class="form-group">
                             <label for="telefono">Tel&eacute;fono</label><br>
-                            <input type="text" class="form-control" name="telefono" id="telefono"
-                                [(ngModel)]="usuario.telefono" [disabled]="!isAdmin">
+                            <input type="tel" pattern="[1-9]{1}[0-9]{8}" class="form-control" name="telefono"
+                                id="telefono" [(ngModel)]="usuario.telefono" [disabled]="!isAdmin" required>
                         </div>
                         <div class="form-group">
                             <label for="pais">País</label><br>
-                            <select name="pais" id="pais" class="form-control" [(ngModel)]="usuario.idPais" [disabled]="!isAdmin">
+                            <select name="pais" id="pais" class="form-control" [(ngModel)]="usuario.idPais"
+                                [disabled]="!isAdmin" required>
                                 <option *ngFor="let pais of paises" [value]="pais.id">{{pais.nombre}}</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="correo">Correo</label><br>
                             <input type="email" class="form-control" name="correo" id="correo"
-                                [(ngModel)]="usuario.email" [disabled]="!isAdmin">
+                                [(ngModel)]="usuario.email" [disabled]="!isAdmin" required>
                         </div>
                         <div class="form-group">
                             <label for="rol">Rol del Usuario</label><br>
                             <select class="form-control form-select form-select-sm" name="rol" id="rol"
-                                [(ngModel)]="usuario.role" (change)="tableEstacion()" [disabled]="!isAdmin">
+                                [(ngModel)]="usuario.role" (change)="tableEstacion()" [disabled]="!isAdmin" required>
                                 <option value="observer">Observador</option>
                                 <option value="admin">Administrador</option>
                             </select>
@@ -243,7 +244,7 @@
                     <h3 class="card-title">Actualizar Contraseña del Usuario</h3>
                 </div>
                 <div class="card-body">
-                    <form #formPassUsuario="ngForm">
+                    <form #formPassUsuario="ngForm" ngNativeValidate>
                         <div class="form-group">
                             <label for="correoPass">Correo del Usuario</label><br>
                             <input type="text" disabled class="form-control" name="correoPass" id="correoPass"
@@ -252,12 +253,12 @@
                         <div class="form-group">
                             <label for="contrasena">Nueva Contraseña</label><br>
                             <input type="password" class="form-control" name="contrasena" id="contrasena"
-                                [(ngModel)]="usuario.password">
+                                [(ngModel)]="usuario.password" required>
                         </div>
                         <div class="form-group">
                             <label for="confcontrasena">Confirmar Contraseña</label><br>
                             <input type="password" class="form-control" name="confcontrasena" id="confcontrasena"
-                                [(ngModel)]="confpassword">
+                                [(ngModel)]="confpassword" required>
                         </div>
                         <div>
                             <button class="btn btn-secondary float-left"
@@ -299,7 +300,8 @@
                             <div class="col-md-12">
                                 <label for="file">Archivo</label><br>
                                 <input *ngIf="uploader.queue.length == 0" type="file"
-                                    class="input-group custom-file-upload mb-4" ng2FileSelect [uploader]="uploader" />
+                                    class="input-group custom-file-upload mb-4" ng2FileSelect [uploader]="uploader"
+                                    accept=".jpg,.jpeg,.png" />
                             </div>
                             <div class="col-12" *ngIf="uploader.queue.length != 0">
                                 <table class="table">

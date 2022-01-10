@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { User } from "../../models/user";
 import { environment } from "src/environments/environment";
 import { NgbPaginationNumber } from "@ng-bootstrap/ng-bootstrap";
+import { identifierModuleUrl } from "@angular/compiler";
 
 /**
  * Root
@@ -17,7 +18,7 @@ export class DbService {
 
     /** Url de conexión */
     //dbURL = "https://ciifen.loca.lt/api/";
-    dbURL = "http://e825-181-199-40-123.ngrok.io/api/";
+    dbURL = environment.apiURL + "api/";
 
     /**
      * Constructor
@@ -120,6 +121,10 @@ export class DbService {
      */
     getObservadores(estacion: { codigo: string; }): any {
         return this.http.post(this.dbURL + "observers/getObsEstacion", estacion, { headers: this.getHeader() });
+    }
+
+    getTipoRegistros(estacion: any): any {
+        return this.http.post(this.dbURL + "estacion/getTipoRegistros", {"id": estacion.id}, { headers: this.getHeader() });
     }
 
     // ESTACIONES ENDPOINTS

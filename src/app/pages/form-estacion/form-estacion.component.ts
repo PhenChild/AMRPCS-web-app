@@ -56,7 +56,6 @@ export class FormEstacionComponent implements OnInit {
         this.dbService.getPaises()
             .subscribe((data: any) => {
                 this.paises = (data as any);
-                console.log(this.paises);
             });
     }
 
@@ -65,19 +64,20 @@ export class FormEstacionComponent implements OnInit {
      * @param formEstacion
      */
     onSubmit(formEstacion: NgForm): void {
-        if (confirm("¿Está seguro de crear una nueva estación?")) {
-            this.estacion.idUbicacion = this.division3;
-            this.dbService.addEstacion(this.estacion).subscribe(
-                (data: any) => {
-                    this.tService.success("Estacion guardada con exito.", "Envio exitoso");
-                    formEstacion.reset();
-                },
-                (err: any) => {
-                    this.tService.error("", "Ha ocurrido un error");
-                    console.log(err);
-                    formEstacion.reset();
-                }
-            );
+        if (formEstacion.valid) {
+            if (confirm("¿Está seguro de crear una nueva estación?")) {
+                this.estacion.idUbicacion = this.division3;
+                this.dbService.addEstacion(this.estacion).subscribe(
+                    (data: any) => {
+                        this.tService.success("Estacion guardada con exito.", "Envio exitoso");
+                        formEstacion.reset();
+                    },
+                    (err: any) => {
+                        this.tService.error("", "Ha ocurrido un error");
+                        formEstacion.reset();
+                    }
+                );
+            }
         }
     }
 
@@ -89,11 +89,9 @@ export class FormEstacionComponent implements OnInit {
     }
 
     getDivDivisiones(division: any, nivel: number) {
-        console.log(division)
         if (nivel == 1) {
             this.dbService.getDivDivisiones(division, nivel)
                 .subscribe((data: any) => {
-                    console.log(data)
                     this.divisiones2 = (data as any);
                 });
         } else if (nivel == 2) {
@@ -104,5 +102,8 @@ export class FormEstacionComponent implements OnInit {
         }
     }
 
-
+    cancelar(formEstacion: NgForm): void {
+        this.estacion = new Estacion();
+        formEstacion.reset();
+    }
 }

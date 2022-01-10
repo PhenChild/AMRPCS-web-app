@@ -7,10 +7,12 @@
       <li class="nav-item" ngbDropdown placement="bottom-right">
         <a class="nav-link pr-0" role="button" ngbDropdownToggle>
           <div class="media align-items-center">
-            <span class="avatar avatar-sm rounded-circle bg-default">
-              <i *ngIf="!hasImage()" class="ni ni-single-02 text-white"></i>
-              <img *ngIf="hasImage()" src="data:image/png;base64,{{getImage()}}" class="img-fluid" alt="user image">
+            <span class="avatar avatar-sm bg-default" *ngIf="!hasImage()">
+              <i class="ni ni-single-02 text-white"></i>
             </span>
+            <div class="image-cropper" *ngIf="hasImage()">
+              <img src="data:image/png;base64,{{getImage()}}" class="img-fluid" alt="user image">
+            </div>
             <div class="media-body ml-2 d-none d-lg-block">
               <span class="mb-0 text-sm  font-weight-bold">{{getUser()}}</span>
             </div>
