@@ -51,6 +51,9 @@
                                 <th scope="col">País</th>
                                 <th scope="col">Nivel</th>
                                 <th scope="col">División Superior</th>
+                                <th scope="col">Creado</th>
+                                <th scope="col">Actualizado</th>
+                                <th scope="col">State</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -71,6 +74,15 @@
                                 </td>
                                 <td>
                                     {{division.nombrePadre}}
+                                </td>
+                                <td>
+                                    {{date(division.audCreatedAt)}} {{time(division.audCreatedAt)}}
+                                </td>
+                                <td>
+                                    {{date(division.audUpdatedAt)}} {{time(division.audUpdatedAt)}}
+                                </td>
+                                <td>
+                                    {{division.state}}
                                 </td>
                                 <td class="text-right">
                                     <div ngbDropdown placement="bottom-right">

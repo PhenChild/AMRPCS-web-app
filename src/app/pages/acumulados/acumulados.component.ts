@@ -1,12 +1,13 @@
 import { Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
-import { Reporte } from 'src/app/models/reporte';
 import { ReporteAcumulado } from 'src/app/models/reporteAcumulado';
 import { DbService } from 'src/app/services/database/db.service';
+import Utils from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-acumulados',
@@ -39,7 +40,8 @@ export class AcumuladosComponent implements OnInit {
     observador: "",
     estacion: "",
     fechaInicio: "",
-    fechaFin: ""
+    fechaFin: "",
+    codEstacion: ""
   }
   isDtInitialized: boolean = false
 
@@ -50,10 +52,11 @@ export class AcumuladosComponent implements OnInit {
     location: Location,
     private dbService: DbService,
     private modal: NgbModal,
-    private tService: ToastrService
+    private tService: ToastrService,
+    private router: ActivatedRoute,
   ) {
     this.location = location;
-   }
+  }
 
   ngOnInit(): void {
     let titlee = this.location.prepareExternalUrl(this.location.path());
@@ -63,6 +66,17 @@ export class AcumuladosComponent implements OnInit {
     titlee = titlee.split("/")[1]
     if (titlee === "admin-layout") {
       this.isAdmin = true;
+    }
+
+    let estacion = this.router.snapshot.paramMap.get('estacion')
+    let fi = this.router.snapshot.paramMap.get('fi')
+    let ff = this.router.snapshot.paramMap.get('ff')
+
+    if (!!estacion && !!fi && !!ff) {
+      this.filtro.estacion = estacion;
+      this.filtro.fechaInicio = Utils.date2(fi);
+      this.filtro.fechaFin = Utils.date2(ff)
+      this.getData();
     }
   }
 
@@ -88,38 +102,6 @@ export class AcumuladosComponent implements OnInit {
 
   }
 
-  /**
-     * Rectifica el formato de la fecha entregada por la base
-     * @param s String de la fecha
-     * @returns String de la fecha rectificada.
-     */
-  rectifyFormat(s: string) {
-    const b = s.split(/\D/);
-    return b[0] + "-" + b[1] + "-" + b[2] + "T" +
-      b[3] + ":" + b[4] + ":" + b[5] + "." +
-      b[6].substr(0, 3) + "+00:00";
-  }
-  /**
-   * Obtiene la hora de la fecha rectificada.
-   * @param s String de la fecha
-   * @returns La hora de la fecha
-   */
-  time(s: any) {
-    const fecha = new Date(this.rectifyFormat(s));
-    return fecha.toTimeString().split(" ").slice(0, 1);
-  }
-  /**
-   * Obtiene el dia de la fecha rectificada.
-   * @param s Fecha entregada
-   * @returns Dia de la fecha
-   */
-  date(s: any) {
-    const fecha = this.rectifyFormat(s);
-    return fecha.split("T")[0];
-  }
-
-
-
   openModal(contenido: any, reporte: ReporteAcumulado): void {
     this.reporte = reporte;
     this.modal.open(contenido, { size: "lg" });
@@ -134,6 +116,13 @@ export class AcumuladosComponent implements OnInit {
           this.tService.error("", "Ha ocurrido un error");
         })
     }
+  }
+
+  time(fecha: any) {
+    return Utils.time(fecha);
+  }
+  date(s: any) {
+    return Utils.date(s);
   }
 
 }

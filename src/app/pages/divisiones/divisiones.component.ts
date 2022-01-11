@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 import { Division } from 'src/app/models/division';
 import { Pais } from 'src/app/models/pais';
 import { DbService } from 'src/app/services/database/db.service';
+import Utils from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-divisiones',
@@ -212,6 +213,14 @@ export class DivisionesComponent implements OnInit {
     this.divisionesSuperiores = [];
     this.division = new Division();
     formDivision.reset();
+  }
+  
+  time(fecha: any) {
+    return Utils.time(fecha);
+  }
+
+  date(fecha: any) {
+    return Utils.date(fecha);
   }
 
 }

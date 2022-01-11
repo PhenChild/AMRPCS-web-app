@@ -34,4 +34,6 @@ export class User{
 
     /** Fecha de actualización */
     audUpdatedAt!: string;
+
+    state!: string;
 }

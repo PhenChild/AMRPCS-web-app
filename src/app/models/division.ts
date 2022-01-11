@@ -24,4 +24,7 @@ export class Division{
     audDeletedAt!: string;
 
     audUpdatedAt!: string;
+
+    state!: string;
+
 }

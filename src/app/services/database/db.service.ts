@@ -102,11 +102,11 @@ export class DbService {
     }
 
     editUserPassword(usuario: any): any {
-        return this.http.post(this.dbURL + "user/pass", 
-        {
-            "id": usuario.id,
-            "password": usuario.password
-        }, { headers: this.getHeader() });
+        return this.http.post(this.dbURL + "user/pass",
+            {
+                "id": usuario.id,
+                "password": usuario.password
+            }, { headers: this.getHeader() });
     }
 
     getFoto(usuario: any): any {
@@ -124,7 +124,7 @@ export class DbService {
     }
 
     getTipoRegistros(estacion: any): any {
-        return this.http.post(this.dbURL + "estacion/getTipoRegistros", {"id": estacion.id}, { headers: this.getHeader() });
+        return this.http.post(this.dbURL + "estacion/getTipoRegistros", { "id": estacion.id }, { headers: this.getHeader() });
     }
 
     // ESTACIONES ENDPOINTS
@@ -293,7 +293,7 @@ export class DbService {
     getDivisionesSuperiores(idPais: number, nivel: number) {
         return this.http.post(this.dbURL + "division/getDivisionesSuperiores", { "idPais": idPais, "nivel": nivel }, { headers: this.getHeader() });
     }
-    
+
     // REPORTES ENDPOINTS
 
     /**
@@ -310,6 +310,8 @@ export class DbService {
             query += "fechaInicio=" + filtro.fechaInicio + "&"
         } if (filtro.fechaFin != "") {
             query += "fechaFin=" + filtro.fechaFin + "&"
+        } if (filtro.codEstacion != "") {
+            query += "codigo=" + filtro.codEstacion + "&"
         }
         return this.http.get(this.dbURL + "precipitacion/getAll/filtro?" + query, { headers: this.getHeader() });
     }
@@ -340,6 +342,8 @@ export class DbService {
             query += "fechaInicio=" + filtro.fechaInicio + "&"
         } if (filtro.fechaFin != "") {
             query += "fechaFin=" + filtro.fechaFin + "&"
+        } if (filtro.codEstacion != "") {
+            query += "codigo=" + filtro.codEstacion + "&"
         }
         return this.http.get(this.dbURL + "acumulado/getAll/filtro?" + query, { headers: this.getHeader() });
     }
@@ -365,12 +369,12 @@ export class DbService {
         return this.http.get(this.dbURL + "getMe", { headers: this.getHeader() });
     }
 
-    updateReporteValor(reporte: any){
-        return this.http.post(this.dbURL + "precipitacion/update", reporte,{ headers: this.getHeader() })
+    updateReporteValor(reporte: any) {
+        return this.http.post(this.dbURL + "precipitacion/update", reporte, { headers: this.getHeader() })
     }
-    
-    updateReporteValorAcumulado(reporte: any){
-        return this.http.post(this.dbURL + "acumulado/update", reporte,{ headers: this.getHeader() })
+
+    updateReporteValorAcumulado(reporte: any) {
+        return this.http.post(this.dbURL + "acumulado/update", reporte, { headers: this.getHeader() })
     }
 
 }

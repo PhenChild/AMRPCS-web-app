@@ -12,6 +12,7 @@ import { Pais } from "src/app/models/pais";
 import { Division } from "src/app/models/division";
 import { Variable } from "src/app/models/variable";
 import { Router } from "@angular/router";
+import Utils from "src/app/utils/utils";
 
 /**
  * Componente para la pagina de edición de estaciones.
@@ -91,7 +92,7 @@ export class EstacionesComponent implements OnInit, OnDestroy {
         location: Location,
         private dbService: DbService,
         private tService: ToastrService,
-        private router: Router, 
+        private router: Router,
     ) {
         this.location = location;
 
@@ -122,7 +123,7 @@ export class EstacionesComponent implements OnInit, OnDestroy {
         titlee = titlee.split("/")[1]
         if (titlee === "admin-layout") {
             this.isAdmin = true;
-        } if(titlee === "obs-layout"){
+        } if (titlee === "obs-layout") {
             this.isObserver = true;
         }
 
@@ -170,6 +171,7 @@ export class EstacionesComponent implements OnInit, OnDestroy {
 
         this.dbService.getEstaciones(this.filtro)
             .subscribe((data: Estacion[]) => {
+                console.log(data)
                 this.estaciones = data;
                 this.dtTrigger1.next();
                 const table = (<HTMLInputElement>document.getElementById("tablaEstaciones"));
@@ -199,14 +201,14 @@ export class EstacionesComponent implements OnInit, OnDestroy {
                 console.log(data);
                 this.variables = data;
             });
-        this.dbService.getPaises()
-            .subscribe((data: any) => {
-                this.paises = (data as any);
-            });
         this.estacion = estacion;
         this.estacion.latitud = estacion.posicion.coordinates[0];
         this.estacion.longitud = estacion.posicion.coordinates[1];
         if (this.isAdmin) {
+            this.dbService.getPaises()
+                .subscribe((data: any) => {
+                    this.paises = (data as any);
+                });
             this.getDivisiones(estacion.Division.Pai.id)
             this.getDivDivisiones(estacion.division1.id, 1)
             this.getDivDivisiones(estacion.division2.id, 2)
@@ -355,10 +357,30 @@ export class EstacionesComponent implements OnInit, OnDestroy {
     }
 
     verGraficos() {
-        if(this.isAdmin){
-            console.log(this.estacion.nombre)
-            this.router.navigate(['/admin-layout/graficos', { filtro: {estacion: this.estacion.nombre} }]);
+        let url = (this.isAdmin) ? "/admin-layout" : (this.isObserver) ? "/obs-layout" : "/view-layout"
+        var dn = new Date(Date.now());
+        var df = new Date(Date.now());
+        df.setMonth(dn.getMonth() - 1)
+        this.router.navigate([url + '/graficos', { estacion: this.estacion.nombre, ff: dn.toLocaleString(), fi: df.toLocaleString() }]);
+    }
+
+    verDatos(variable: any) {
+        var dn = new Date(Date.now());
+        var df = new Date(Date.now());
+        df.setMonth(dn.getMonth() - 1)
+        let url = (this.isAdmin) ? "/admin-layout" : (this.isObserver) ? "/obs-layout" : "/view-layout"
+        if (variable.nombre == "Precipitación Diaria") {
+            this.router.navigate([url + '/reportes', { estacion: this.estacion.nombre, ff: dn.toLocaleString(), fi: df.toLocaleString() }]);
+        } else if (variable.nombre == "Precipitación Acumulada") {
+            this.router.navigate([url + '/acumulados', { estacion: this.estacion.nombre, ff: dn.toLocaleString(), fi: df.toLocaleString() }]);
         }
     }
 
+    time(fecha: any) {
+        return Utils.time(fecha);
+    }
+
+    date(fecha: any) {
+        return Utils.date(fecha);
+    }
 }

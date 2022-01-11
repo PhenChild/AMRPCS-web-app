@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { Pais } from 'src/app/models/pais';
 import { DbService } from 'src/app/services/database/db.service';
+import Utils from 'src/app/utils/utils';
 
 @Component({
   selector: 'app-paises',
@@ -183,6 +184,12 @@ export class PaisesComponent implements OnInit, OnDestroy {
     formPais.reset();
   }
 
+  time(fecha: any) {
+    return Utils.time(fecha);
+  }
 
+  date(fecha: any) {
+    return Utils.date(fecha);
+  }
 
 }

@@ -46,6 +46,9 @@
                             <tr>
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Siglas</th>
+                                <th scope="col">Creado</th>
+                                <th scope="col">Actualizado</th>
+                                <th scope="col">State</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -60,6 +63,15 @@
                                 </th>
                                 <td>
                                     {{pais.siglas}}
+                                </td>
+                                <td>
+                                    {{date(pais.audCreatedAt)}} {{time(pais.audCreatedAt)}}
+                                </td>
+                                <td>
+                                    {{date(pais.audUpdatedAt)}} {{time(pais.audUpdatedAt)}}
+                                </td>
+                                <td>
+                                    {{pais.state}}
                                 </td>
                                 <td class="text-right">
                                     <div ngbDropdown placement="bottom-right">

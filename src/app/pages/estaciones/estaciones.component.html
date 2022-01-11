@@ -54,6 +54,9 @@
                                 <th scope="col">Altitud</th>
                                 <th scope="col">País</th>
                                 <th scope="col">Ubicación</th>
+                                <th scope="col" *ngIf="isAdmin">Creado</th>
+                                <th scope="col" *ngIf="isAdmin">Actualizado</th>
+                                <th scope="col" *ngIf="isAdmin">Estado</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -84,6 +87,15 @@
                                 <td>
                                     {{estacion.division1.nombre + ", " + estacion.division2.nombre + ", " +
                                     estacion.division3.nombre}}
+                                </td>
+                                <td *ngIf="isAdmin">
+                                    {{date(estacion.audCreatedAt)}} {{time(estacion.audCreatedAt)}}
+                                </td>
+                                <td *ngIf="isAdmin">
+                                    {{date(estacion.audUpdatedAt)}} {{time(estacion.audUpdatedAt)}}
+                                </td>
+                                <td *ngIf="isAdmin">
+                                    {{estacion.state}}
                                 </td>
                                 <td class="text-right">
                                     <div ngbDropdown placement="bottom-right">
@@ -118,7 +130,8 @@
         <div class="col-xl-8 mb-5 mb-xl-0">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="card-title">Editar Estaci&oacute;n</h3>
+                    <h3 class="card-title" *ngIf="isAdmin">Ver/Editar Información de Estación</h3>
+                    <h3 class="card-title" *ngIf="!isAdmin">Ver Información de Estación</h3>
                 </div>
                 <div class="card-body">
                     <div class="row justify-content-center">
@@ -211,7 +224,7 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="Foto">Gráficos</label><br>
+                            <label for="graficos">Gráficos</label><br>
                             <button class="btn btn-secondary" (click)="verGraficos()">Ver gráficos</button>
                         </div>
                         <div class="container pb-3" id="tablaEstaciones">
@@ -224,7 +237,7 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let variable of variables">
-                                        <th scope="row">
+                                        <th scope="row" (click)="verDatos(variable)">
                                             <div class="media align-items-center">
                                                 <div class="media-body">
                                                     <span class="mb-0 text-sm">{{variable.nombre}}</span>
@@ -241,7 +254,7 @@
                                 <thead class="thead-light">
                                     <tr>
                                         <th scope="col">Nombre</th>
-                                        <th scope="col">Correo</th>
+                                        <th scope="col" *ngIf="isAdmin">Correo</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -254,7 +267,7 @@
                                                 </div>
                                             </div>
                                         </th>
-                                        <td>
+                                        <td *ngIf="isAdmin">
                                             {{usuario.User.email}}
                                         </td>
                                     </tr>

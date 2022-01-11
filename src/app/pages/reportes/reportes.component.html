@@ -30,6 +30,11 @@
                                 [(ngModel)]="filtro.estacion">
                         </div>
                         <div class="form-group col-md-3">
+                            <label for="estacion">Código de Estación</label><br>
+                            <input type="text" class="form-control" name="estacion" id="festacion"
+                                [(ngModel)]="filtro.codEstacion">
+                        </div>
+                        <div class="form-group col-md-3">
                             <label for="fechaInicio">Fecha Inicio</label><br>
                             <input type="date" class="form-control" name="fechaInicio" id="ffechaInicio"
                                 [(ngModel)]="filtro.fechaInicio">
@@ -51,9 +56,12 @@
                             <tr>
                                 <th scope="col">Observador</th>
                                 <th scope="col">Estación</th>
+                                <th scope="col">Código Estación</th>
                                 <th scope="col">Fecha</th>
                                 <th scope="col">Valor</th>
                                 <th scope="col">Comentario</th>
+                                <th scope="col" *ngIf="isAdmin">Creado</th>
+                                <th scope="col" *ngIf="isAdmin">Actualizado</th>
                                 <th scope="col" *ngIf="isAdmin"></th>
                             </tr>
                         </thead>
@@ -71,6 +79,9 @@
                                     {{reporte.Observador.Estacion.nombre }}
                                 </td>
                                 <td>
+                                    {{reporte.Observador.Estacion.codigo }}
+                                </td>
+                                <td>
                                     {{ date(reporte.fecha)+ " " + time(reporte.fecha)}}
                                 </td>
                                 <td>
@@ -78,6 +89,12 @@
                                 </td>
                                 <td width=35%>
                                     {{reporte.comentario}}
+                                </td>
+                                <td *ngIf="isAdmin">
+                                    {{date(reporte.audCreatedAt)}} {{time(reporte.audCreatedAt)}}
+                                </td>
+                                <td *ngIf="isAdmin">
+                                    {{date(reporte.audUpdatedAt)}} {{time(reporte.audUpdatedAt)}}
                                 </td>
                                 <td class="text-right" *ngIf="isAdmin">
                                     <div ngbDropdown placement="bottom-right">
@@ -107,8 +124,14 @@
         </button>
     </div>
     <div class="modal-body">
-        <label for="valor">Valor del reporte</label><br>
-        <input type="number" name="valor" id="valor" class="form-control" [(ngModel)]="reporte.valor">
+        <div class="form-group">
+            <label for="valor">Valor del reporte</label><br>
+            <input type="number" name="valor" id="valor" class="form-control" [(ngModel)]="reporte.valor">
+        </div>
+        <div class="form-group">
+            <label for="comentario">Comentario del reporte</label><br>
+            <textarea name="comentario" id="comentario" class="form-control" [(ngModel)]="reporte.comentario"></textarea>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" (click)="saveValor();modal.close()">Actualizar</button>

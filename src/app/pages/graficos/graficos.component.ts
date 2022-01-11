@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Chart, registerables } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ToastrService } from 'ngx-toastr';
 import { DbService } from 'src/app/services/database/db.service';
+import Utils from 'src/app/utils/utils';
+import 'chartjs-adapter-moment';
+
 Chart.register(...registerables);
 
 @Component({
@@ -19,7 +24,7 @@ export class GraficosComponent implements OnInit {
     fechaFin: ""
   }
   myChart!: Chart;
-
+  isDrawn = false;
 
 
   reportes = [];
@@ -27,41 +32,82 @@ export class GraficosComponent implements OnInit {
   constructor(
     private dbService: DbService,
     private modal: NgbModal,
-    private tService: ToastrService
+    private tService: ToastrService,
+    private router: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
+    let estacion = this.router.snapshot.paramMap.get('estacion')
+    let fi = this.router.snapshot.paramMap.get('fi')
+    let ff = this.router.snapshot.paramMap.get('ff')
+    if (!!estacion && !!fi && !!ff) {
+      this.filtro.estacion = estacion;
+      this.filtro.fechaInicio = Utils.date2(fi);
+      this.filtro.fechaFin = Utils.date2(ff)
+      this.getData();
+    }
   }
 
   getData(): void {
+    if (this.isDrawn) {
+      this.myChart.destroy()
+    }
+
     this.dbService.getReportesGraficos(this.filtro)
       .subscribe((data: any) => {
         this.reportes = (data as any);
-        const fechas = this.reportes.map((a:any) => a.fecha)
-        const valores = this.reportes.map((a:any) => {
-          if(a.valor == 0){
-            return 0.01
-          }else if(a.valor == -888){
-            return 0
-          }else{
+        const fechas = this.reportes.map((a: any) => Utils.date(a.fecha))
+        const valores = this.reportes.map((a: any) => {
+          if (a.valor == -888) {
+            return null
+          } else {
             return a.valor
           }
         })
         this.myChart = new Chart("chart", {
+          plugins: [ChartDataLabels],
           type: "bar",
           data: {
             labels: fechas,
             datasets: [{
               label: "Precipitacion",
-              backgroundColor: ["#FF8000"],
+              backgroundColor: ["#93B5C6"],
               data: valores,
+              datalabels: {
+                color: "#232323",
+                formatter: function (value, context) {
+                  if (value == null) return "x"
+                  else return value
+                },
+                anchor: 'center'
+              }
             }]
           },
           options: {
-            indexAxis:'x',
+            indexAxis: 'x',
+            locale: 'es',
             responsive: true,
+            scales: {
+              x: {
+                type: 'time',
+                time: {
+                  unit: 'day',
+                  tooltipFormat: 'DD-MM-YYYY',
+                  displayFormats: {
+                    day: 'DD-MM-YYYY'
+                  },
+                }
+              }, 
+              
+              y: {
+                display: true,
+                suggestedMin: 0,
+              }
+            }
           }
         });
+        this.isDrawn = true;
+
       });
   }
 

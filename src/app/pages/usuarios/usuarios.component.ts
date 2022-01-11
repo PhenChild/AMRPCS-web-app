@@ -10,6 +10,7 @@ import { Pais } from "src/app/models/pais";
 import { FileUploader } from 'ng2-file-upload';
 import { Estacion } from "src/app/models/estacion";
 import { Location } from "@angular/common";
+import Utils from "src/app/utils/utils";
 
 
 /**
@@ -180,6 +181,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         this.dbService.getUsuarios(this.filtro)
             .subscribe((data: User[]) => {
                 this.usuarios = data;
+                console.log(data)
                 this.dtTrigger.next();
                 const table = (<HTMLInputElement>document.getElementById("tablaUsuarios"));
                 table.style.display = "block";
@@ -406,4 +408,13 @@ export class UsuariosComponent implements OnInit, OnDestroy {
             this.addedEstaciones = this.addedEstaciones.filter(obj => obj !== estacion);
         }
     }
+
+    time(fecha: any) {
+        return Utils.time(fecha);
+    }
+
+    date(fecha: any) {
+        return Utils.date(fecha);
+    }
+
 }

@@ -15,4 +15,6 @@ export class Pais{
     audDeletedAt!: string;
 
     audUpdatedAt!: string;
+
+    state!: string;
 }

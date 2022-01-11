@@ -49,4 +49,7 @@ export class Estacion {
     division2: any;
     division3: any;
 
+    state!: string;
+
+
 }
