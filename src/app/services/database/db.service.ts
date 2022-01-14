@@ -195,7 +195,7 @@ export class DbService {
      * @returns respuesta del servidor
      */
     getPaises(): any {
-        return this.http.get(this.dbURL + "pais/getAll", { headers: this.getHeader() });
+        return this.http.get(this.dbURL + "pais/get", { headers: this.getHeader() });
     }
 
     getFiltroPaises(filtro: any): any {
@@ -377,4 +377,17 @@ export class DbService {
         return this.http.post(this.dbURL + "acumulado/update", reporte, { headers: this.getHeader() })
     }
 
+    /**Active Endpoints */
+    activateUser(usuario: any) {
+        return this.http.post(this.dbURL + "users/activateUser", usuario, { headers: this.getHeader() })
+    }
+    activateEstacion(estacion: any) {
+        return this.http.post(this.dbURL + "estacion/activateEstacion", estacion, { headers: this.getHeader() })
+    }
+    activateDivision(division: any) {
+        return this.http.post(this.dbURL + "division/activateDivision", division, { headers: this.getHeader() })
+    }
+    activatePais(pais: any) {
+        return this.http.post(this.dbURL + "pais/activatePais", pais, { headers: this.getHeader() })
+    }
 }

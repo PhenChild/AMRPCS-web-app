@@ -56,12 +56,15 @@ export class GraficosComponent implements OnInit {
     this.dbService.getReportesGraficos(this.filtro)
       .subscribe((data: any) => {
         this.reportes = (data as any);
+        console.log(this.reportes);
         const fechas = this.reportes.map((a: any) => Utils.date(a.fecha))
         const valores = this.reportes.map((a: any) => {
           if (a.valor == -888) {
-            return null
+            return 0;
+          } else if (a.valor == -1) {
+            return null;
           } else {
-            return a.valor
+            return a.valor;
           }
         })
         this.myChart = new Chart("chart", {
@@ -97,11 +100,13 @@ export class GraficosComponent implements OnInit {
                     day: 'DD-MM-YYYY'
                   },
                 }
-              }, 
-              
+              },
+
               y: {
                 display: true,
-                suggestedMin: 0,
+                ticks: {
+
+                }
               }
             }
           }

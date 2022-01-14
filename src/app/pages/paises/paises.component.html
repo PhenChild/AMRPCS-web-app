@@ -80,6 +80,8 @@
                                         </a>
                                         <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
                                             <a class="dropdown-item" (click)="editarPais(pais)">Editar</a>
+                                            <a class="dropdown-item" (click)="activar(pais)"
+                                                *ngIf="pais.state.includes('I')">Activar</a>
                                             <a class="dropdown-item" (click)="deletePais(pais)">Eliminar</a>
                                         </div>
                                     </div>
@@ -105,17 +107,16 @@
                     <form #formPais="ngForm" ngNativeValidate>
                         <div class="form-group">
                             <label for="nombre">Nombre</label><br>
-                            <input type="text" class="form-control" name="nombre" id="nombre"
-                                [(ngModel)]="pais.nombre" required>
+                            <input type="text" class="form-control" name="nombre" id="nombre" [(ngModel)]="pais.nombre"
+                                required>
                         </div>
                         <div class="form-group">
                             <label for="siglas">Siglas</label><br>
-                            <input type="text" class="form-control" name="siglas" id="siglas"
-                                [(ngModel)]="pais.siglas" required>
+                            <input type="text" class="form-control" name="siglas" id="siglas" [(ngModel)]="pais.siglas"
+                                required>
                         </div>
                         <div>
-                            <button class="btn btn-secondary float-left"
-                                (click)="cancelar(formPais)">Cancelar</button>
+                            <button class="btn btn-secondary float-left" (click)="cancelar(formPais)">Cancelar</button>
                             <button class="btn btn-default float-right" (click)="submit(formPais)">Guardar</button>
                         </div>
                     </form>

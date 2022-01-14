@@ -51,5 +51,6 @@ export class Estacion {
 
     state!: string;
 
+    itsMine!: boolean;
 
 }

@@ -11,6 +11,7 @@ import { FileUploader } from 'ng2-file-upload';
 import { Estacion } from "src/app/models/estacion";
 import { Location } from "@angular/common";
 import Utils from "src/app/utils/utils";
+import { data } from "jquery";
 
 
 /**
@@ -63,6 +64,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
     isDtInitialized: boolean = false;
     isDtInitialized2: boolean = false;
+    
     filtro = {
         nombre: "",
         email: "",
@@ -181,7 +183,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         this.dbService.getUsuarios(this.filtro)
             .subscribe((data: User[]) => {
                 this.usuarios = data;
-                console.log(data)
                 this.dtTrigger.next();
                 const table = (<HTMLInputElement>document.getElementById("tablaUsuarios"));
                 table.style.display = "block";
@@ -417,4 +418,14 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         return Utils.date(fecha);
     }
 
+    activar(usuario: any) {
+        if (confirm("¿Está seguro de activar este usuario?")) {
+            this.dbService.activateUser(usuario).subscribe((data: any) => {
+                this.tService.success("Usuario activado con exito.", "Envio exitoso");
+            }, (err: any) => {
+                this.tService.error("", "Ha ocurrido un error");
+            })
+        }
+        this.getData();
+    }
 }

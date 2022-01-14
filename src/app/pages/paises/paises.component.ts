@@ -71,7 +71,6 @@ export class PaisesComponent implements OnInit, OnDestroy {
     this.dbService.getFiltroPaises(this.filtro)
       .subscribe((data: any) => {
         this.paises = (data as any);
-        console.log(this.paises);
         this.dtTrigger1.next();
         const table = (<HTMLInputElement>document.getElementById("tablaPaises"));
         table.style.display = "block";
@@ -113,11 +112,10 @@ export class PaisesComponent implements OnInit, OnDestroy {
     if (confirm("¿Está seguro de eliminar este país?")) {
       this.pais = pais;
       this.dbService.deletePais(this.pais).subscribe((data: any) => {
-        this.tService.success("Pais eliminada con exito.", "Envio exitoso");
+        this.tService.success("Pais eliminada con éxito.", "Envio exitoso");
         this.getData();
       },
         (err: any) => {
-          console.log(err);
           this.tService.error("", "Ha ocurrido un error");
         });
     }
@@ -134,7 +132,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
           this.dbService.updatePais(this.pais)
             .subscribe(
               (data: any) => {
-                this.tService.success("Pais actualizado con exito.", "Envio exitoso");
+                this.tService.success("Pais actualizado con éxito.", "Envio exitoso");
                 formPais.reset();
                 const table = (<HTMLInputElement>document.getElementById("table"));
                 const form = (<HTMLInputElement>document.getElementById("form-pais"));
@@ -143,7 +141,6 @@ export class PaisesComponent implements OnInit, OnDestroy {
                 this.getData();
               },
               (err: any) => {
-                console.log(err);
                 this.tService.error("", "Ha ocurrido un error");
               }
             );
@@ -153,7 +150,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
           this.dbService.addPais(this.pais)
             .subscribe(
               (data: any) => {
-                this.tService.success("Pais creado con exito.", "Envio exitoso");
+                this.tService.success("Pais creado con éxito.", "Envio exitoso");
                 formPais.reset();
                 const table = (<HTMLInputElement>document.getElementById("table"));
                 const form = (<HTMLInputElement>document.getElementById("form-pais"));
@@ -162,7 +159,6 @@ export class PaisesComponent implements OnInit, OnDestroy {
                 this.getData();
               },
               (err: any) => {
-                console.log(err);
                 this.tService.error("", "Ha ocurrido un error");
               }
             );
@@ -190,6 +186,16 @@ export class PaisesComponent implements OnInit, OnDestroy {
 
   date(fecha: any) {
     return Utils.date(fecha);
+  }
+
+  activar(pais: any) {
+    if (confirm("¿Está seguro de activar este país?")) {
+      this.dbService.activatePais(pais).subscribe((data: any) => {
+        this.tService.success("País activado con éxito.", "Envio exitoso");
+      }, (err: any) => {
+        this.tService.error("", "Ha ocurrido un error");
+      })
+    }
   }
 
 }

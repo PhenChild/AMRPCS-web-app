@@ -138,14 +138,12 @@ export class FormUsuarioComponent implements OnInit {
      */
     onSubmit(formUsuario: NgForm) {
         if (formUsuario.valid) {
-
-
             if (this.confpassword == this.usuario.password) {
                 if (confirm("¿Está seguro de crear un nuevo usuario?")) {
                     this.dbService.addUsuario(this.usuario, this.selectedEstaciones)
                         .subscribe(
                             (data: any) => {
-                                this.tService.success("Usuario registrado con exito.", "Envio exitoso");
+                                this.tService.success("Usuario registrado con éxito.", "Envio exitoso");
                                 formUsuario.reset();
                                 this.selectedEstaciones = [];
                                 this.estaciones = [];
@@ -159,8 +157,11 @@ export class FormUsuarioComponent implements OnInit {
                                 this.dtTrigger1.next();
                             },
                             (err: any) => {
-                                this.tService.error("", "Ha ocurrido un error");
-                                formUsuario.reset();
+                                if(err.status == 418){
+                                    this.tService.error("", "El correo se encuentra en uso por otro usuario.");
+                                }else{
+                                    this.tService.error("", "Ha ocurrido un error");
+                                }
                             }
                         );
                 }

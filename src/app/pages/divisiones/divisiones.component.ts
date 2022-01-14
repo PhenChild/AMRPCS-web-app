@@ -124,7 +124,7 @@ export class DivisionesComponent implements OnInit {
     if (confirm("¿Está seguro de eliminar esta division política?")) {
       this.division = division;
       this.dbService.deleteDivision(this.division).subscribe((data: any) => {
-        this.tService.success("División eliminada con exito.", "Envio exitoso");
+        this.tService.success("División eliminada con éxito.", "Envio exitoso");
         this.getData();
       },
         (err: any) => {
@@ -143,7 +143,7 @@ export class DivisionesComponent implements OnInit {
         this.dbService.updateDivision(this.division)
           .subscribe(
             (data: any) => {
-              this.tService.success("División actualizada con exito.", "Envio exitoso");
+              this.tService.success("División actualizada con éxito.", "Envio exitoso");
               formDivision.reset();
               const table = (<HTMLInputElement>document.getElementById("table"));
               const form = (<HTMLInputElement>document.getElementById("form-division"));
@@ -163,7 +163,7 @@ export class DivisionesComponent implements OnInit {
         this.dbService.addDivision(this.division)
           .subscribe(
             (data: any) => {
-              this.tService.success("División creada con exito.", "Envio exitoso");
+              this.tService.success("División creada con éxito.", "Envio exitoso");
               formDivision.reset();
               const table = (<HTMLInputElement>document.getElementById("table"));
               const form = (<HTMLInputElement>document.getElementById("form-division"));
@@ -214,13 +214,22 @@ export class DivisionesComponent implements OnInit {
     this.division = new Division();
     formDivision.reset();
   }
-  
+
   time(fecha: any) {
     return Utils.time(fecha);
   }
 
   date(fecha: any) {
     return Utils.date(fecha);
+  }
+  activar(division: any) {
+    if (confirm("¿Está seguro de activar esta división?")) {
+      this.dbService.activateDivision(division).subscribe((data: any) => {
+        this.tService.success("División activada con éxito.", "Envio exitoso");
+      }, (err: any) => {
+        this.tService.error("", "Ha ocurrido un error");
+      })
+    }
   }
 
 }

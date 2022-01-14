@@ -111,6 +111,10 @@
                                                 Información</a>
                                             <a class="dropdown-item" (click)="editarFoto(estacion)"
                                                 *ngIf="isAdmin">Ver/Editar Foto</a>
+                                            <a class="dropdown-item" (click)="editarFoto(estacion)"
+                                            *ngIf="isObserver && estacion.itsMine">Ver/Editar Foto</a>
+                                            <a class="dropdown-item" (click)="activar(estacion)"
+                                                *ngIf="isAdmin && estacion.state.includes('I')">Activar</a>
                                             <a class="dropdown-item" (click)="deleteEstacion(estacion)"
                                                 *ngIf="isAdmin">Eliminar</a>
                                         </div>

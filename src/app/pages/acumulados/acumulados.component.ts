@@ -111,7 +111,7 @@ export class AcumuladosComponent implements OnInit {
     if (confirm("¿Desea actualizar la información del reporte?")) {
       this.dbService.updateReporteValorAcumulado(this.reporte)
         .subscribe((data: any) => {
-          this.tService.success("Valor actualizado con exito", "Envio exitoso");
+          this.tService.success("Valor actualizado con éxito", "Envio exitoso");
         }, (err: any) => {
           this.tService.error("", "Ha ocurrido un error");
         })

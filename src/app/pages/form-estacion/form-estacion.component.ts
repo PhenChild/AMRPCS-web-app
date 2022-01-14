@@ -60,7 +60,7 @@ export class FormEstacionComponent implements OnInit {
     }
 
     /**
-     * Guardado con exito de la estación
+     * Guardado con éxito de la estación
      * @param formEstacion
      */
     onSubmit(formEstacion: NgForm): void {
@@ -69,12 +69,15 @@ export class FormEstacionComponent implements OnInit {
                 this.estacion.idUbicacion = this.division3;
                 this.dbService.addEstacion(this.estacion).subscribe(
                     (data: any) => {
-                        this.tService.success("Estacion guardada con exito.", "Envio exitoso");
+                        this.tService.success("Estacion guardada con éxito.", "Envio exitoso");
                         formEstacion.reset();
                     },
                     (err: any) => {
-                        this.tService.error("", "Ha ocurrido un error");
-                        formEstacion.reset();
+                        if(err.status == 418){
+                            this.tService.error("", "El correo se encuentra en uso por otro usuario.");
+                        }else{
+                            this.tService.error("", "Ha ocurrido un error");
+                        }
                     }
                 );
             }
