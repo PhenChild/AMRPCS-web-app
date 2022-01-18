@@ -23,7 +23,7 @@ import { SidebarViewComponent } from "./sidebar-view/sidebar-view.component";
         NavbarViewComponent,
         SidebarComponent,
         SidebarObsComponent,
-        SidebarViewComponent
+        SidebarViewComponent,
     ],
     exports: [
         FooterComponent,

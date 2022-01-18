@@ -17,6 +17,9 @@ import { ComponentsModule } from "./components/components.module";
 import { CommonModule } from "@angular/common";
 import { ObsLayoutComponent } from './layouts/obs-layout/obs-layout.component';
 import { ViewLayoutComponent } from './layouts/view-layout/view-layout.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
+import { httpInterceptProviders } from './services/http-interceptor';
+
 
 @NgModule({
   declarations: [
@@ -24,7 +27,8 @@ import { ViewLayoutComponent } from './layouts/view-layout/view-layout.component
     AdminLayoutComponent,
     AuthLayoutComponent,
     ObsLayoutComponent,
-    ViewLayoutComponent
+    ViewLayoutComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
@@ -38,9 +42,9 @@ import { ViewLayoutComponent } from './layouts/view-layout/view-layout.component
     ComponentsModule,
     RouterModule,
     AppRoutingModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
   ],
-  providers: [],
+  providers: [httpInterceptProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

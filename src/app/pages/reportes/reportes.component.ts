@@ -94,6 +94,7 @@ export class ReportesComponent implements OnInit {
 
     this.dbService.getReportes(this.filtro)
       .subscribe((data: any) => {
+        console.log(data);
         this.reportes = (data as any);
         this.dtTrigger.next();
         const table = (<HTMLInputElement>document.getElementById("tablaReportes"));
@@ -113,6 +114,7 @@ export class ReportesComponent implements OnInit {
       this.dbService.updateReporteValor(this.reporte)
         .subscribe((data: any) => {
           this.tService.success("Valor actualizado con éxito", "Envio exitoso");
+          this.getData()
         }, (err: any) => {
           this.tService.error("", "Ha ocurrido un error");
         })

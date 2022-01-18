@@ -112,10 +112,11 @@ export class PaisesComponent implements OnInit, OnDestroy {
     if (confirm("¿Está seguro de eliminar este país?")) {
       this.pais = pais;
       this.dbService.deletePais(this.pais).subscribe((data: any) => {
-        this.tService.success("Pais eliminada con éxito.", "Envio exitoso");
+        this.tService.success("Pais eliminado con éxito.", "Envio exitoso");
         this.getData();
       },
         (err: any) => {
+          console.log(err)
           this.tService.error("", "Ha ocurrido un error");
         });
     }
@@ -192,6 +193,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
     if (confirm("¿Está seguro de activar este país?")) {
       this.dbService.activatePais(pais).subscribe((data: any) => {
         this.tService.success("País activado con éxito.", "Envio exitoso");
+        this.getData();
       }, (err: any) => {
         this.tService.error("", "Ha ocurrido un error");
       })

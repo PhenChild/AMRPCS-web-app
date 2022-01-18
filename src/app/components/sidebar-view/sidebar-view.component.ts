@@ -23,7 +23,7 @@ export const ROUTES: RouteInfo[] = [
     { path: "/view-layout/estaciones", title: "Estaciones", icon: "fa-building", class: "" },
     { path: "/view-layout/reportes", title: "Precipitación", icon: "fa-file-alt", class: "" },
     { path: "/view-layout/acumulados", title: "Precipitación Acumulada", icon: "fa-file-alt", class: "" },
-    { path: "/view-layout/graficos", title: "Graficos", icon: "fa-chart-bar", class: "" },
+    { path: "/view-layout/graficos", title: "Gráficos", icon: "fa-chart-bar", class: "" },
     { path: "/view-layout/acercade", title: "Acerca de", icon: "fa-info-circle", class: "active-pro" },
 ];
 

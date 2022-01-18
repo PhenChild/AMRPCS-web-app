@@ -56,17 +56,17 @@
                         </div>
                         <div class="form-group">
                             <label for="altitud">Latitud</label><br>
-                            <input type="number" class="form-control" name="altitud" id="altitud"
+                            <input type="float" class="form-control" name="altitud" id="altitud"
                                 [(ngModel)]="estacion.latitud" required>
                         </div>
                         <div class="form-group">
                             <label for="longitud">Longitud</label><br>
-                            <input type="number" class="form-control" name="longitud" id="longitud "
+                            <input type="float" class="form-control" name="longitud" id="longitud "
                                 [(ngModel)]="estacion.longitud" required>
                         </div>
                         <div class="form-group">
                             <label for="altitud">Altitud</label><br>
-                            <input type="number" class="form-control" name="altitud" id="altitud"
+                            <input type="float" class="form-control" name="altitud" id="altitud"
                                 [(ngModel)]="estacion.altitud" required>
                         </div>
                         <div class="form-group">
@@ -77,7 +77,7 @@
                         <div class="form-group">
                             <label for="referencias">Referencias</label><br>
                             <input type="text" class="form-control" name="referencias" id="referencias "
-                                [(ngModel)]="estacion.referencias" >
+                                [(ngModel)]="estacion.referencias">
                         </div>
                         <div class="form-group">
                             <label for="hasPluviometro">Tiene Pluviómetro</label><br>
@@ -88,7 +88,7 @@
                             </select>
                         </div>
                         <div>
-                            <button class="btn btn-secondary float-left"
+                            <button class="btn btn-secondary float-left" type="reset" 
                                 (click)="cancelar(formEstacion)">Cancelar</button>
                             <button class="btn btn-default float-right"
                                 (click)="onSubmit(formEstacion)">Guardar</button>

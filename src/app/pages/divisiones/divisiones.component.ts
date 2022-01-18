@@ -226,6 +226,7 @@ export class DivisionesComponent implements OnInit {
     if (confirm("¿Está seguro de activar esta división?")) {
       this.dbService.activateDivision(division).subscribe((data: any) => {
         this.tService.success("División activada con éxito.", "Envio exitoso");
+        this.getData();
       }, (err: any) => {
         this.tService.error("", "Ha ocurrido un error");
       })

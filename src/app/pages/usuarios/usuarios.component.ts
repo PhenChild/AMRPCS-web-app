@@ -64,7 +64,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
     isDtInitialized: boolean = false;
     isDtInitialized2: boolean = false;
-    
+
     filtro = {
         nombre: "",
         email: "",
@@ -254,7 +254,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         this.usuario = usuario;
         if (confirm("¿Está seguro de eliminar el usuario?")) {
             this.dbService.deleteUsuario(this.usuario).subscribe((data: any) => {
-                this.tService.success("Estacion guardada con exito.", "Envio exitoso");
+                this.tService.success("Usuario eliminado con éxito.", "Envio exitoso");
                 this.getData();
             },
                 (err: any) => {
@@ -326,6 +326,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
                             form.style.display = "none";
                             this.tService.success("Contraseña actualizada con exito.", "Envio exitoso");
                             formPasswordUsuario.reset();
+                            this.getData()
                         },
                         (err: any) => {
                             this.tService.error("", "Ha ocurrido un error");
@@ -381,6 +382,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         table.style.display = "block";
         form.style.display = "none";
         this.usuario = new User();
+        this.uploader.clearQueue();
     }
 
 

@@ -27,7 +27,7 @@ export const ROUTES: RouteInfo[] = [
     { path: "/admin-layout/divisiones", title: "Divisiones Políticas", icon: "fa-flag", class: "" },
     { path: "/admin-layout/reportes", title: "Precipitación", icon: "fa-file-alt", class: "" },
     { path: "/admin-layout/acumulados", title: "Precipitación Acumulada", icon: "fa-file-alt", class: "" },
-    { path: "/admin-layout/graficos", title: "Graficos", icon: "fa-chart-bar", class: "" },
+    { path: "/admin-layout/graficos", title: "Gráficos", icon: "fa-chart-bar", class: "" },
     { path: "/admin-layout/acercade", title: "Acerca de", icon: "fa-info-circle", class: "active-pro" },
 ];
 

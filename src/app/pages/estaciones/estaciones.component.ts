@@ -234,7 +234,7 @@ export class EstacionesComponent implements OnInit, OnDestroy {
         this.estacion = estacion;
         if (confirm("¿Está seguro de eliminar esta estación?")) {
             this.dbService.deleteEstacion(this.estacion).subscribe((data: any) => {
-                this.tService.success("Estacion eliminada con éxito.", "Envio exitoso");
+                this.tService.success("Estación eliminada con éxito.", "Envio exitoso");
                 this.getData();
             },
                 (err: any) => {
@@ -249,23 +249,25 @@ export class EstacionesComponent implements OnInit, OnDestroy {
      * @param formEstacion formulario de estación
      */
     submit(formEstacion: NgForm): void {
-        if (confirm("¿Está seguro de actualizar la información de esta estación?")) {
-            this.estacion.idUbicacion = this.division3;
-            this.dbService.updateEstacion(this.estacion)
-                .subscribe(
-                    (data: any) => {
-                        this.tService.success("Estacion actualizada con éxito.", "Envio exitoso");
-                        formEstacion.reset();
-                        const table = (<HTMLInputElement>document.getElementById("table"));
-                        const form = (<HTMLInputElement>document.getElementById("form-estacion"));
-                        table.style.display = "block";
-                        form.style.display = "none";
-                        this.getData();
-                    },
-                    (err: any) => {
-                        this.tService.error("", "Ha ocurrido un error");
-                    }
-                );
+        if (formEstacion.valid) {
+            if (confirm("¿Está seguro de actualizar la información de esta estación?")) {
+                this.estacion.idUbicacion = this.division3;
+                this.dbService.updateEstacion(this.estacion)
+                    .subscribe(
+                        (data: any) => {
+                            this.tService.success("Estación actualizada con éxito.", "Envio exitoso");
+                            formEstacion.reset();
+                            const table = (<HTMLInputElement>document.getElementById("table"));
+                            const form = (<HTMLInputElement>document.getElementById("form-estacion"));
+                            table.style.display = "block";
+                            form.style.display = "none";
+                            this.getData();
+                        },
+                        (err: any) => {
+                            this.tService.error("", "Ha ocurrido un error");
+                        }
+                    );
+            }
         }
     }
 
@@ -388,7 +390,11 @@ export class EstacionesComponent implements OnInit, OnDestroy {
                 this.tService.success("Estación activada con éxito.", "Envio exitoso");
                 this.getData();
             }, (err: any) => {
-                this.tService.error("", "Ha ocurrido un error");
+                if (err.status == 418) {
+                    this.tService.error("La estación pertenece a una ubicación inactiva.", "Error");
+                } else {
+                    this.tService.error("", "Ha ocurrido un error");
+                }
             })
         }
     }

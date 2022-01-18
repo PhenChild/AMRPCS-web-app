@@ -120,7 +120,7 @@ export class FormUsuarioComponent implements OnInit {
      * @param estacion Estacion escojida.
      */
     selectEstacion(estacion: Estacion): void {
-        if (!this.selectedEstaciones.includes(estacion)) {
+        if (this.selectedEstaciones.filter(obj => obj.id == estacion.id).length <= 0) {
             this.selectedEstaciones.push(estacion);
         }
     }
@@ -157,9 +157,9 @@ export class FormUsuarioComponent implements OnInit {
                                 this.dtTrigger1.next();
                             },
                             (err: any) => {
-                                if(err.status == 418){
+                                if (err.status == 418) {
                                     this.tService.error("", "El correo se encuentra en uso por otro usuario.");
-                                }else{
+                                } else {
                                     this.tService.error("", "Ha ocurrido un error");
                                 }
                             }

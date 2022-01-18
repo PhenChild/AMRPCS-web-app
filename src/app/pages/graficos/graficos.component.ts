@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { DbService } from 'src/app/services/database/db.service';
 import Utils from 'src/app/utils/utils';
 import 'chartjs-adapter-moment';
+import { NgForm } from '@angular/forms';
 
 Chart.register(...registerables);
 
@@ -44,6 +45,12 @@ export class GraficosComponent implements OnInit {
       this.filtro.estacion = estacion;
       this.filtro.fechaInicio = Utils.date2(fi);
       this.filtro.fechaFin = Utils.date2(ff)
+      this.getData();
+    }
+  }
+
+  getDataForm(formChart: NgForm) {
+    if (formChart.valid) {
       this.getData();
     }
   }
@@ -113,6 +120,10 @@ export class GraficosComponent implements OnInit {
         });
         this.isDrawn = true;
 
+      }, (err: any) => {
+        if(err.status == 418){
+          this.tService.error( "El nombre o código de estación ingresado no existe.","Error");
+        }
       });
   }
 
