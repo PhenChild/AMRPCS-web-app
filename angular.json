@@ -47,13 +47,13 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "3mb",
+                  "maximumError": "3mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "3mb",
+                  "maximumError": "3mb"
                 }
               ],
               "fileReplacements": [
@@ -106,7 +106,6 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss",
               "src/styles.scss",
               "src/assets/scss/argon.scss",
               "node_modules/datatables.net-dt/css/jquery.dataTables.css"
