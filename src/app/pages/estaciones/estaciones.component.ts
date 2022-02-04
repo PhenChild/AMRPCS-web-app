@@ -85,6 +85,7 @@ export class EstacionesComponent implements OnInit, OnDestroy {
     public location!: Location;
     isAdmin = false;
     isObserver = false;
+    isCharts = false;
     /**
      * Constructor
      */
@@ -146,7 +147,7 @@ export class EstacionesComponent implements OnInit, OnDestroy {
             const form = (<HTMLInputElement>document.getElementById("form-update-foto"));
             table.style.display = "block";
             form.style.display = "none";
-            this.tService.success("Foto actualizada con éxito.", "Envio exitoso");
+            this.tService.success("Foto actualizada con éxito.", "Envío exitoso");
             this.uploader.clearQueue()
         };
     }
@@ -198,6 +199,7 @@ export class EstacionesComponent implements OnInit, OnDestroy {
         this.dbService.getTipoRegistros(estacion)
             .subscribe((data: any) => {
                 this.variables = data;
+                if(this.variables.length >= 1) this.isCharts = true;
             });
         this.estacion = estacion;
         this.estacion.latitud = estacion.posicion.coordinates[0];
@@ -234,7 +236,7 @@ export class EstacionesComponent implements OnInit, OnDestroy {
         this.estacion = estacion;
         if (confirm("¿Está seguro de eliminar esta estación?")) {
             this.dbService.deleteEstacion(this.estacion).subscribe((data: any) => {
-                this.tService.success("Estación eliminada con éxito.", "Envio exitoso");
+                this.tService.success("Estación eliminada con éxito.", "Envío exitoso");
                 this.getData();
             },
                 (err: any) => {
@@ -245,7 +247,7 @@ export class EstacionesComponent implements OnInit, OnDestroy {
 
 
     /**
-     * Envio de actualización de estación
+     * Envío de actualización de estación
      * @param formEstacion formulario de estación
      */
     submit(formEstacion: NgForm): void {
@@ -255,7 +257,7 @@ export class EstacionesComponent implements OnInit, OnDestroy {
                 this.dbService.updateEstacion(this.estacion)
                     .subscribe(
                         (data: any) => {
-                            this.tService.success("Estación actualizada con éxito.", "Envio exitoso");
+                            this.tService.success("Estación actualizada con éxito.", "Envío exitoso");
                             formEstacion.reset();
                             const table = (<HTMLInputElement>document.getElementById("table"));
                             const form = (<HTMLInputElement>document.getElementById("form-estacion"));
@@ -281,6 +283,7 @@ export class EstacionesComponent implements OnInit, OnDestroy {
         table.style.display = "block";
         form.style.display = "none";
         this.estacion = new Estacion();
+        this.isCharts = false;
         formEstacion.reset();
     }
 
@@ -387,7 +390,7 @@ export class EstacionesComponent implements OnInit, OnDestroy {
     activar(estacion: any) {
         if (confirm("¿Está seguro de activar esta estación?")) {
             this.dbService.activateEstacion(estacion).subscribe((data: any) => {
-                this.tService.success("Estación activada con éxito.", "Envio exitoso");
+                this.tService.success("Estación activada con éxito.", "Envío exitoso");
                 this.getData();
             }, (err: any) => {
                 if (err.status == 418) {

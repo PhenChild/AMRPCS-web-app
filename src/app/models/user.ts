@@ -36,4 +36,8 @@ export class User{
     audUpdatedAt!: string;
 
     state!: string;
+
+    Pais!:{
+        nombre: string;
+    }
 }

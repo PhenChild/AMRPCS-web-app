@@ -35,6 +35,12 @@
                                 [(ngModel)]="filtro.codEstacion">
                         </div>
                         <div class="form-group col-md-3">
+                            <label for="pais">País</label><br>
+                            <select name="pais" id="pais" class="form-control" [(ngModel)]="filtro.pais">
+                                <option *ngFor="let pais of paises" [value]="pais.id">{{pais.nombre}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
                             <label for="fechaInicio">Fecha Inicio</label><br>
                             <input type="date" class="form-control" name="fechaInicio" id="ffechaInicio"
                                 [(ngModel)]="filtro.fechaInicio">

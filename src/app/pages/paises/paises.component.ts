@@ -112,7 +112,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
     if (confirm("¿Está seguro de eliminar este país?")) {
       this.pais = pais;
       this.dbService.deletePais(this.pais).subscribe((data: any) => {
-        this.tService.success("Pais eliminado con éxito.", "Envio exitoso");
+        this.tService.success("Pais eliminado con éxito.", "Envío exitoso");
         this.getData();
       },
         (err: any) => {
@@ -123,7 +123,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
   }
 
   /**
-     * Envio de actualización de estación
+     * Envío de actualización de estación
      * @param formPais formulario de estación
      */
   submit(formPais: NgForm): void {
@@ -133,7 +133,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
           this.dbService.updatePais(this.pais)
             .subscribe(
               (data: any) => {
-                this.tService.success("Pais actualizado con éxito.", "Envio exitoso");
+                this.tService.success("Pais actualizado con éxito.", "Envío exitoso");
                 formPais.reset();
                 const table = (<HTMLInputElement>document.getElementById("table"));
                 const form = (<HTMLInputElement>document.getElementById("form-pais"));
@@ -151,7 +151,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
           this.dbService.addPais(this.pais)
             .subscribe(
               (data: any) => {
-                this.tService.success("Pais creado con éxito.", "Envio exitoso");
+                this.tService.success("Pais creado con éxito.", "Envío exitoso");
                 formPais.reset();
                 const table = (<HTMLInputElement>document.getElementById("table"));
                 const form = (<HTMLInputElement>document.getElementById("form-pais"));
@@ -192,7 +192,7 @@ export class PaisesComponent implements OnInit, OnDestroy {
   activar(pais: any) {
     if (confirm("¿Está seguro de activar este país?")) {
       this.dbService.activatePais(pais).subscribe((data: any) => {
-        this.tService.success("País activado con éxito.", "Envio exitoso");
+        this.tService.success("País activado con éxito.", "Envío exitoso");
         this.getData();
       }, (err: any) => {
         this.tService.error("", "Ha ocurrido un error");

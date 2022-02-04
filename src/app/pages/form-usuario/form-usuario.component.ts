@@ -133,7 +133,7 @@ export class FormUsuarioComponent implements OnInit {
     }
 
     /**
-     * Envio de Registro de usuario
+     * Envío de Registro de usuario
      * @param formUsuario
      */
     onSubmit(formUsuario: NgForm) {
@@ -143,7 +143,7 @@ export class FormUsuarioComponent implements OnInit {
                     this.dbService.addUsuario(this.usuario, this.selectedEstaciones)
                         .subscribe(
                             (data: any) => {
-                                this.tService.success("Usuario registrado con éxito.", "Envio exitoso");
+                                this.tService.success("Usuario registrado con éxito.", "Envío exitoso");
                                 formUsuario.reset();
                                 this.selectedEstaciones = [];
                                 this.estaciones = [];

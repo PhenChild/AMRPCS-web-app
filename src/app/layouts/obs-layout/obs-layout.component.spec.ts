@@ -10,7 +10,7 @@ describe("ObsLayoutComponent", () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [ ObsLayoutComponent, DataTablesModule ],
+            declarations: [ObsLayoutComponent, DataTablesModule],
             imports: [
                 HttpClientTestingModule
             ]

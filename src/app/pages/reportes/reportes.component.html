@@ -35,6 +35,12 @@
                                 [(ngModel)]="filtro.codEstacion">
                         </div>
                         <div class="form-group col-md-3">
+                            <label for="pais">País</label><br>
+                            <select name="pais" id="pais" class="form-control" [(ngModel)]="filtro.pais">
+                                <option *ngFor="let pais of paises" [value]="pais.id">{{pais.nombre}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-3">
                             <label for="fechaInicio">Fecha Inicio</label><br>
                             <input type="date" class="form-control" name="fechaInicio" id="ffechaInicio"
                                 [(ngModel)]="filtro.fechaInicio">
@@ -118,7 +124,8 @@
 
 <ng-template #contenido let-modal>
     <div class="modal-header">
-        <h4 class="modal-title">Editar el valor del reporte {{reporte.Observador.Estacion.nombre}} {{time(reporte.fecha)}} {{date(reporte.fecha)}}</h4>
+        <h4 class="modal-title">Editar el valor del reporte {{reporte.Observador.Estacion.nombre}}
+            {{time(reporte.fecha)}} {{date(reporte.fecha)}}</h4>
         <button class="close" aria-label="close" type="button" (click)="modal.close()">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -130,7 +137,8 @@
         </div>
         <div class="form-group">
             <label for="comentario">Comentario del reporte</label><br>
-            <textarea name="comentario" id="comentario" class="form-control" [(ngModel)]="reporte.comentario"></textarea>
+            <textarea name="comentario" id="comentario" class="form-control"
+                [(ngModel)]="reporte.comentario"></textarea>
         </div>
     </div>
     <div class="modal-footer">

@@ -38,7 +38,7 @@ export class AuthService {
 
     /**
      * token de autenticacion
-     * @param token token de autenticacion con usuario envio
+     * @param token token de autenticacion con usuario Envío
      */
     logout(): void {
         sessionStorage.removeItem("token");

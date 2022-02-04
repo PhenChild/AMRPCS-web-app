@@ -312,6 +312,8 @@ export class DbService {
             query += "fechaFin=" + filtro.fechaFin + "&"
         } if (filtro.codEstacion != "") {
             query += "codigo=" + filtro.codEstacion + "&"
+        } if (filtro.pais != "") {
+            query += "pais=" + filtro.pais + "&"
         }
         return this.http.get(this.dbURL + "precipitacion/getAll/filtro?" + query, { headers: this.getHeader() });
     }
@@ -344,6 +346,8 @@ export class DbService {
             query += "fechaFin=" + filtro.fechaFin + "&"
         } if (filtro.codEstacion != "") {
             query += "codigo=" + filtro.codEstacion + "&"
+        } if (filtro.pais != "") {
+            query += "pais=" + filtro.pais + "&"
         }
         return this.http.get(this.dbURL + "acumulado/getAll/filtro?" + query, { headers: this.getHeader() });
     }

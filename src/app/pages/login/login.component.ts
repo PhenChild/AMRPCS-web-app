@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Envio del usuario con su contraseña
+     * Envío del usuario con su contraseña
      * @param formLogin formulario de login
      */
     onSubmit(formLogin: NgForm): void {

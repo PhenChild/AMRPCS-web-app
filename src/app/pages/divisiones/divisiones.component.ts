@@ -121,10 +121,10 @@ export class DivisionesComponent implements OnInit {
      * @param estacion estación que será eliminada
      */
   deleteDivision(division: any): void {
-    if (confirm("¿Está seguro de eliminar esta division política?")) {
+    if (confirm("¿Está seguro de eliminar esta división política?")) {
       this.division = division;
       this.dbService.deleteDivision(this.division).subscribe((data: any) => {
-        this.tService.success("División eliminada con éxito.", "Envio exitoso");
+        this.tService.success("División eliminada con éxito.", "Envío exitoso");
         this.getData();
       },
         (err: any) => {
@@ -134,16 +134,16 @@ export class DivisionesComponent implements OnInit {
   }
 
   /**
-     * Envio de actualización de división
+     * Envío de actualización de división
      * @param formDivision formulario de división
      */
   submit(formDivision: NgForm): void {
     if (this.isUpdating) {
-      if (confirm("¿Está seguro de actualizar la información de esta division política?")) {
+      if (confirm("¿Está seguro de actualizar la información de esta división política?")) {
         this.dbService.updateDivision(this.division)
           .subscribe(
             (data: any) => {
-              this.tService.success("División actualizada con éxito.", "Envio exitoso");
+              this.tService.success("División actualizada con éxito.", "Envío exitoso");
               formDivision.reset();
               const table = (<HTMLInputElement>document.getElementById("table"));
               const form = (<HTMLInputElement>document.getElementById("form-division"));
@@ -159,11 +159,11 @@ export class DivisionesComponent implements OnInit {
           );
       }
     } else {
-      if (confirm("¿Está seguro de crear una nueva division política?")) {
+      if (confirm("¿Está seguro de crear una nueva división política?")) {
         this.dbService.addDivision(this.division)
           .subscribe(
             (data: any) => {
-              this.tService.success("División creada con éxito.", "Envio exitoso");
+              this.tService.success("División creada con éxito.", "Envío exitoso");
               formDivision.reset();
               const table = (<HTMLInputElement>document.getElementById("table"));
               const form = (<HTMLInputElement>document.getElementById("form-division"));
@@ -225,7 +225,7 @@ export class DivisionesComponent implements OnInit {
   activar(division: any) {
     if (confirm("¿Está seguro de activar esta división?")) {
       this.dbService.activateDivision(division).subscribe((data: any) => {
-        this.tService.success("División activada con éxito.", "Envio exitoso");
+        this.tService.success("División activada con éxito.", "Envío exitoso");
         this.getData();
       }, (err: any) => {
         this.tService.error("", "Ha ocurrido un error");

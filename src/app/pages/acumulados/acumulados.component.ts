@@ -5,6 +5,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
+import { Pais } from 'src/app/models/pais';
 import { ReporteAcumulado } from 'src/app/models/reporteAcumulado';
 import { DbService } from 'src/app/services/database/db.service';
 import Utils from 'src/app/utils/utils';
@@ -32,6 +33,7 @@ export class AcumuladosComponent implements OnInit {
 
   /** Lista de reportes seleccionados*/
   reportes: ReporteAcumulado[] = [];
+  paises: Pais[] = [];
 
   /** Operador del datatable de los registros */
   dtTrigger: Subject<any> = new Subject<any>();
@@ -41,7 +43,8 @@ export class AcumuladosComponent implements OnInit {
     estacion: "",
     fechaInicio: "",
     fechaFin: "",
-    codEstacion: ""
+    codEstacion: "",
+    pais: ""
   }
   isDtInitialized: boolean = false
 
@@ -68,6 +71,11 @@ export class AcumuladosComponent implements OnInit {
       this.isAdmin = true;
     }
 
+    this.dbService.getPaises()
+      .subscribe((data: any) => {
+        this.paises = (data as any);
+      });
+
     let estacion = this.router.snapshot.paramMap.get('estacion')
     let fi = this.router.snapshot.paramMap.get('fi')
     let ff = this.router.snapshot.paramMap.get('ff')
@@ -93,6 +101,7 @@ export class AcumuladosComponent implements OnInit {
 
     this.dbService.getReportesAcumulados(this.filtro)
       .subscribe((data: any) => {
+        console.log(data);
         this.reportes = (data as any);
         this.dtTrigger.next();
         const table = (<HTMLInputElement>document.getElementById("tablaReportes"));
@@ -111,7 +120,7 @@ export class AcumuladosComponent implements OnInit {
     if (confirm("¿Desea actualizar la información del reporte?")) {
       this.dbService.updateReporteValorAcumulado(this.reporte)
         .subscribe((data: any) => {
-          this.tService.success("Valor actualizado con éxito", "Envio exitoso");
+          this.tService.success("Valor actualizado con éxito", "Envío exitoso");
         }, (err: any) => {
           this.tService.error("", "Ha ocurrido un error");
         })

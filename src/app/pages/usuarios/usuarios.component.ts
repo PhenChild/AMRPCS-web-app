@@ -149,7 +149,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
             const form = (<HTMLInputElement>document.getElementById("form-update-foto"));
             table.style.display = "block";
             form.style.display = "none";
-            this.tService.success("Foto actualizada con exito.", "Envio exitoso");
+            this.tService.success("Foto actualizada con exito.", "Envío exitoso");
             this.uploader.clearQueue()
         };
     }
@@ -182,6 +182,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         }
         this.dbService.getUsuarios(this.filtro)
             .subscribe((data: User[]) => {
+                console.log(data);
                 this.usuarios = data;
                 this.dtTrigger.next();
                 const table = (<HTMLInputElement>document.getElementById("tablaUsuarios"));
@@ -254,7 +255,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         this.usuario = usuario;
         if (confirm("¿Está seguro de eliminar el usuario?")) {
             this.dbService.deleteUsuario(this.usuario).subscribe((data: any) => {
-                this.tService.success("Usuario eliminado con éxito.", "Envio exitoso");
+                this.tService.success("Usuario eliminado con éxito.", "Envío exitoso");
                 this.getData();
             },
                 (err: any) => {
@@ -278,7 +279,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
                             table.style.display = "block";
                             form.style.display = "none";
                             this.usuario = new User();
-                            this.tService.success("Usuario actualizado con exito.", "Envio exitoso");
+                            this.tService.success("Usuario actualizado con exito.", "Envío exitoso");
                             formUsuario.reset();
                         },
                         (err: any) => {
@@ -324,7 +325,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
                             const form = (<HTMLInputElement>document.getElementById("form-update-password"));
                             table.style.display = "block";
                             form.style.display = "none";
-                            this.tService.success("Contraseña actualizada con exito.", "Envio exitoso");
+                            this.tService.success("Contraseña actualizada con exito.", "Envío exitoso");
                             formPasswordUsuario.reset();
                             this.getData()
                         },
@@ -423,7 +424,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     activar(usuario: any) {
         if (confirm("¿Está seguro de activar este usuario?")) {
             this.dbService.activateUser(usuario).subscribe((data: any) => {
-                this.tService.success("Usuario activado con exito.", "Envio exitoso");
+                this.tService.success("Usuario activado con exito.", "Envío exitoso");
             }, (err: any) => {
                 this.tService.error("", "Ha ocurrido un error");
             })

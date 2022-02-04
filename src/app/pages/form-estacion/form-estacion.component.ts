@@ -69,7 +69,7 @@ export class FormEstacionComponent implements OnInit {
                 this.estacion.idUbicacion = this.division3;
                 this.dbService.addEstacion(this.estacion).subscribe(
                     (data: any) => {
-                        this.tService.success("Estacion guardada con éxito.", "Envio exitoso");
+                        this.tService.success("Estación guardada con éxito.", "Envío exitoso");
                         formEstacion.reset();
                     },
                     (err: any) => {

@@ -76,7 +76,7 @@ export class PerfilComponent implements OnInit {
       const form = (<HTMLInputElement>document.getElementById("form-update-foto"));
       table.style.display = "block";
       form.style.display = "none";
-      this.tService.success("Foto actualizada con éxito.", "Envio exitoso");
+      this.tService.success("Foto actualizada con éxito.", "Envío exitoso");
       this.uploader.clearQueue()
     };
   }
@@ -87,7 +87,7 @@ export class PerfilComponent implements OnInit {
         this.dbService.updateUserProfile(this.usuario)
           .subscribe(
             (data: any) => {
-              this.tService.success("Información de perfil actualizada con éxito.", "Envio exitoso");
+              this.tService.success("Información de perfil actualizada con éxito.", "Envío exitoso");
             },
             (err: any) => {
               this.tService.error("", "Ha ocurrido un error");
@@ -116,7 +116,7 @@ export class PerfilComponent implements OnInit {
                 const form = (<HTMLInputElement>document.getElementById("form-update-password"));
                 table.style.display = "block";
                 form.style.display = "none";
-                this.tService.success("Contraseña actualizada con éxito.", "Envio exitoso");
+                this.tService.success("Contraseña actualizada con éxito.", "Envío exitoso");
               },
               (err: any) => {
                 this.tService.error("", "Ha ocurrido un error");
