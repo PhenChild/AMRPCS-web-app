@@ -102,7 +102,6 @@ export class ReportesComponent implements OnInit {
 
     this.dbService.getReportes(this.filtro)
       .subscribe((data: any) => {
-        console.log(data);
         this.reportes = (data as any);
         this.dtTrigger.next();
         const table = (<HTMLInputElement>document.getElementById("tablaReportes"));

@@ -22,7 +22,7 @@
     "@ng-bootstrap/ng-bootstrap": "^10.0.0",
     "@types/chart.js": "^2.9.35",
     "angular-datatables": "^12.0.0",
-    "bootstrap": "^4.5.0",
+    "bootstrap": "^4.3.0",
     "chart.js": "^3.7.0",
     "chartjs-adapter-moment": "^1.0.0",
     "chartjs-plugin-datalabels": "^2.0.0",

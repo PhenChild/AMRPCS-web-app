@@ -116,7 +116,6 @@ export class PaisesComponent implements OnInit, OnDestroy {
         this.getData();
       },
         (err: any) => {
-          console.log(err)
           this.tService.error("", "Ha ocurrido un error");
         });
     }

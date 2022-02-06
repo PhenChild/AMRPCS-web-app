@@ -182,7 +182,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         }
         this.dbService.getUsuarios(this.filtro)
             .subscribe((data: User[]) => {
-                console.log(data);
                 this.usuarios = data;
                 this.dtTrigger.next();
                 const table = (<HTMLInputElement>document.getElementById("tablaUsuarios"));
