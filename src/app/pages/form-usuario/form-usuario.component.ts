@@ -140,7 +140,7 @@ export class FormUsuarioComponent implements OnInit {
         if (formUsuario.valid) {
             if (this.confpassword == this.usuario.password) {
                 if (this.usuario.role == "observer" && this.selectedEstaciones.length == 0) {
-                    this.tService.error("", "Debe seleccionar al menos una estación.");
+                    this.tService.error("", "Debe seleccionar al menos una estación para el observador.");
                 } else {
                     if (confirm("¿Está seguro de crear un nuevo usuario?")) {
                         this.dbService.addUsuario(this.usuario, this.selectedEstaciones)

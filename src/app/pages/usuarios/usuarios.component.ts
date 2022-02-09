@@ -277,27 +277,31 @@ export class UsuariosComponent implements OnInit, OnDestroy {
      */
     submit(formUsuario: NgForm): void {
         if (formUsuario.valid) {
-            if (confirm("¿Está seguro de actualizar la contraseña del usuario?")) {
-                this.dbService.updateUsuario(this.usuario, this.addedEstaciones, this.deletedEstaciones)
-                    .subscribe(
-                        (data: any) => {
-                            const table = (<HTMLInputElement>document.getElementById("table"));
-                            const form = (<HTMLInputElement>document.getElementById("form-usuario"));
-                            table.style.display = "block";
-                            form.style.display = "none";
-                            this.usuario = new User();
-                            this.tService.success("Usuario actualizado con exito.", "Envío exitoso");
-                            formUsuario.reset();
-                        },
-                        (err: any) => {
-                            this.tService.error("", "Ha ocurrido un error");
-                            this.addedEstaciones = [];
-                            this.deletedEstaciones = [];
-                            this.selectedEstaciones = [];
-                            formUsuario.reset();
-                        }
-                    );
-            }
+            if (this.usuario.role == "observer" && this.selectedEstaciones.length == 0) {
+                this.tService.error("", "Debe seleccionar al menos una estación para el observador.");
+            } else {
+                if (confirm("¿Está seguro de actualizar la contraseña del usuario?")) {
+                    this.dbService.updateUsuario(this.usuario, this.addedEstaciones, this.deletedEstaciones)
+                        .subscribe(
+                            (data: any) => {
+                                const table = (<HTMLInputElement>document.getElementById("table"));
+                                const form = (<HTMLInputElement>document.getElementById("form-usuario"));
+                                table.style.display = "block";
+                                form.style.display = "none";
+                                this.usuario = new User();
+                                this.tService.success("Usuario actualizado con exito.", "Envío exitoso");
+                                formUsuario.reset();
+                            },
+                            (err: any) => {
+                                this.tService.error("", "Ha ocurrido un error");
+                                this.addedEstaciones = [];
+                                this.deletedEstaciones = [];
+                                this.selectedEstaciones = [];
+                                formUsuario.reset();
+                            }
+                        );
+                }
+            } 
         }
     }
 

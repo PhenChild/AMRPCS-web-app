@@ -65,8 +65,6 @@ export class FormEstacionComponent implements OnInit {
      */
     onSubmit(formEstacion: NgForm): void {
         if (formEstacion.valid) {
-            console.log(this.divisiones3)
-            console.log(this.division3)
             if (this.divisiones3.filter(d => d.id.toString() == this.division3).length == 0) {
                 this.tService.error("", "Por favor, seleccionar 3 niveles de divisiones políticas.");
             } else {

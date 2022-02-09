@@ -258,23 +258,27 @@ export class EstacionesComponent implements OnInit, OnDestroy {
      */
     submit(formEstacion: NgForm): void {
         if (formEstacion.valid) {
-            if (confirm("¿Está seguro de actualizar la información de esta estación?")) {
-                this.estacion.idUbicacion = this.division3;
-                this.dbService.updateEstacion(this.estacion)
-                    .subscribe(
-                        (data: any) => {
-                            this.tService.success("Estación actualizada con éxito.", "Envío exitoso");
-                            formEstacion.reset();
-                            const table = (<HTMLInputElement>document.getElementById("table"));
-                            const form = (<HTMLInputElement>document.getElementById("form-estacion"));
-                            table.style.display = "block";
-                            form.style.display = "none";
-                            this.getData();
-                        },
-                        (err: any) => {
-                            this.tService.error("", "Ha ocurrido un error");
-                        }
-                    );
+            if (this.divisiones3.filter(d => d.id.toString() == this.division3).length == 0) {
+                this.tService.error("", "Por favor, seleccionar 3 niveles de divisiones políticas.");
+            } else {
+                if (confirm("¿Está seguro de actualizar la información de esta estación?")) {
+                    this.estacion.idUbicacion = this.division3;
+                    this.dbService.updateEstacion(this.estacion)
+                        .subscribe(
+                            (data: any) => {
+                                this.tService.success("Estación actualizada con éxito.", "Envío exitoso");
+                                formEstacion.reset();
+                                const table = (<HTMLInputElement>document.getElementById("table"));
+                                const form = (<HTMLInputElement>document.getElementById("form-estacion"));
+                                table.style.display = "block";
+                                form.style.display = "none";
+                                this.getData();
+                            },
+                            (err: any) => {
+                                this.tService.error("", "Ha ocurrido un error");
+                            }
+                        );
+                }
             }
         }
     }
