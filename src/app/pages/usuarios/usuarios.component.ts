@@ -69,6 +69,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         nombre: "",
         email: "",
         rol: "",
+        pais: ""
     };
 
     filtroEstacion = {

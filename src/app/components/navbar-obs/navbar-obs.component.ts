@@ -22,11 +22,11 @@ export class NavbarObsComponent implements OnInit {
 
     /** Constructor */
     constructor(
-        location: Location,  
-        private element: ElementRef, 
-        private router: Router, 
+        location: Location,
+        private element: ElementRef,
+        private router: Router,
         private authService: AuthService
-        ) {
+    ) {
         this.location = location;
     }
 
@@ -36,20 +36,20 @@ export class NavbarObsComponent implements OnInit {
     }
 
     /** Obtener el titulo del componente. */
-    getTitle(): string{
+    getTitle(): string {
         let titlee = this.location.prepareExternalUrl(this.location.path());
-        if (titlee.charAt(0) === "#"){
-            titlee = titlee.slice( 1 );
+        if (titlee.charAt(0) === "#") {
+            titlee = titlee.slice(1);
         }
-        if(titlee === "/obs-layout/acercade"){
+        if (titlee === "/obs-layout/acercade") {
             return "Acerca De"
         }
-        else if(titlee === "/obs-layout/perfil"){
+        else if (titlee === "/obs-layout/perfil") {
             return "Mi Perfil"
         }
-        if(this.listTitles != undefined){
-            for (let item = 0; item < this.listTitles.length; item++){
-                if (this.listTitles[item].path === titlee){
+        if (this.listTitles != undefined) {
+            for (let item = 0; item < this.listTitles.length; item++) {
+                if (this.listTitles[item].path === titlee.split(";")[0]) {
                     return this.listTitles[item].title;
                 }
             }
@@ -58,25 +58,25 @@ export class NavbarObsComponent implements OnInit {
     }
 
     /** Obtiene el nombre de usuario. */
-    getUser(): any{
+    getUser(): any {
         return sessionStorage.getItem("user");
     }
 
-    getImage(): any{
+    getImage(): any {
         return sessionStorage.getItem("foto");
     }
 
-    hasImage(): boolean{
+    hasImage(): boolean {
         var foto = sessionStorage.getItem("foto")
-        if ( foto != "undefined"){
+        if (foto != "undefined") {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
     /** Cierra sesion en la página. */
-    logout(): void{
+    logout(): void {
         this.authService.logout();
         this.router.navigate(["/auth-layout/login"]);
     }

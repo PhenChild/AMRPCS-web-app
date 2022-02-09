@@ -53,6 +53,8 @@ export class DbService {
             query += "correo=" + filtro.email + "&"
         } if (filtro.rol != "") {
             query += "role=" + filtro.rol + "&"
+        } if (filtro.pais != "") {
+            query += "pais=" + filtro.pais + "&"
         }
         return this.http.get(this.dbURL + "getAll/filtro?" + query, { headers: this.getHeader() });
     }

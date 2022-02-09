@@ -60,35 +60,38 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let estacion of estaciones">
-                                <th scope="row" width=30%>
+                                <th scope="row" width=30%  (click)="editarEstacion(estacion)">
                                     <div class="media align-items-center">
                                         <div class="media-body">
                                             <span class="mb-0 text-sm">{{ estacion.nombre}}</span>
                                         </div>
                                     </div>
                                 </th>
-                                <td>
+                                <td  (click)="editarEstacion(estacion)">
                                     {{estacion.codigo}}
                                 </td>
-                                <td>
+                                <td  (click)="editarEstacion(estacion)">
                                     {{estacion.posicion.coordinates[0]}},
                                     {{estacion.posicion.coordinates[1]}},
                                     {{estacion.altitud}}
                                 </td>
-                                <td>
+                                <td  (click)="editarEstacion(estacion)">
                                     {{estacion.Division.Pai.nombre}}
                                 </td>
-                                <td>
+                                <td *ngIf="!!estacion.division1.nombre && !!estacion.division2.nombre && !!estacion.division3.nombre"  (click)="editarEstacion(estacion)">
                                     {{estacion.division1.nombre + ", " + estacion.division2.nombre + ", " +
                                     estacion.division3.nombre}}
                                 </td>
-                                <td *ngIf="isAdmin">
+                                <td *ngIf="!(!!estacion.division1.nombre && !!estacion.division2.nombre && !!estacion.division3.nombre)"  (click)="editarEstacion(estacion)">
+                                    Error de Division
+                                </td>
+                                <td *ngIf="isAdmin"  (click)="editarEstacion(estacion)">
                                     {{date(estacion.audCreatedAt)}} {{time(estacion.audCreatedAt)}}
                                 </td>
-                                <td *ngIf="isAdmin">
+                                <td *ngIf="isAdmin"  (click)="editarEstacion(estacion)">
                                     {{date(estacion.audUpdatedAt)}} {{time(estacion.audUpdatedAt)}}
                                 </td>
-                                <td *ngIf="isAdmin">
+                                <td *ngIf="isAdmin"  (click)="editarEstacion(estacion)">
                                     {{estacion.state}}
                                 </td>
                                 <td class="text-right">

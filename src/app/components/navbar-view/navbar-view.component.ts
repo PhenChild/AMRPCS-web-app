@@ -49,7 +49,7 @@ export class NavbarViewComponent implements OnInit {
         }
         if(this.listTitles != undefined){
             for (let item = 0; item < this.listTitles.length; item++){
-                if (this.listTitles[item].path === titlee){
+                if (this.listTitles[item].path === titlee.split(";")[0]){
                     return this.listTitles[item].title;
                 }
             }

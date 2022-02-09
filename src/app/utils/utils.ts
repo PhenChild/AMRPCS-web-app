@@ -21,7 +21,7 @@ export default class Utils {
     }
 
     static date2(s: any) {
-        let fecha = s.split(" ")[0].split("/")
+        let fecha = s.replace(",","").split(" ")[0].split("/")
         let mes = (fecha[1].length == 1) ? "0" + fecha[1] : fecha[1];
         let dia = (fecha[0].length == 1) ? "0" + fecha[0] : fecha[0];
         return fecha[2] + "-" + mes + "-" + dia;
