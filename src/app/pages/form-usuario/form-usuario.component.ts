@@ -139,31 +139,35 @@ export class FormUsuarioComponent implements OnInit {
     onSubmit(formUsuario: NgForm) {
         if (formUsuario.valid) {
             if (this.confpassword == this.usuario.password) {
-                if (confirm("¿Está seguro de crear un nuevo usuario?")) {
-                    this.dbService.addUsuario(this.usuario, this.selectedEstaciones)
-                        .subscribe(
-                            (data: any) => {
-                                this.tService.success("Usuario registrado con éxito.", "Envío exitoso");
-                                formUsuario.reset();
-                                this.selectedEstaciones = [];
-                                this.estaciones = [];
-                                if (this.isDtInitialized) {
-                                    this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-                                        dtInstance.destroy()
-                                    })
-                                } else {
-                                    this.isDtInitialized = true;
+                if (this.usuario.role == "observer" && this.selectedEstaciones.length == 0) {
+                    this.tService.error("", "Debe seleccionar al menos una estación.");
+                } else {
+                    if (confirm("¿Está seguro de crear un nuevo usuario?")) {
+                        this.dbService.addUsuario(this.usuario, this.selectedEstaciones)
+                            .subscribe(
+                                (data: any) => {
+                                    this.tService.success("Usuario registrado con éxito.", "Envío exitoso");
+                                    formUsuario.reset();
+                                    this.selectedEstaciones = [];
+                                    this.estaciones = [];
+                                    if (this.isDtInitialized) {
+                                        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+                                            dtInstance.destroy()
+                                        })
+                                    } else {
+                                        this.isDtInitialized = true;
+                                    }
+                                    this.dtTrigger1.next();
+                                },
+                                (err: any) => {
+                                    if (err.status == 418) {
+                                        this.tService.error("", "El correo se encuentra en uso por otro usuario.");
+                                    } else {
+                                        this.tService.error("", "Ha ocurrido un error");
+                                    }
                                 }
-                                this.dtTrigger1.next();
-                            },
-                            (err: any) => {
-                                if (err.status == 418) {
-                                    this.tService.error("", "El correo se encuentra en uso por otro usuario.");
-                                } else {
-                                    this.tService.error("", "Ha ocurrido un error");
-                                }
-                            }
-                        );
+                            );
+                    }
                 }
             } else {
                 this.tService.error("", "Las contraseñas deben coincidir");

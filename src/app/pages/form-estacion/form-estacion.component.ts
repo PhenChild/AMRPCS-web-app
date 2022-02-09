@@ -65,21 +65,35 @@ export class FormEstacionComponent implements OnInit {
      */
     onSubmit(formEstacion: NgForm): void {
         if (formEstacion.valid) {
-            if (confirm("¿Está seguro de crear una nueva estación?")) {
-                this.estacion.idUbicacion = this.division3;
-                this.dbService.addEstacion(this.estacion).subscribe(
-                    (data: any) => {
-                        this.tService.success("Estación guardada con éxito.", "Envío exitoso");
-                        formEstacion.reset();
-                    },
-                    (err: any) => {
-                        if(err.status == 418){
-                            this.tService.error("", "El correo se encuentra en uso por otro usuario.");
-                        }else{
-                            this.tService.error("", "Ha ocurrido un error");
+            console.log(this.divisiones3)
+            console.log(this.division3)
+            if (this.divisiones3.filter(d => d.id.toString() == this.division3).length == 0) {
+                this.tService.error("", "Por favor, seleccionar 3 niveles de divisiones políticas.");
+            } else {
+                if (confirm("¿Está seguro de crear una nueva estación?")) {
+                    this.estacion.idUbicacion = this.division3;
+                    this.dbService.addEstacion(this.estacion).subscribe(
+                        (data: any) => {
+                            this.tService.success("Estación guardada con éxito.", "Envío exitoso");
+                            formEstacion.reset();
+                            this.divisiones1 = [];
+                            this.divisiones2 = [];
+                            this.divisiones3 = [];
+
+                            this.pais = "";
+                            this.division1 = "";
+                            this.division2 = "";
+                            this.division3 = "";
+                        },
+                        (err: any) => {
+                            if (err.status == 418) {
+                                this.tService.error("", "El código se encuentra en uso por otra estación.");
+                            } else {
+                                this.tService.error("", "Ha ocurrido un error creando la estación.");
+                            }
                         }
-                    }
-                );
+                    );
+                }
             }
         }
     }

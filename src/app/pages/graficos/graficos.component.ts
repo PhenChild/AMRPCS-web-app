@@ -59,71 +59,78 @@ export class GraficosComponent implements OnInit {
     if (this.isDrawn) {
       this.myChart.destroy()
     }
-
-    this.dbService.getReportesGraficos(this.filtro)
-      .subscribe((data: any) => {
-        this.reportes = (data as any);
-        const fechas = this.reportes.map((a: any) => Utils.date(a.fecha))
-        const valores = this.reportes.map((a: any) => {
-          if (a.valor == -888) {
-            return 0;
-          } else if (a.valor == -1) {
-            return null;
-          } else {
-            return a.valor;
-          }
-        })
-        this.myChart = new Chart("chart", {
-          plugins: [ChartDataLabels],
-          type: "bar",
-          data: {
-            labels: fechas,
-            datasets: [{
-              label: "Precipitacion",
-              backgroundColor: ["#93B5C6"],
-              data: valores,
-              datalabels: {
-                color: "#232323",
-                formatter: function (value, context) {
-                  if (value == null) return "x"
-                  else return value
-                },
-                anchor: 'center'
-              }
-            }]
-          },
-          options: {
-            indexAxis: 'x',
-            locale: 'es',
-            responsive: true,
-            scales: {
-              x: {
-                type: 'time',
-                time: {
-                  unit: 'day',
-                  tooltipFormat: 'DD-MM-YYYY',
-                  displayFormats: {
-                    day: 'DD-MM-YYYY'
+    let fi = new Date(this.filtro.fechaInicio);
+    let ff = new Date(this.filtro.fechaFin);
+    console.log(fi)
+    console.log(ff)
+    if (fi <= ff) {
+      this.dbService.getReportesGraficos(this.filtro)
+        .subscribe((data: any) => {
+          this.reportes = (data as any);
+          const fechas = this.reportes.map((a: any) => Utils.date(a.fecha))
+          const valores = this.reportes.map((a: any) => {
+            if (a.valor == -888) {
+              return 0;
+            } else if (a.valor == -1) {
+              return null;
+            } else {
+              return a.valor;
+            }
+          })
+          this.myChart = new Chart("chart", {
+            plugins: [ChartDataLabels],
+            type: "bar",
+            data: {
+              labels: fechas,
+              datasets: [{
+                label: "Precipitacion",
+                backgroundColor: ["#93B5C6"],
+                data: valores,
+                datalabels: {
+                  color: "#232323",
+                  formatter: function (value, context) {
+                    if (value == null) return "x"
+                    else return value
                   },
+                  anchor: 'center'
                 }
-              },
+              }]
+            },
+            options: {
+              indexAxis: 'x',
+              locale: 'es',
+              responsive: true,
+              scales: {
+                x: {
+                  type: 'time',
+                  time: {
+                    unit: 'day',
+                    tooltipFormat: 'DD-MM-YYYY',
+                    displayFormats: {
+                      day: 'DD-MM-YYYY'
+                    },
+                  }
+                },
 
-              y: {
-                display: true,
-                ticks: {
+                y: {
+                  display: true,
+                  ticks: {
 
+                  }
                 }
               }
             }
+          });
+          this.isDrawn = true;
+
+        }, (err: any) => {
+          if (err.status == 418) {
+            this.tService.error("El nombre o código de estación ingresado no existe.", "Error");
           }
         });
-        this.isDrawn = true;
-
-      }, (err: any) => {
-        if(err.status == 418){
-          this.tService.error( "El nombre o código de estación ingresado no existe.","Error");
-        }
-      });
+    } else {
+      this.tService.error("La fecha de inicio debe ser menor o igual a la fecha de fin.", "Error");
+    }
   }
 
 }
