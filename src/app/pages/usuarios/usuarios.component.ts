@@ -89,6 +89,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     selectedEstaciones: Estacion[] = [];
     addedEstaciones: Estacion[] = [];
     deletedEstaciones: Estacion[] = []
+    filtroPaises: Pais[] = [];
 
     /**
      * Constructor
@@ -136,6 +137,12 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         this.isCancel = false;
         this.isError = false;
         this.isSuccess = false;
+
+
+        this.dbService.getPaises()
+            .subscribe((data: any) => {
+                this.filtroPaises = (data as any);
+            });
 
         this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
 

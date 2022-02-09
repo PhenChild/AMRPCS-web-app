@@ -12,8 +12,11 @@
             <div class="card shadow">
                 <div class="card-header border-0">
                     <div class="row align-items-center">
-                        <div class="col-9">
+                        <div class="col-9" *ngIf="isAdmin">
                             <h3 class="mb-0">Lista de Usuarios</h3>
+                        </div>
+                        <div class="col-9" *ngIf="!isAdmin">
+                            <h3 class="mb-0">Lista de Observadores</h3>
                         </div>
                         <div class="col-3 text-right text-default" *ngIf="isAdmin">
                             <a [routerLink]="['/admin-layout/form-usuario']" class="btn btn-sm btn-default">Nuevo
@@ -35,9 +38,11 @@
                         </div>
                         <div class="form-group col-md-3">
                             <label for="pais">País</label><br>
-                            <input type="text" class="form-control" name="pais" id="fpais" [(ngModel)]="filtro.pais">
+                            <select name="pais" id="pais" class="form-control" [(ngModel)]="filtro.pais">
+                                <option *ngFor="let pais of filtroPaises" [value]="pais.nombre">{{pais.nombre}}</option>
+                            </select>
                         </div>
-                        <div class="col-md-6" *ngIf="!isAdmin"></div>
+                        <div class="col-md-3" *ngIf="!isAdmin"></div>
                         <div class="form-group col-md-3" *ngIf="isAdmin">
                             <label for="rol">Rol</label><br>
                             <select class="form-control form-select form-select-sm" name="frol" id="rol"

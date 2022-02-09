@@ -30,6 +30,7 @@ export class DivisionesComponent implements OnInit {
   divisiones: Division[] = [];
 
   paises: Pais[] = [];
+  filtroPaises: Pais[] = [];
 
   divisionesSuperiores: Division[] = [];
 
@@ -56,6 +57,11 @@ export class DivisionesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.dbService.getPaises()
+      .subscribe((data: any) => {
+        this.filtroPaises = (data as any);
+      });
+
   }
 
   /**

@@ -80,6 +80,7 @@ export class EstacionesComponent implements OnInit, OnDestroy {
     divisiones2: Division[] = [];
     divisiones3: Division[] = [];
     variables: Variable[] = [];
+    filtroPaises: Pais[] = [];
 
     isDtInitialized: boolean = false
     public location!: Location;
@@ -133,6 +134,11 @@ export class EstacionesComponent implements OnInit, OnDestroy {
         this.isSuccess = false;
 
 
+
+        this.dbService.getPaises()
+            .subscribe((data: any) => {
+                this.filtroPaises = (data as any);
+            });
 
         this.uploader.onAfterAddingFile = (file) => { file.withCredentials = false; };
 
@@ -199,7 +205,7 @@ export class EstacionesComponent implements OnInit, OnDestroy {
         this.dbService.getTipoRegistros(estacion)
             .subscribe((data: any) => {
                 this.variables = data;
-                if(this.variables.length >= 1) this.isCharts = true;
+                if (this.variables.length >= 1) this.isCharts = true;
             });
         this.estacion = estacion;
         this.estacion.latitud = estacion.posicion.coordinates[0];
