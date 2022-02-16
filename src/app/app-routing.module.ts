@@ -9,6 +9,7 @@ import { ObsLayoutComponent } from './layouts/obs-layout/obs-layout.component';
 import { ViewLayoutComponent } from './layouts/view-layout/view-layout.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AuthObsGuard } from './guards/auth-obs.guard';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 const routes: Routes = [
   {
@@ -65,6 +66,7 @@ const routes: Routes = [
     CommonModule,
     BrowserModule,
     RouterModule.forRoot(routes)],
+    providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy }],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
