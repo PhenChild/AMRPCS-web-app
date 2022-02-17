@@ -145,44 +145,48 @@ export class DivisionesComponent implements OnInit {
      */
   submit(formDivision: NgForm): void {
     if (this.isUpdating) {
-      if (confirm("¿Está seguro de actualizar la información de esta división política?")) {
-        this.dbService.updateDivision(this.division)
-          .subscribe(
-            (data: any) => {
-              this.tService.success("División actualizada con éxito.", "Envío exitoso");
-              formDivision.reset();
-              const table = (<HTMLInputElement>document.getElementById("table"));
-              const form = (<HTMLInputElement>document.getElementById("form-division"));
-              table.style.display = "block";
-              form.style.display = "none";
-              this.paises = [];
-              this.divisionesSuperiores = [];
-              this.getData();
-            },
-            (err: any) => {
-              this.tService.error("", "Ha ocurrido un error");
-            }
-          );
+      if (formDivision.valid) {
+        if (confirm("¿Está seguro de actualizar la información de esta división política?")) {
+          this.dbService.updateDivision(this.division)
+            .subscribe(
+              (data: any) => {
+                this.tService.success("División actualizada con éxito.", "Envío exitoso");
+                formDivision.reset();
+                const table = (<HTMLInputElement>document.getElementById("table"));
+                const form = (<HTMLInputElement>document.getElementById("form-division"));
+                table.style.display = "block";
+                form.style.display = "none";
+                this.paises = [];
+                this.divisionesSuperiores = [];
+                this.getData();
+              },
+              (err: any) => {
+                this.tService.error("", "Ha ocurrido un error");
+              }
+            );
+        }
       }
     } else {
-      if (confirm("¿Está seguro de crear una nueva división política?")) {
-        this.dbService.addDivision(this.division)
-          .subscribe(
-            (data: any) => {
-              this.tService.success("División creada con éxito.", "Envío exitoso");
-              formDivision.reset();
-              const table = (<HTMLInputElement>document.getElementById("table"));
-              const form = (<HTMLInputElement>document.getElementById("form-division"));
-              table.style.display = "block";
-              form.style.display = "none";
-              this.paises = [];
-              this.divisionesSuperiores = [];
-              this.getData();
-            },
-            (err: any) => {
-              this.tService.error("", "Ha ocurrido un error");
-            }
-          );
+      if (formDivision.valid) {
+        if (confirm("¿Está seguro de crear una nueva división política?")) {
+          this.dbService.addDivision(this.division)
+            .subscribe(
+              (data: any) => {
+                this.tService.success("División creada con éxito.", "Envío exitoso");
+                formDivision.reset();
+                const table = (<HTMLInputElement>document.getElementById("table"));
+                const form = (<HTMLInputElement>document.getElementById("form-division"));
+                table.style.display = "block";
+                form.style.display = "none";
+                this.paises = [];
+                this.divisionesSuperiores = [];
+                this.getData();
+              },
+              (err: any) => {
+                this.tService.error("", "Ha ocurrido un error");
+              }
+            );
+        }
       }
     }
   }

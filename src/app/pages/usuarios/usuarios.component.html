@@ -142,34 +142,34 @@
                 <div class="card-body">
                     <form #formUsuario="ngForm" ngNativeValidate>
                         <div class="form-group">
-                            <label for="nombre">Nombres</label><br>
+                            <label for="nombre">Nombres*</label><br>
                             <input type="text" class="form-control" name="nombre" id="nombre"
                                 [(ngModel)]="usuario.nombre" [disabled]="!isAdmin" required>
                         </div>
                         <div class="form-group">
-                            <label for="apellido">Apellidos</label><br>
+                            <label for="apellido">Apellidos*</label><br>
                             <input type="text" class="form-control" name="apellido" id="apellido"
                                 [(ngModel)]="usuario.apellido" [disabled]="!isAdmin" required>
                         </div>
                         <div class="form-group">
-                            <label for="telefono">Tel&eacute;fono</label><br>
+                            <label for="telefono">Tel&eacute;fono*</label><br>
                             <input type="text" class="form-control" name="telefono" id="telefono"
                                 [(ngModel)]="usuario.telefono" [disabled]="!isAdmin" required>
                         </div>
                         <div class="form-group">
-                            <label for="pais">País</label><br>
+                            <label for="pais">País*</label><br>
                             <select name="pais" id="pais" class="form-control" [(ngModel)]="usuario.idPais"
                                 [disabled]="!isAdmin" required>
                                 <option *ngFor="let pais of paises" [value]="pais.id">{{pais.nombre}}</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="correo">Correo</label><br>
+                            <label for="correo">Correo*</label><br>
                             <input type="email" class="form-control" name="correo" id="correo"
                                 [(ngModel)]="usuario.email" [disabled]="!isAdmin" required>
                         </div>
                         <div class="form-group">
-                            <label for="rol">Rol del Usuario</label><br>
+                            <label for="rol">Rol del Usuario*</label><br>
                             <select class="form-control form-select form-select-sm" name="rol" id="rol"
                                 [(ngModel)]="usuario.role" (change)="tableEstacion()" [disabled]="!isAdmin" required>
                                 <option value="observer">Observador</option>

@@ -107,12 +107,12 @@
                 <div class="card-body">
                     <form #formPais="ngForm" ngNativeValidate>
                         <div class="form-group">
-                            <label for="nombre">Nombre</label><br>
+                            <label for="nombre">Nombre*</label><br>
                             <input type="text" class="form-control" name="nombre" id="nombre" [(ngModel)]="pais.nombre"
                                 required>
                         </div>
                         <div class="form-group">
-                            <label for="siglas">Siglas</label><br>
+                            <label for="siglas">Siglas*</label><br>
                             <input type="text" maxlength="2" class="form-control" name="siglas" id="siglas" [(ngModel)]="pais.siglas"
                                 required>
                         </div>

@@ -117,26 +117,26 @@
                 <div class="card-body">
                     <form #formDivision="ngForm" ngNativeValidate>
                         <div class="form-group">
-                            <label for="nombre">Nombre</label><br>
+                            <label for="nombre">Nombre*</label><br>
                             <input type="text" class="form-control" name="nombre" id="nombre"
-                                [(ngModel)]="division.nombre">
+                                [(ngModel)]="division.nombre" required>
                         </div>
                         <div class="form-group">
-                            <label for="pais">País</label><br>
+                            <label for="pais">País*</label><br>
                             <select name="pais" id="pais" class="form-control" [(ngModel)]="division.idPais"
-                                (change)="getDivisionesSuperiores()">
+                                (change)="getDivisionesSuperiores()" required>
                                 <option *ngFor="let pais of paises" [value]="pais.id">{{pais.nombre}}</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="nivel">Nivel</label><br>
+                            <label for="nivel">Nivel*</label><br>
                             <input min="1" max="3" type="number" class="form-control" name="nivel" id="nivel"
-                                [(ngModel)]="division.nivel" (change)="getDivisionesSuperiores()">
+                                [(ngModel)]="division.nivel" (change)="getDivisionesSuperiores()" required>
                         </div>
                         <div class="form-group" *ngIf="division.nivel > 1">
-                            <label for="divisionSuperior">División Superior</label><br>
+                            <label for="divisionSuperior">División Superior*</label><br>
                             <select name="divisionSuperior" id="divisionSuperior" class="form-control"
-                                [(ngModel)]="division.idPadre">
+                                [(ngModel)]="division.idPadre" required>
                                 <option *ngFor="let divisionSuperior of divisionesSuperiores"
                                     [value]="divisionSuperior.id">{{divisionSuperior.nombre}}</option>
                             </select>
