@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from "@angular/core";
+import { Component, OnInit, OnDestroy, ViewChild, QueryList, ViewChildren } from "@angular/core";
 import { Subject } from "rxjs";
 import { ViewEncapsulation } from "@angular/core";
 import { DbService } from "../../services/database/db.service";
@@ -25,8 +25,8 @@ import { data } from "jquery";
 })
 export class UsuariosComponent implements OnInit, OnDestroy {
 
-    @ViewChild(DataTableDirective, { static: false })
-    dtElement!: DataTableDirective;
+    @ViewChildren(DataTableDirective)
+    dtElements!: QueryList<DataTableDirective>;
 
     /** Opciones para los datatbles. */
     dtOptions: DataTables.Settings = {
@@ -182,9 +182,12 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         const table = (<HTMLInputElement>document.getElementById("tablaUsuarios"));
         table.style.display = "none";
         if (this.isDtInitialized) {
-            this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-                dtInstance.destroy()
-            })
+            this.dtElements.forEach((dtElement: DataTableDirective) => {
+                if (dtElement.dtInstance)
+                    dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+                        dtInstance.destroy();
+                    });
+            });
         } else {
             this.isDtInitialized = true;
         }
@@ -201,9 +204,12 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         const table = (<HTMLInputElement>document.getElementById("tablaEstaciones"));
         table.style.display = "none";
         if (this.isDtInitialized2) {
-            this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-                dtInstance.destroy()
-            })
+            this.dtElements.forEach((dtElement: DataTableDirective) => {
+                if (dtElement.dtInstance)
+                    dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+                        dtInstance.destroy();
+                    });
+            });
         } else {
             this.isDtInitialized2 = true;
         }
@@ -280,7 +286,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
             if (this.usuario.role == "observer" && this.selectedEstaciones.length == 0) {
                 this.tService.error("", "Debe seleccionar al menos una estación para el observador.");
             } else {
-                if (confirm("¿Está seguro de actualizar la contraseña del usuario?")) {
+                if (confirm("¿Está seguro de actualizar la información del usuario?")) {
                     this.dbService.updateUsuario(this.usuario, this.addedEstaciones, this.deletedEstaciones)
                         .subscribe(
                             (data: any) => {
@@ -301,7 +307,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
                             }
                         );
                 }
-            } 
+            }
         }
     }
 
