@@ -1,382 +1,678 @@
-<div class="header pb-8 pt-5 pt-md-8"
-    style="min-height: 300px; background-image: url(assets/img/theme/chimborazo.jpg); background-size: cover; background-position: 0px -120px;">
-    <span class="mask bg-default opacity-6"></span>
-    <div class="container-fluid">
-        <div class="header-body">
-        </div>
-    </div>
+<div
+  class="header pb-8 pt-5 pt-md-8"
+  style="
+    min-height: 300px;
+    background-image: url(assets/img/theme/chimborazo.jpg);
+    background-size: cover;
+    background-position: 0px -120px;
+  "
+>
+  <span class="mask bg-default opacity-6"></span>
+  <div class="container-fluid">
+    <div class="header-body"></div>
+  </div>
 </div>
 <div class="container-fluid mt--9" id="table">
-    <div class="row">
-        <div class="col">
-            <div class="card shadow">
-                <div class="card-header border-0">
-                    <div class="row align-items-center">
-                        <div class="col-9">
-                            <h3 class="mb-0">Lista de Estaciones</h3>
-                        </div>
-                        <div class="col-3 text-right text-default" *ngIf="isAdmin">
-                            <a [routerLink]="['/admin-layout/form-estacion']" class="btn btn-sm btn-default">Nueva
-                                Estación</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="form-group col-md-3">
-                            <label for="nombre">Nombre</label><br>
-                            <input type="text" class="form-control" name="nombre" id="fnombre"
-                                [(ngModel)]="filtro.nombre">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="codigo">C&oacute;digo</label><br>
-                            <input type="text" class="form-control" name="codigo" id="fcodigo"
-                                [(ngModel)]="filtro.codigo" maxlength="7">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="pais">País</label><br>
-                            <select name="pais" id="pais" class="form-control" [(ngModel)]="filtro.pais">
-                                <option *ngFor="let pais of filtroPaises" [value]="pais.nombre">{{pais.nombre}}</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <button class="btn btn-default float-right" (click)="getData()">Buscar</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="container" id="tablaEstaciones" style="display: none;">
-                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger1"
-                        class="table-responsive align-items-center table-flush row-border hover">
-                        <thead class="thead-light">
-                            <tr>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">C&oacute;digo</th>
-                                <th scope="col">Latitud, Longitud, Altitud</th>
-                                <th scope="col">País</th>
-                                <th scope="col">Ubicación</th>
-                                <th scope="col" *ngIf="isAdmin">Creado</th>
-                                <th scope="col" *ngIf="isAdmin">Actualizado</th>
-                                <th scope="col" *ngIf="isAdmin">Estado</th>
-                                <th scope="col">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let estacion of estaciones">
-                                <th scope="row" width=30%  (click)="editarEstacion(estacion)">
-                                    <div class="media align-items-center">
-                                        <div class="media-body">
-                                            <span class="mb-0 text-sm">{{ estacion.nombre}}</span>
-                                        </div>
-                                    </div>
-                                </th>
-                                <td  (click)="editarEstacion(estacion)">
-                                    {{estacion.codigo}}
-                                </td>
-                                <td  (click)="editarEstacion(estacion)">
-                                    {{estacion.posicion.coordinates[0]}},
-                                    {{estacion.posicion.coordinates[1]}},
-                                    {{estacion.altitud}}
-                                </td>
-                                <td  (click)="editarEstacion(estacion)">
-                                    {{estacion.Division.Pai.nombre}}
-                                </td>
-                                <td *ngIf="!!estacion.division1.nombre && !!estacion.division2.nombre && !!estacion.division3.nombre"  (click)="editarEstacion(estacion)">
-                                    {{estacion.division1.nombre + ", " + estacion.division2.nombre + ", " +
-                                    estacion.division3.nombre}}
-                                </td>
-                                <td *ngIf="!(!!estacion.division1.nombre && !!estacion.division2.nombre && !!estacion.division3.nombre)"  (click)="editarEstacion(estacion)">
-                                    Error de Division
-                                </td>
-                                <td *ngIf="isAdmin"  (click)="editarEstacion(estacion)">
-                                    {{date(estacion.audCreatedAt)}} {{time(estacion.audCreatedAt)}}
-                                </td>
-                                <td *ngIf="isAdmin"  (click)="editarEstacion(estacion)">
-                                    {{date(estacion.audUpdatedAt)}} {{time(estacion.audUpdatedAt)}}
-                                </td>
-                                <td *ngIf="isAdmin"  (click)="editarEstacion(estacion)">
-                                    {{estacion.state}}
-                                </td>
-                                <td class="text-right">
-                                    <div ngbDropdown placement="bottom-right">
-                                        <a class="btn btn-sm btn-icon-only text-light" ngbDropdownToggle>
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </a>
-                                        <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
-                                            <a class="dropdown-item" (click)="editarEstacion(estacion)"
-                                                *ngIf="isAdmin">Ver/Editar
-                                                Información</a>
-                                            <a class="dropdown-item" (click)="editarEstacion(estacion)"
-                                                *ngIf="!isAdmin">Ver
-                                                Información</a>
-                                            <a class="dropdown-item" (click)="editarFoto(estacion)"
-                                                *ngIf="isAdmin">Ver/Editar Foto</a>
-                                            <a class="dropdown-item" (click)="editarFoto(estacion)"
-                                                *ngIf="isObserver && estacion.itsMine">Ver/Editar Foto</a>
-                                            <a class="dropdown-item" (click)="activar(estacion)"
-                                                *ngIf="isAdmin && estacion.state.includes('I')">Activar</a>
-                                            <a class="dropdown-item" (click)="deleteEstacion(estacion)"
-                                                *ngIf="isAdmin && estacion.state.includes('A')">Eliminar</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col-9">
+              <h3 class="mb-0">Lista de Estaciones</h3>
             </div>
+            <div class="col-3 text-right text-default" *ngIf="isAdmin">
+              <a
+                [routerLink]="['/admin-layout/form-estacion']"
+                class="btn btn-sm btn-default"
+                >Nueva Estación</a
+              >
+            </div>
+          </div>
         </div>
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="form-group col-md-3">
+              <label for="nombre">Nombre</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="nombre"
+                id="fnombre"
+                [(ngModel)]="filtro.nombre"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="codigo">C&oacute;digo</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="codigo"
+                id="fcodigo"
+                [(ngModel)]="filtro.codigo"
+                maxlength="7"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="pais">País</label><br />
+              <select
+                name="pais"
+                id="pais"
+                class="form-control"
+                [(ngModel)]="filtro.pais"
+              >
+                <option *ngFor="let pais of filtroPaises" [value]="pais.nombre">
+                  {{ pais.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group col-md-3">
+              <button class="btn btn-default float-right" (click)="getData()">
+                Buscar
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="container" id="tablaEstaciones" style="display: none">
+          <table
+            datatable
+            [dtOptions]="dtOptions"
+            [dtTrigger]="dtTrigger1"
+            class="table-responsive align-items-center table-flush row-border hover"
+          >
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">C&oacute;digo</th>
+                <th scope="col">Latitud, Longitud, Altitud</th>
+                <th scope="col">País</th>
+                <th scope="col">Ubicación</th>
+                <th scope="col" *ngIf="isAdmin">Creado</th>
+                <th scope="col" *ngIf="isAdmin">Actualizado</th>
+                <th scope="col" *ngIf="isAdmin">Estado</th>
+                <th scope="col">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let estacion of estaciones">
+                <th scope="row" width="30%" (click)="editarEstacion(estacion)">
+                  <div class="media align-items-center">
+                    <div class="media-body">
+                      <span class="mb-0 text-sm">{{ estacion.nombre }}</span>
+                    </div>
+                  </div>
+                </th>
+                <td (click)="editarEstacion(estacion)">
+                  {{ estacion.codigo }}
+                </td>
+                <td (click)="editarEstacion(estacion)">
+                  {{ estacion.posicion.coordinates[0] }},
+                  {{ estacion.posicion.coordinates[1] }},
+                  {{ estacion.altitud }}
+                </td>
+                <td (click)="editarEstacion(estacion)">
+                  {{ estacion.Division.Pai.nombre }}
+                </td>
+                <td
+                  *ngIf="
+                    !!estacion.division1.nombre &&
+                    !!estacion.division2.nombre &&
+                    !!estacion.division3.nombre
+                  "
+                  (click)="editarEstacion(estacion)"
+                >
+                  {{
+                    estacion.division1.nombre +
+                      ", " +
+                      estacion.division2.nombre +
+                      ", " +
+                      estacion.division3.nombre
+                  }}
+                </td>
+                <td
+                  *ngIf="
+                    !(
+                      !!estacion.division1.nombre &&
+                      !!estacion.division2.nombre &&
+                      !!estacion.division3.nombre
+                    )
+                  "
+                  (click)="editarEstacion(estacion)"
+                >
+                  Error de Division
+                </td>
+                <td *ngIf="isAdmin" (click)="editarEstacion(estacion)">
+                  {{ date(estacion.audCreatedAt) }}
+                  {{ time(estacion.audCreatedAt) }}
+                </td>
+                <td *ngIf="isAdmin" (click)="editarEstacion(estacion)">
+                  {{ date(estacion.audUpdatedAt) }}
+                  {{ time(estacion.audUpdatedAt) }}
+                </td>
+                <td *ngIf="isAdmin" (click)="editarEstacion(estacion)">
+                  {{ estacion.state }}
+                </td>
+                <td class="text-right">
+                  <div ngbDropdown placement="bottom-right">
+                    <a
+                      class="btn btn-sm btn-icon-only text-light"
+                      ngbDropdownToggle
+                    >
+                      <i class="fas fa-ellipsis-v"></i>
+                    </a>
+                    <div
+                      ngbDropdownMenu
+                      class="dropdown-menu-right dropdown-menu-arrow"
+                    >
+                      <a
+                        class="dropdown-item"
+                        (click)="editarEstacion(estacion)"
+                        *ngIf="isAdmin"
+                        >Ver/Editar Información</a
+                      >
+                      <a
+                        class="dropdown-item"
+                        (click)="editarEstacion(estacion)"
+                        *ngIf="!isAdmin"
+                        >Ver Información</a
+                      >
+                      <a
+                        class="dropdown-item"
+                        (click)="editarFoto(estacion)"
+                        *ngIf="isAdmin"
+                        >Ver/Editar Foto</a
+                      >
+                      <a
+                        class="dropdown-item"
+                        (click)="editarFoto(estacion)"
+                        *ngIf="isObserver && estacion.itsMine"
+                        >Ver/Editar Foto</a
+                      >
+                      <a
+                        class="dropdown-item"
+                        (click)="activar(estacion)"
+                        *ngIf="isAdmin && estacion.state.includes('I')"
+                        >Activar</a
+                      >
+                      <a
+                        class="dropdown-item"
+                        (click)="deleteEstacion(estacion)"
+                        *ngIf="isAdmin && estacion.state.includes('A')"
+                        >Eliminar</a
+                      >
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
-<div class="container-fluid mt--9" id="form-estacion" style="display: none;">
-    <div class="row">
-        <div class="col-xl-2"></div>
-        <div class="col-xl-8 mb-5 mb-xl-0">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title" *ngIf="isAdmin">Ver/Editar Información de Estación</h3>
-                    <h3 class="card-title" *ngIf="!isAdmin">Ver Información de Estación</h3>
-                </div>
-                <div class="card-body">
-                    <div class="row justify-content-center">
-                        <div class="col-md-5">
-                            <img *ngIf="!estacion.foto" src="../../../assets/img/more/default-building.jpg"
-                                class=" img-fluid" alt="user image">
-                            <img *ngIf="estacion.foto" src="data:image/png;base64,{{estacion.foto}}" class="img-fluid"
-                                alt="user image">
-                        </div>
-                    </div>
-                    <form #formEstacion="ngForm" ngNativeValidate>
-                        <div class="form-group">
-                            <label for="nombre">Nombre</label><br>
-                            <input type="text" class="form-control" name="nombre" id="nombre"
-                                [(ngModel)]="estacion.nombre" [disabled]="!isAdmin" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="codigo">Código</label><br>
-                            <input type="text" class="form-control" name="codigo" id="codigo"
-                                [(ngModel)]="estacion.codigo" [disabled]="!isAdmin" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="pais">País</label><br>
-                            <input type="text" class="form-control" name="pais" id="pais" [(ngModel)]="pais"
-                                [disabled]="!isAdmin" *ngIf="!isAdmin">
-                            <select name="pais" id="pais" class="form-control" [(ngModel)]="pais"
-                                (change)="getDivisiones(pais)" [disabled]="!isAdmin" *ngIf="isAdmin" required>
-                                <option *ngFor="let pais of paises" [value]="pais.id">{{pais.nombre}}</option>
-                            </select>
-                        </div>
-                        <div class="form-group" *ngIf="divisiones1.length >= 1 || !isAdmin">
-                            <label for="division1">División Política Nivel 1</label><br>
-                            <input type="text" class="form-control" name="division1" id="division1"
-                                [(ngModel)]="division1" [disabled]="!isAdmin" *ngIf="!isAdmin">
-
-                            <select name="division1" id="division1" class="form-control" [(ngModel)]="division1"
-                                (change)="getDivDivisiones(division1,1)" [disabled]="!isAdmin" *ngIf="isAdmin" required>
-                                <option *ngFor="let d1 of divisiones1" [value]="d1.id">{{d1.nombre}}</option>
-                            </select>
-                        </div>
-                        <div class="form-group" *ngIf="divisiones2.length >= 1 || !isAdmin">
-                            <label for="division2">División Política Nivel 2</label><br>
-                            <input type="text" class="form-control" name="division2" id="division2"
-                                [(ngModel)]="division2" [disabled]="!isAdmin" *ngIf="!isAdmin">
-                            <select name="division2" id="division2" class="form-control" [(ngModel)]="division2"
-                                (change)="getDivDivisiones(division2,2)" [disabled]="!isAdmin" *ngIf="isAdmin" required>
-                                <option *ngFor="let d2 of divisiones2" [value]="d2.id">{{d2.nombre}}</option>
-                            </select>
-                        </div>
-                        <div class="form-group" *ngIf="divisiones3.length >= 1 || !isAdmin">
-                            <label for="division3">División Política Nivel 3</label><br>
-                            <input type="text" class="form-control" name="division3" id="division3"
-                                [(ngModel)]="division3" [disabled]="!isAdmin" *ngIf="!isAdmin" required>
-                            <select name="division3" id="division3" class="form-control" [(ngModel)]="division3"
-                                [disabled]="!isAdmin" *ngIf="isAdmin">
-                                <option *ngFor="let d3 of divisiones3" [value]="d3.id">{{d3.nombre}}</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="altitud">Latitud</label><br>
-                            <input type="float" class="form-control" name="latitud" id="latitud"
-                                [(ngModel)]="estacion.latitud" [disabled]="!isAdmin" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="longitud">Longitud</label><br>
-                            <input type="float" class="form-control" name="longitud" id="longitud "
-                                [(ngModel)]="estacion.longitud" [disabled]="!isAdmin" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="altitud">Altitud</label><br>
-                            <input type="float" class="form-control" name="altitud" id="altitud"
-                                [(ngModel)]="estacion.altitud" [disabled]="!isAdmin" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="direccion">Dirección</label><br>
-                            <input type="text" class="form-control" name="direccion" id="direccion "
-                                [(ngModel)]="estacion.direccion" [disabled]="!isAdmin" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="referencias">Referencias</label><br>
-                            <input type="text" class="form-control" name="referencias" id="referencias "
-                                [(ngModel)]="estacion.referencias" [disabled]="!isAdmin">
-                        </div>
-                        <div class="form-group">
-                            <label for="hasPluviometro">Tiene Pluviómetro</label><br>
-                            <select class="form-control form-select form-select-sm" name="hasPluviometro"
-                                id="hasPluviometro" [(ngModel)]="estacion.hasPluviometro" [disabled]="!isAdmin"
-                                required>
-                                <option value=true>Si</option>
-                                <option value=false>No</option>
-                            </select>
-                        </div>
-                        <div class="form-group" *ngIf="isCharts">
-                            <label for="graficos">Gráficos</label><br>
-                            <button class="btn btn-secondary" (click)="verGraficos()">Ver gráficos</button>
-                        </div>
-                        <div class="container pb-3" id="tablaEstaciones">
-                            <label for="hasPluviometro">Variables Registradas en la estación</label><br>
-                            <table class="table align-items-center table-flush row-border hover">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th scope="col">Nombre</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let variable of variables">
-                                        <th scope="row" (click)="verDatos(variable)">
-                                            <div class="media align-items-center">
-                                                <div class="media-body">
-                                                    <span class="mb-0 text-sm">{{variable.nombre}}</span>
-                                                </div>
-                                            </div>
-                                        </th>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="container pb-3" id="tablaEstaciones">
-                            <label for="hasPluviometro">Observadores</label><br>
-                            <table class="table align-items-center table-flush row-border hover">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th scope="col">Nombre</th>
-                                        <th scope="col" *ngIf="isAdmin">Correo</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let usuario of usuarios">
-                                        <th scope="row">
-                                            <div class="media align-items-center">
-                                                <div class="media-body">
-                                                    <span class="mb-0 text-sm">{{usuario.User.nombre + " " +
-                                                        usuario.User.apellido}}</span>
-                                                </div>
-                                            </div>
-                                        </th>
-                                        <td *ngIf="isAdmin">
-                                            {{usuario.User.email}}
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div>
-                            <button class="btn btn-secondary float-left"
-                                (click)="cancelar(formEstacion)">Cancelar</button>
-                            <button class="btn btn-default float-right" (click)="submit(formEstacion)"
-                                *ngIf="isAdmin">Guardar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<div class="container-fluid mt--9" id="form-estacion" style="display: none">
+  <div class="row">
+    <div class="col-xl-2"></div>
+    <div class="col-xl-8 mb-5 mb-xl-0">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title" *ngIf="isAdmin">
+            Ver/Editar Información de Estación
+          </h3>
+          <h3 class="card-title" *ngIf="!isAdmin">
+            Ver Información de Estación
+          </h3>
         </div>
+        <div class="card-body">
+          <div class="row justify-content-center">
+            <div class="col-md-5">
+              <img
+                *ngIf="!estacion.foto"
+                src="../../../assets/img/more/default-building.jpg"
+                class="img-fluid"
+                alt="user image"
+              />
+              <img
+                *ngIf="estacion.foto"
+                src="data:image/png;base64,{{ estacion.foto }}"
+                class="img-fluid"
+                alt="user image"
+              />
+            </div>
+          </div>
+          <form #formEstacion="ngForm" ngNativeValidate>
+            <div class="form-group">
+              <label for="nombre">Nombre</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="nombre"
+                id="nombre"
+                [(ngModel)]="estacion.nombre"
+                [disabled]="!isAdmin"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="codigo">Código</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="codigo"
+                id="codigo"
+                [(ngModel)]="estacion.codigo"
+                [disabled]="!isAdmin"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="pais">País</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="pais"
+                id="pais"
+                [(ngModel)]="pais"
+                [disabled]="!isAdmin"
+                *ngIf="!isAdmin"
+              />
+              <select
+                name="pais"
+                id="pais"
+                class="form-control"
+                [(ngModel)]="pais"
+                (change)="getDivisiones(pais)"
+                [disabled]="!isAdmin"
+                *ngIf="isAdmin"
+                required
+              >
+                <option *ngFor="let pais of paises" [value]="pais.id">
+                  {{ pais.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group" *ngIf="divisiones1.length >= 1 || !isAdmin">
+              <label for="division1">División Política Nivel 1</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="division1"
+                id="division1"
+                [(ngModel)]="division1"
+                [disabled]="!isAdmin"
+                *ngIf="!isAdmin"
+              />
+
+              <select
+                name="division1"
+                id="division1"
+                class="form-control"
+                [(ngModel)]="division1"
+                (change)="getDivDivisiones(division1, 1)"
+                [disabled]="!isAdmin"
+                *ngIf="isAdmin"
+                required
+              >
+                <option *ngFor="let d1 of divisiones1" [value]="d1.id">
+                  {{ d1.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group" *ngIf="divisiones2.length >= 1 || !isAdmin">
+              <label for="division2">División Política Nivel 2</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="division2"
+                id="division2"
+                [(ngModel)]="division2"
+                [disabled]="!isAdmin"
+                *ngIf="!isAdmin"
+              />
+              <select
+                name="division2"
+                id="division2"
+                class="form-control"
+                [(ngModel)]="division2"
+                (change)="getDivDivisiones(division2, 2)"
+                [disabled]="!isAdmin"
+                *ngIf="isAdmin"
+                required
+              >
+                <option *ngFor="let d2 of divisiones2" [value]="d2.id">
+                  {{ d2.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group" *ngIf="divisiones3.length >= 1 || !isAdmin">
+              <label for="division3">División Política Nivel 3</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="division3"
+                id="division3"
+                [(ngModel)]="division3"
+                [disabled]="!isAdmin"
+                *ngIf="!isAdmin"
+                required
+              />
+              <select
+                name="division3"
+                id="division3"
+                class="form-control"
+                [(ngModel)]="division3"
+                [disabled]="!isAdmin"
+                *ngIf="isAdmin"
+              >
+                <option *ngFor="let d3 of divisiones3" [value]="d3.id">
+                  {{ d3.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="altitud">Latitud</label><br />
+              <input
+                type="float"
+                class="form-control"
+                name="latitud"
+                id="latitud"
+                [(ngModel)]="estacion.latitud"
+                [disabled]="!isAdmin"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="longitud">Longitud</label><br />
+              <input
+                type="float"
+                class="form-control"
+                name="longitud"
+                id="longitud "
+                [(ngModel)]="estacion.longitud"
+                [disabled]="!isAdmin"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="altitud">Altitud</label><br />
+              <input
+                type="float"
+                class="form-control"
+                name="altitud"
+                id="altitud"
+                [(ngModel)]="estacion.altitud"
+                [disabled]="!isAdmin"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="direccion">Dirección</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="direccion"
+                id="direccion "
+                [(ngModel)]="estacion.direccion"
+                [disabled]="!isAdmin"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="referencias">Referencias</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="referencias"
+                id="referencias "
+                [(ngModel)]="estacion.referencias"
+                [disabled]="!isAdmin"
+              />
+            </div>
+            <div class="form-group">
+              <label for="hasPluviometro">Tiene Pluviómetro</label><br />
+              <select
+                class="form-control form-select form-select-sm"
+                name="hasPluviometro"
+                id="hasPluviometro"
+                [(ngModel)]="estacion.hasPluviometro"
+                [disabled]="!isAdmin"
+                required
+              >
+                <option value="true">Si</option>
+                <option value="false">No</option>
+              </select>
+            </div>
+            <div class="form-group" *ngIf="isCharts">
+              <label for="graficos">Gráficos</label><br />
+              <button class="btn btn-secondary" (click)="verGraficos()">
+                Ver gráficos
+              </button>
+            </div>
+            <div class="container pb-3" id="tablaEstaciones">
+              <label for="hasPluviometro"
+                >Variables Registradas en la estación</label
+              ><br />
+              <table
+                class="table align-items-center table-flush row-border hover"
+              >
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Nombre</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="variables.length == 0">
+                    <th scope="row">
+                      <div class="media align-items-center">
+                        <div class="media-body">
+                          <span class="mb-0 text-sm">
+                            No existen variables</span
+                          >
+                        </div>
+                      </div>
+                    </th>
+                  </tr>
+                  <tr *ngFor="let variable of variables">
+                    <th scope="row" (click)="verDatos(variable)">
+                      <div class="media align-items-center">
+                        <div class="media-body">
+                          <span class="mb-0 text-sm">{{
+                            variable.nombre
+                          }}</span>
+                        </div>
+                      </div>
+                    </th>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="container pb-3" id="tablaEstaciones">
+              <label for="hasPluviometro">Observadores</label><br />
+              <table class="table align-items-center table-flush row-border">
+                <thead class="thead-light">
+                  <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col" *ngIf="isAdmin">Correo</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngIf="usuarios.length == 0">
+                    <th scope="row">
+                      <div class="media align-items-center">
+                        <div class="media-body">
+                          <span class="mb-0 text-sm">
+                            No existen observadores
+                          </span>
+                        </div>
+                      </div>
+                    </th>
+                  </tr>
+                  <tr *ngFor="let usuario of usuarios">
+                    <th scope="row">
+                      <div class="media align-items-center">
+                        <div class="media-body">
+                          <span class="mb-0 text-sm">{{
+                            usuario.User.nombre + " " + usuario.User.apellido
+                          }}</span>
+                        </div>
+                      </div>
+                    </th>
+                    <td *ngIf="isAdmin">
+                      {{ usuario.User.email }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div>
+              <button
+                class="btn btn-secondary float-left"
+                (click)="cancelar(formEstacion)"
+              >
+                Cancelar
+              </button>
+              <button
+                class="btn btn-default float-right"
+                (click)="submit(formEstacion)"
+                *ngIf="isAdmin"
+              >
+                Guardar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
-<div class="container-fluid mt--9" id="form-update-foto" style="display: none;">
-    <div class="row">
-        <div class="col-xl-2"></div>
-        <div class="col-xl-8 mb-5 mb-xl-0">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Actualizar la Foto de la Estación</h3>
-                </div>
-                <div class="card-body">
-                    <form #formPassUsuario="ngForm">
-                        <div class="form-group">
-                            <label for="codigo">Código Estación</label><br>
-                            <input type="text" disabled class="form-control" name="codigo" id="codigo"
-                                [(ngModel)]="estacion.codigo">
-                        </div>
-                        <div class="row justify-content-center">
-                            <div class="col-md-5">
-                                <img *ngIf="!estacion.foto" src="../../../assets/img/more/default-building.jpg"
-                                    class=" img-fluid" alt="user image">
-                                <img *ngIf="estacion.foto" src="data:image/png;base64,{{estacion.foto}}"
-                                    class="img-fluid" alt="user image">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label for="file">Archivo</label><br>
-                                <input *ngIf="uploader.queue.length == 0" type="file"
-                                    class="input-group custom-file-upload mb-4" ng2FileSelect [uploader]="uploader"
-                                    accept=".jpg,.jpeg,.png" />
-                            </div>
-                            <div class="col-12" *ngIf="uploader.queue.length != 0">
-                                <table class="table">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th scope="col">Nombre</th>
-                                            <th scope="col">Tamaño</th>
-                                            <th scope="col">Estado</th>
-                                            <th scope="col">Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of uploader.queue">
-                                            <td scope="row" class="text-wrap"><strong>{{ item?.file?.name }}</strong>
-                                            </td>
-                                            <td *ngIf="uploader.options.isHTML5" nowrap>{{ item?.file?.size/1024/1024 |
-                                                number:'.2' }} MB</td>
-                                            <td class="text-center">
-                                                <span *ngIf="item.isUploading"><i class="fa fa-spinner"></i></span>
-                                                <span *ngIf="item.isSuccess"><i class="fa fa-check-circle"></i></span>
-                                                <span *ngIf="item.isCancel"><i
-                                                        class="fa fa-times-circle text-black"></i></span>
-                                                <span *ngIf="item.isError"><i
-                                                        class="fa fa-exclamation-circle text-black"></i></span>
-                                            </td>
-                                            <td nowrap>
-                                                <button type="button" class="btn btn-danger btn-xs"
-                                                    (click)="item.remove()">
-                                                    <span class="fa fa-trash"></span> Eliminar
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <div class="progress-wrapper pt-0">
-                                    <div class="progress-info">
-                                        <div class="progress-label">
-                                            <span>Progreso</span>
-                                        </div>
-                                        <div class="progress-percentage">
-                                            <span>{{uploader.progress + "%"}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar"
-                                            [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <button class="btn btn-secondary float-left" (click)="cancelarFoto()">Cancelar</button>
-                            <button class="btn btn-default float-right" (click)="subirFoto()">Guardar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<div class="container-fluid mt--9" id="form-update-foto" style="display: none">
+  <div class="row">
+    <div class="col-xl-2"></div>
+    <div class="col-xl-8 mb-5 mb-xl-0">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Actualizar la Foto de la Estación</h3>
         </div>
+        <div class="card-body">
+          <form #formPassUsuario="ngForm">
+            <div class="form-group">
+              <label for="codigo">Código Estación</label><br />
+              <input
+                type="text"
+                disabled
+                class="form-control"
+                name="codigo"
+                id="codigo"
+                [(ngModel)]="estacion.codigo"
+              />
+            </div>
+            <div class="row justify-content-center">
+              <div class="col-md-5">
+                <img
+                  *ngIf="!estacion.foto"
+                  src="../../../assets/img/more/default-building.jpg"
+                  class="img-fluid"
+                  alt="user image"
+                />
+                <img
+                  *ngIf="estacion.foto"
+                  src="data:image/png;base64,{{ estacion.foto }}"
+                  class="img-fluid"
+                  alt="user image"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <label for="file">Archivo</label><br />
+                <input
+                  *ngIf="uploader.queue.length == 0"
+                  type="file"
+                  class="input-group custom-file-upload mb-4"
+                  ng2FileSelect
+                  [uploader]="uploader"
+                  accept=".jpg,.jpeg,.png"
+                />
+              </div>
+              <div class="col-12" *ngIf="uploader.queue.length != 0">
+                <table class="table">
+                  <thead class="thead-light">
+                    <tr>
+                      <th scope="col">Nombre</th>
+                      <th scope="col">Tamaño</th>
+                      <th scope="col">Estado</th>
+                      <th scope="col">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of uploader.queue">
+                      <td scope="row" class="text-wrap">
+                        <strong>{{ item?.file?.name }}</strong>
+                      </td>
+                      <td *ngIf="uploader.options.isHTML5" nowrap>
+                        {{ item?.file?.size / 1024 / 1024 | number: ".2" }} MB
+                      </td>
+                      <td class="text-center">
+                        <span *ngIf="item.isUploading"
+                          ><i class="fa fa-spinner"></i
+                        ></span>
+                        <span *ngIf="item.isSuccess"
+                          ><i class="fa fa-check-circle"></i
+                        ></span>
+                        <span *ngIf="item.isCancel"
+                          ><i class="fa fa-times-circle text-black"></i
+                        ></span>
+                        <span *ngIf="item.isError"
+                          ><i class="fa fa-exclamation-circle text-black"></i
+                        ></span>
+                      </td>
+                      <td nowrap>
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-xs"
+                          (click)="item.remove()"
+                        >
+                          <span class="fa fa-trash"></span> Eliminar
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div class="progress-wrapper pt-0">
+                  <div class="progress-info">
+                    <div class="progress-label">
+                      <span>Progreso</span>
+                    </div>
+                    <div class="progress-percentage">
+                      <span>{{ uploader.progress + "%" }}</span>
+                    </div>
+                  </div>
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      [ngStyle]="{ width: uploader.progress + '%' }"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button
+                class="btn btn-secondary float-left"
+                (click)="cancelarFoto()"
+              >
+                Cancelar
+              </button>
+              <button class="btn btn-default float-right" (click)="subirFoto()">
+                Guardar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

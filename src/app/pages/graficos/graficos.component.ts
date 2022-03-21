@@ -14,19 +14,17 @@ Chart.register(...registerables);
 @Component({
   selector: 'app-graficos',
   templateUrl: './graficos.component.html',
-  styleUrls: ['./graficos.component.scss']
+  styleUrls: ['./graficos.component.scss'],
 })
 export class GraficosComponent implements OnInit {
-
   filtro = {
-    observador: "",
-    estacion: "",
-    fechaInicio: "",
-    fechaFin: ""
-  }
+    observador: '',
+    estacion: '',
+    fechaInicio: '',
+    fechaFin: '',
+  };
   myChart!: Chart;
   isDrawn = false;
-
 
   reportes = [];
 
@@ -34,17 +32,17 @@ export class GraficosComponent implements OnInit {
     private dbService: DbService,
     private modal: NgbModal,
     private tService: ToastrService,
-    private router: ActivatedRoute,
-  ) { }
+    private router: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    let estacion = this.router.snapshot.paramMap.get('estacion')
-    let fi = this.router.snapshot.paramMap.get('fi')
-    let ff = this.router.snapshot.paramMap.get('ff')
+    let estacion = this.router.snapshot.paramMap.get('estacion');
+    let fi = this.router.snapshot.paramMap.get('fi');
+    let ff = this.router.snapshot.paramMap.get('ff');
     if (!!estacion && !!fi && !!ff) {
       this.filtro.estacion = estacion;
       this.filtro.fechaInicio = Utils.date2(fi);
-      this.filtro.fechaFin = Utils.date2(ff)
+      this.filtro.fechaFin = Utils.date2(ff);
       this.getData();
     }
   }
@@ -57,17 +55,15 @@ export class GraficosComponent implements OnInit {
 
   getData(): void {
     if (this.isDrawn) {
-      this.myChart.destroy()
+      this.myChart.destroy();
     }
     let fi = new Date(this.filtro.fechaInicio);
     let ff = new Date(this.filtro.fechaFin);
-    console.log(fi)
-    console.log(ff)
     if (fi <= ff) {
-      this.dbService.getReportesGraficos(this.filtro)
-        .subscribe((data: any) => {
-          this.reportes = (data as any);
-          const fechas = this.reportes.map((a: any) => Utils.date(a.fecha))
+      this.dbService.getReportesGraficos(this.filtro).subscribe(
+        (data: any) => {
+          this.reportes = data as any;
+          const fechas = this.reportes.map((a: any) => Utils.date(a.fecha));
           const valores = this.reportes.map((a: any) => {
             if (a.valor == -888) {
               return 0;
@@ -76,25 +72,27 @@ export class GraficosComponent implements OnInit {
             } else {
               return a.valor;
             }
-          })
-          this.myChart = new Chart("chart", {
+          });
+          this.myChart = new Chart('chart', {
             plugins: [ChartDataLabels],
-            type: "bar",
+            type: 'bar',
             data: {
               labels: fechas,
-              datasets: [{
-                label: "Precipitacion",
-                backgroundColor: ["#93B5C6"],
-                data: valores,
-                datalabels: {
-                  color: "#232323",
-                  formatter: function (value, context) {
-                    if (value == null) return "x"
-                    else return value
+              datasets: [
+                {
+                  label: 'Precipitacion',
+                  backgroundColor: ['#93B5C6'],
+                  data: valores,
+                  datalabels: {
+                    color: '#232323',
+                    formatter: function (value, context) {
+                      if (value == null) return 'x';
+                      else return value;
+                    },
+                    anchor: 'center',
                   },
-                  anchor: 'center'
-                }
-              }]
+                },
+              ],
             },
             options: {
               indexAxis: 'x',
@@ -107,30 +105,46 @@ export class GraficosComponent implements OnInit {
                     unit: 'day',
                     tooltipFormat: 'DD-MM-YYYY',
                     displayFormats: {
-                      day: 'DD-MM-YYYY'
+                      day: 'DD-MM-YYYY',
                     },
-                  }
+                  },
                 },
 
                 y: {
                   display: true,
-                  ticks: {
-
-                  }
-                }
-              }
-            }
+                  ticks: {},
+                },
+              },
+              plugins: {
+                title: {
+                  display: true,
+                  text:
+                    'Mostrando datos de: ' +
+                    this.filtro.estacion +
+                    ' desde ' +
+                    this.filtro.fechaInicio +
+                    ' hasta ' +
+                    this.filtro.fechaFin,
+                },
+              },
+            },
           });
           this.isDrawn = true;
-
-        }, (err: any) => {
+        },
+        (err: any) => {
           if (err.status == 418) {
-            this.tService.error("El nombre o código de estación ingresado no existe.", "Error");
+            this.tService.error(
+              'El nombre o código de estación ingresado no existe.',
+              'Error'
+            );
           }
-        });
+        }
+      );
     } else {
-      this.tService.error("La fecha de inicio debe ser menor o igual a la fecha de fin.", "Error");
+      this.tService.error(
+        'La fecha de inicio debe ser menor o igual a la fecha de fin.',
+        'Error'
+      );
     }
   }
-
 }

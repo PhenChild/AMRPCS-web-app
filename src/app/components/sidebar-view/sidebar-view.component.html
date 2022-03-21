@@ -1,26 +1,49 @@
-<nav class="navbar navbar-vertical navbar-expand-md navbar-dark bg-default" id="sidenav-main">
-  <div class="container-fluid ">
+<nav
+  class="navbar navbar-vertical navbar-expand-md navbar-dark bg-default"
+  id="sidenav-main"
+>
+  <div class="container-fluid">
     <!-- Toggler -->
-    <button class="navbar-toggler" type="button" (click)="isCollapsed=!isCollapsed"
-      aria-controls="sidenav-collapse-main">
+    <button
+      class="navbar-toggler"
+      type="button"
+      (click)="isCollapsed = !isCollapsed"
+      aria-controls="sidenav-collapse-main"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <!-- Brand -->
-    <a class="navbar-brand pt-0" routerLinkActive="active" routerLink="/auth-layout/login">
-      <img src="./assets/img/brand/Logo.png" class="navbar-brand-img" alt="...">
+    <a
+      class="navbar-brand pt-0"
+      routerLinkActive="active"
+      routerLink="/auth-layout/login"
+    >
+      <img
+        src="./assets/img/brand/Logo.png"
+        class="navbar-brand-img"
+        alt="..."
+      />
     </a>
     <!-- Collapse -->
-    <div class="collapse navbar-collapse bg-default navbar-dark" [ngbCollapse]="isCollapsed" id="sidenav-collapse-main">
+    <div
+      class="collapse navbar-collapse bg-default navbar-dark"
+      [ngbCollapse]="isCollapsed"
+      id="sidenav-collapse-main"
+    >
       <!-- Collapse header -->
       <div class="navbar-collapse-header d-md-none">
         <div class="row">
           <div class="col-6 collapse-brand">
             <a routerLinkActive="active" routerLink="/dashboard">
-              <img src="./assets/img/brand/Logo.png">
+              <img src="./assets/img/brand/Logo.png" />
             </a>
           </div>
           <div class="col-6 collapse-close">
-            <button type="button" class="navbar-toggler" (click)="isCollapsed=!isCollapsed">
+            <button
+              type="button"
+              class="navbar-toggler"
+              (click)="isCollapsed = !isCollapsed"
+            >
               <span></span>
               <span></span>
             </button>
@@ -30,10 +53,18 @@
       <!-- Form -->
       <!-- Navigation -->
       <ul class="navbar-nav">
-        <li *ngFor="let menuItem of menuItems" class="{{menuItem.class}} nav-item ">
-          <a routerLinkActive="active" routerLink="{{menuItem.path}}" class="nav-link text-white">
-            <i class="fa {{menuItem.icon}}"></i>
-            {{menuItem.title}}
+        <li
+          *ngFor="let menuItem of menuItems"
+          class="{{ menuItem.class }} nav-item "
+        >
+          <a
+            routerLinkActive="active"
+            routerLink="{{ menuItem.path }}"
+            class="nav-link text-white"
+            (click)="refresh(menuItem.path)"
+          >
+            <i class="fa {{ menuItem.icon }}"></i>
+            {{ menuItem.title }}
           </a>
         </li>
       </ul>
