@@ -44,9 +44,21 @@ export const ROUTES: RouteInfo[] = [
     class: '',
   },
   {
+    path: '/obs-layout/cuestionarios',
+    title: 'Cuestionario de sequía',
+    icon: 'fa-file-alt',
+    class: '',
+  },
+  {
     path: '/obs-layout/graficos',
     title: 'Gráficos',
     icon: 'fa-chart-bar',
+    class: '',
+  },
+  {
+    path: '/obs-layout/mis-reportes',
+    title: 'Mis Reportes',
+    icon: 'fa-file-alt',
     class: '',
   },
   {
@@ -73,8 +85,9 @@ export class SidebarObsComponent implements OnInit {
   public isCollapsed = true;
 
   /** Constructor */
-  constructor(private router: Router) //private authService: AuthService
-  {}
+  constructor(
+    private router: Router //private authService: AuthService
+  ) {}
 
   /** Inicializador. */
   ngOnInit(): void {

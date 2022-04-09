@@ -56,6 +56,12 @@ export const ROUTES: RouteInfo[] = [
     class: '',
   },
   {
+    path: '/admin-layout/ocupacion',
+    title: 'Ocupación',
+    icon: 'fa-briefcase',
+    class: '',
+  },
+  {
     path: '/admin-layout/reportes',
     title: 'Precipitación',
     icon: 'fa-file-alt',
@@ -64,6 +70,12 @@ export const ROUTES: RouteInfo[] = [
   {
     path: '/admin-layout/acumulados',
     title: 'Precipitación Acumulada',
+    icon: 'fa-file-alt',
+    class: '',
+  },
+  {
+    path: '/admin-layout/cuestionarios',
+    title: 'Cuestionario de Sequía',
     icon: 'fa-file-alt',
     class: '',
   },
