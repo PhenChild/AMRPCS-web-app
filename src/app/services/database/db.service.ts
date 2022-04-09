@@ -197,6 +197,12 @@ export class DbService {
     );
   }
 
+  getEstacionesSelfUsuario(): any {
+    return this.http.get(this.dbURL + 'observers/getEstacionObs', {
+      headers: this.getHeader(),
+    });
+  }
+
   getEstacionesUsuario(usuario: any): any {
     return this.http.post(
       this.dbURL + 'observers/getUserEstacion',
@@ -404,6 +410,18 @@ export class DbService {
       query += 'pais=' + filtro.pais + '&';
     }
     return this.http.get(this.dbURL + 'precipitacion/getAll/filtro?' + query, {
+      headers: this.getHeader(),
+    });
+  }
+
+  addReporte(reporte: any): any {
+    return this.http.post(this.dbURL + 'precipitacion/new', reporte, {
+      headers: this.getHeader(),
+    });
+  }
+
+  addReporteAcumulado(reporte: any): any {
+    return this.http.post(this.dbURL + 'acumulado/new', reporte, {
       headers: this.getHeader(),
     });
   }

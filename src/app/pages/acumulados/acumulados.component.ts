@@ -6,9 +6,11 @@ import { DataTableDirective } from 'angular-datatables';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { Pais } from 'src/app/models/pais';
+import { Estacion } from 'src/app/models/estacion';
 import { ReporteAcumulado } from 'src/app/models/reporteAcumulado';
 import { DbService } from 'src/app/services/database/db.service';
 import Utils from 'src/app/utils/utils';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-acumulados',
@@ -35,6 +37,9 @@ export class AcumuladosComponent implements OnInit {
   reportes: ReporteAcumulado[] = [];
   paises: Pais[] = [];
 
+  /** Lista de estaciones */
+  estaciones: Estacion[] = [];
+
   /** Operador del datatable de los registros */
   dtTrigger: Subject<any> = new Subject<any>();
 
@@ -47,6 +52,8 @@ export class AcumuladosComponent implements OnInit {
     pais: ""
   }
   isDtInitialized: boolean = false
+  isUpdating: boolean = false;
+  isForm: boolean = false;
 
   reporte!: ReporteAcumulado;
 
@@ -76,6 +83,10 @@ export class AcumuladosComponent implements OnInit {
         this.paises = (data as any);
       });
 
+    this.dbService.getEstacionesSelfUsuario().subscribe((data: any) => {
+      this.estaciones = data.map((item: any) => item.Estacion);
+    });
+
     let estacion = this.router.snapshot.paramMap.get('estacion')
     let fi = this.router.snapshot.paramMap.get('fi')
     let ff = this.router.snapshot.paramMap.get('ff')
@@ -86,6 +97,7 @@ export class AcumuladosComponent implements OnInit {
       this.filtro.fechaFin = Utils.date2(ff)
       this.getData();
     }
+    this.reporte = new ReporteAcumulado();
   }
 
   getData(): void {
@@ -123,6 +135,21 @@ export class AcumuladosComponent implements OnInit {
         }, (err: any) => {
           this.tService.error("", "Ha ocurrido un error");
         })
+    }
+  }
+
+  saveReporte(form: NgForm) {
+    if (confirm('¿Desea crear un nuevo reporte acumulado?')) {
+      this.dbService.addReporteAcumulado(this.reporte).subscribe(
+        (data: any) => {
+          this.tService.success('Reporte creado con éxito', 'Envío exitoso');
+          this.isForm = !this.isForm;
+          form.resetForm();
+        },
+        (err: any) => {
+          this.tService.error('', 'Ha ocurrido un error');
+        }
+      );
     }
   }
 

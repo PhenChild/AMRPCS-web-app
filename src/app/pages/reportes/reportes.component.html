@@ -184,7 +184,7 @@
     </div>
   </div>
 </div>
-<div class="container-fluid mt--9" id="form-pais" *ngIf="isForm">
+<div class="container-fluid mt--9" id="form-precipitacion" *ngIf="isForm">
   <div class="row">
     <div class="col-xl-2"></div>
     <div class="col-xl-8 mb-5 mb-xl-0">
@@ -196,27 +196,52 @@
           <h3 class="card-title" *ngIf="!isUpdating">Crear nuevo reporte</h3>
         </div>
         <div class="card-body">
-          <form #formPais="ngForm" ngNativeValidate>
-            <div class="form-group">
-              <label for="nombre">Nombre*</label><br />
-              <input
-                type="text"
+          <form #formReporte="ngForm" ngNativeValidate>
+            <div class="form-group col-md-3">
+              <label for="estacion">Estación*</label><br />
+              <select
+                name="estacion"
+                id="estacion"
                 class="form-control"
-                name="nombre"
-                id="nombre"
+                [(ngModel)]="reporte.estacion"
+                required
+              >
+                <option *ngFor="let estacion of estaciones" [value]="estacion.id">
+                  {{ estacion.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="fecha">Fecha*</label><br />
+              <input
+                type="datetime-local"
+                class="form-control"
+                name="fecha"
+                id="fecha"
+                [(ngModel)]="reporte.fecha"
                 required
               />
             </div>
             <div class="form-group">
-              <label for="siglas">Siglas*</label><br />
+              <label for="valor">Valor*</label><br />
               <input
-                type="text"
+                type="Float"
                 maxlength="2"
                 class="form-control"
-                name="siglas"
-                id="siglas"
+                name="valor"
+                id="valor"
+                [(ngModel)]="reporte.valor"
                 required
               />
+            </div>
+            <div class="form-group">
+              <label for="comentario">Comentario*</label><br />
+              <textarea
+                name="comentario"
+                id="comentario"
+                class="form-control"
+                [(ngModel)]="reporte.comentario"
+              ></textarea>
             </div>
             <div>
               <button
@@ -225,7 +250,7 @@
               >
                 Cancelar
               </button>
-              <button class="btn btn-default float-right">Guardar</button>
+              <button class="btn btn-default float-right" (click)="saveReporte(formReporte)">Guardar</button>
             </div>
           </form>
         </div>
