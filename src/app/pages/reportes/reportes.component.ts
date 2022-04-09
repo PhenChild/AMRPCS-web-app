@@ -46,6 +46,8 @@ export class ReportesComponent implements OnInit {
 
   reporte!: Reporte;
   isDtInitialized: boolean = false;
+  isUpdating: boolean = false;
+  isForm: boolean = false;
 
   constructor(
     location: Location,

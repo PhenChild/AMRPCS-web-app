@@ -19,6 +19,9 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { DataTablesModule } from "angular-datatables";
 import { FileUploadModule } from "ng2-file-upload";
+import { CuestionariosComponent } from './cuestionarios/cuestionarios.component';
+import { OcupacionComponent } from './ocupacion/ocupacion.component';
+import { MisReportesComponent } from './mis-reportes/mis-reportes.component';
 
 @NgModule({
     imports: [
@@ -44,6 +47,9 @@ import { FileUploadModule } from "ng2-file-upload";
         PerfilComponent,
         GraficosComponent,
         AcercadeComponent,
+        CuestionariosComponent,
+        OcupacionComponent,
+        MisReportesComponent,
     ],
     exports: [
         UsuariosComponent,
