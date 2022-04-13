@@ -9,6 +9,7 @@ import { GraficosComponent } from 'src/app/pages/graficos/graficos.component';
 import { AcercadeComponent } from 'src/app/pages/acercade/acercade.component';
 import { CuestionariosComponent } from 'src/app/pages/cuestionarios/cuestionarios.component';
 import { MisReportesComponent } from 'src/app/pages/mis-reportes/mis-reportes.component';
+import { ExtremaComponent } from 'src/app/pages/extrema/extrema.component';
 
 export const obsLayoutRoutes: Routes = [
   { path: 'usuarios', component: UsuariosComponent },
@@ -16,6 +17,7 @@ export const obsLayoutRoutes: Routes = [
   { path: 'reportes', component: ReportesComponent },
   { path: 'acumulados', component: AcumuladosComponent },
   { path: 'cuestionarios', component: CuestionariosComponent },
+  { path: 'extrema', component: ExtremaComponent },
   { path: 'mis-reportes', component: MisReportesComponent },
   { path: 'perfil', component: PerfilComponent },
   { path: 'graficos', component: GraficosComponent },

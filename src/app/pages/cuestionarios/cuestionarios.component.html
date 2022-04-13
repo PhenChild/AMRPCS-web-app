@@ -1,1 +1,356 @@
-<p>cuestionarios works!</p>
+<div
+  class="header pb-8 pt-5 pt-md-8"
+  style="
+    min-height: 300px;
+    background-image: url(assets/img/theme/chimborazo.jpg);
+    background-size: cover;
+    background-position: 0px -120px;
+  "
+>
+  <span class="mask bg-default opacity-6"></span>
+  <div class="container-fluid">
+    <div class="header-body"></div>
+  </div>
+</div>
+<div class="container-fluid mt--9" id="table" *ngIf="!isForm">
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col-9">
+              <h3 class="mb-0">Cuestionarios de Sequías</h3>
+            </div>
+            <div class="col-3 text-right text-default">
+              <a class="btn btn-sm btn-default" (click)="isForm = !isForm"
+                >Nuevo reporte</a
+              >
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="form-group col-md-3">
+              <label for="observador">Nombre de Observador</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="observador"
+                id="fobservador"
+                [(ngModel)]="filtro.observador"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="estacion">Nombre de Estación</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="estacion"
+                id="festacion"
+                [(ngModel)]="filtro.estacion"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="estacion">Código de Estación</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="estacion"
+                id="festacion"
+                [(ngModel)]="filtro.codEstacion"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="pais">País</label><br />
+              <select
+                name="pais"
+                id="pais"
+                class="form-control"
+                [(ngModel)]="filtro.pais"
+              >
+                <option *ngFor="let pais of paises" [value]="pais.id">
+                  {{ pais.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="fechaInicio">Fecha Inicio</label><br />
+              <input
+                type="date"
+                class="form-control"
+                name="fechaInicio"
+                id="ffechaInicio"
+                [(ngModel)]="filtro.fechaInicio"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="fechaFin">Fecha Fin</label><br />
+              <input
+                type="date"
+                class="form-control"
+                name="fechaFin"
+                id="ffechaFin"
+                [(ngModel)]="filtro.fechaFin"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <button class="btn btn-default float-left" (click)="getData()">
+                Buscar
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="container" id="tablaCuestionarios" style="display: none">
+          <div class="">
+            <table
+              datatable
+              [dtOptions]="dtOptions"
+              [dtTrigger]="dtTrigger"
+              class="table-responsive align-items-center table-flush row-border hover"
+            >
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">Observador</th>
+                  <th scope="col">Estación</th>
+                  <th scope="col">Código Estación</th>
+                  <th scope="col">Fecha</th>
+                  <th scope="col">Comentario</th>
+                  <th scope="col" *ngIf="isAdmin">Creado</th>
+                  <th scope="col" *ngIf="isAdmin">Actualizado</th>
+                  <th scope="col" *ngIf="isAdmin"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let cuestionario of cuestionarios">
+                  <th scope="row">
+                    <span class="mb-0 text-sm">{{
+                      cuestionario.Observador.User.nombre +
+                        " " +
+                        cuestionario.Observador.User.apellido
+                    }}</span>
+                  </th>
+                  <td scope="row">
+                    {{ cuestionario.Observador.Estacion.nombre }}
+                  </td>
+                  <td scope="row">
+                    {{ cuestionario.Observador.Estacion.codigo }}
+                  </td>
+                  <td scope="row">
+                    {{ cuestionario.fecha }}
+                  </td>
+                  <td scope="row" width="35%">
+                    {{ cuestionario.comentario }}
+                  </td>
+                  <td *ngIf="isAdmin">
+                    {{ date(cuestionario.audCreatedAt) }}
+                    {{ time(cuestionario.audCreatedAt) }}
+                  </td>
+                  <td *ngIf="isAdmin">
+                    {{ date(cuestionario.audUpdatedAt) }}
+                    {{ time(cuestionario.audUpdatedAt) }}
+                  </td>
+                  <td class="text-right" scope="row" *ngIf="isAdmin">
+                    <div ngbDropdown placement="bottom-right">
+                      <a
+                        class="btn btn-sm btn-icon-only text-light"
+                        ngbDropdownToggle
+                      >
+                        <i class="fas fa-ellipsis-v"></i>
+                      </a>
+                      <div
+                        ngbDropdownMenu
+                        class="dropdown-menu-right dropdown-menu-arrow"
+                      >
+                        <a class="dropdown-item">Editar</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt--9" id="form-cuestionario" *ngIf="isForm">
+  <div class="row">
+    <div class="col-xl-2"></div>
+    <div class="col-xl-8 mb-5 mb-xl-0">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title" *ngIf="isUpdating">
+            Editar información de cuestionario
+          </h3>
+          <h3 class="card-title" *ngIf="!isUpdating">
+            Crear nuevo cuestionario
+          </h3>
+        </div>
+        <div class="card-body">
+          <form #formAcumulado="ngForm" ngNativeValidate>
+            <div class="form-group">
+              <label for="estacion">Estación*</label><br />
+              <select
+                name="estacion"
+                id="estacion"
+                class="form-control"
+                [(ngModel)]="cuestionario.estacion"
+                required
+              >
+                <option
+                  *ngFor="let estacion of estaciones"
+                  [value]="estacion.id"
+                >
+                  {{ estacion.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="fechaInicio">Fecha*</label><br />
+              <input
+                type="date"
+                class="form-control"
+                name="fechaInicio"
+                id="fechaInicio"
+                [(ngModel)]="cuestionario.fecha"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="respSuelo">Condición de suelo*</label><br />
+              <select
+                name="respSuelo"
+                id="respSuelo"
+                class="form-control"
+                [(ngModel)]="cuestionario.respSuelo"
+                required
+              >
+                <option value="1">Saturado</option>
+                <option value="2">Húmedo</option>
+                <option value="3">Subhúmedo</option>
+                <option value="4">Normal</option>
+                <option value="5">Seco</option>
+                <option value="6">Muy Seco</option>
+                <option value="7">Erosionable</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="respVeg">Condición de la vegetación*</label><br />
+              <select
+                name="respVeg"
+                id="respVeg"
+                class="form-control"
+                [(ngModel)]="cuestionario.respVeg"
+                required
+              >
+                <option value="1">Clorótica/Aguachinada</option>
+                <option value="2">
+                  Verde pálido/perdió la intensidad del verdor
+                </option>
+                <option value="3">Normal (Verde intenso)</option>
+                <option value="4">
+                  Verde Azulado (Condición de estrés hídrica)
+                </option>
+                <option value="5">Marchitez sin defoliación</option>
+                <option value="6">Marchitez con defoliación</option>
+                <option value="7">Marchitez permanente (muerte)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="respPrec">Lluvias percibidas*</label><br />
+              <select
+                name="respPrec"
+                id="respPrec"
+                class="form-control"
+                [(ngModel)]="cuestionario.respPrec"
+                required
+              >
+                <option value="1">Mucho más de lo normal</option>
+                <option value="2">Más de lo normal</option>
+                <option value="3">Poco más de lo normal</option>
+                <option value="4">Normal</option>
+                <option value="5">Poco menos que lo normal</option>
+                <option value="6">Menos que lo normal</option>
+                <option value="7">Mucho menos que lo normal</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="respTempPrec"
+                >Temporalidad de las precipitaciones*</label
+              ><br />
+              <select
+                name="respTempPrec"
+                id="respTempPrec"
+                class="form-control"
+                [(ngModel)]="cuestionario.respTempPrec"
+                required
+              >
+                <option value="1">Muy adelantadas</option>
+                <option value="2">Más adelantadas de lo normal</option>
+                <option value="3">Poco más adelantadas de lo normal</option>
+                <option value="4">Normal</option>
+                <option value="5">Ligeramente retrasadas de lo normal</option>
+                <option value="6">Más retrasadas de lo normal</option>
+                <option value="7">Muy retrasadas</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="respTemps">Temperaturas observadas*</label><br />
+              <select
+                name="respTemps"
+                id="respTemps"
+                class="form-control"
+                [(ngModel)]="cuestionario.respTemps"
+                required
+              >
+                <option value="1">Mucho más frío de lo normal</option>
+                <option value="2">Más frío de lo normal</option>
+                <option value="3">Poco más frío de lo normal</option>
+                <option value="4">Normal</option>
+                <option value="5">Poco más cálido que lo normal</option>
+                <option value="6">Más cálido que lo normal</option>
+                <option value="7">Mucho más cálido que lo normal</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="respGana"
+                >Disponibilidad de agua para el ganado*</label
+              ><br />
+              <select
+                name="respGana"
+                id="respGana"
+                class="form-control"
+                [(ngModel)]="cuestionario.respGana"
+                required
+              >
+                <option value="1">Mucho más que suficiente</option>
+                <option value="2">Más que suficiente</option>
+                <option value="3">Poco más que suficiente</option>
+                <option value="4">Sufuciente</option>
+                <option value="5">Poco menos que suficiente</option>
+                <option value="6">Menos que suficiente (escasa)</option>
+                <option value="7">Mucho menos que suficiente</option>
+              </select>
+            </div>
+            <div>
+              <button
+                class="btn btn-secondary float-left"
+                (click)="isForm = !isForm"
+              >
+                Cancelar
+              </button>
+              <button
+                class="btn btn-default float-right"
+                (click)="saveReporte(formAcumulado)"
+              >
+                Guardar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

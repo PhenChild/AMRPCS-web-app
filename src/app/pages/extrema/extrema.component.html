@@ -19,7 +19,7 @@
         <div class="card-header border-0">
           <div class="row align-items-center">
             <div class="col-9">
-              <h3 class="mb-0">Reportes Diarios de Precipitación</h3>
+              <h3 class="mb-0">Reportes de precipitación Extrema</h3>
             </div>
             <div class="col-3 text-right text-default">
               <a class="btn btn-sm btn-default" (click)="isForm = !isForm"
@@ -113,8 +113,6 @@
                 <th scope="col">Estación</th>
                 <th scope="col">Código Estación</th>
                 <th scope="col">Fecha</th>
-                <th scope="col">Valor</th>
-                <th scope="col">Comentario</th>
                 <th scope="col" *ngIf="isAdmin">Creado</th>
                 <th scope="col" *ngIf="isAdmin">Actualizado</th>
                 <th scope="col" *ngIf="isAdmin"></th>
@@ -122,7 +120,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let reporte of reportes">
-                <th scope="row">
+                <th scope="row" width="30%">
                   <div class="media align-items-center">
                     <div class="media-body">
                       <span class="mb-0 text-sm">{{
@@ -133,20 +131,14 @@
                     </div>
                   </div>
                 </th>
-                <td>
+                <td width="30%">
                   {{ reporte.Observador.Estacion.nombre }}
                 </td>
-                <td>
+                <td width="25%">
                   {{ reporte.Observador.Estacion.codigo }}
                 </td>
-                <td>
+                <td width="25%">
                   {{ date(reporte.fecha) + " " + time(reporte.fecha) }}
-                </td>
-                <td>
-                  {{ reporte.valor }}
-                </td>
-                <td width="35%">
-                  {{ reporte.comentario }}
                 </td>
                 <td *ngIf="isAdmin">
                   {{ date(reporte.audCreatedAt) }}
@@ -168,11 +160,7 @@
                       ngbDropdownMenu
                       class="dropdown-menu-right dropdown-menu-arrow"
                     >
-                      <a
-                        class="dropdown-item"
-                        (click)="openModal(contenido, reporte)"
-                        >Editar</a
-                      >
+                      <a class="dropdown-item">Editar</a>
                     </div>
                   </div>
                 </td>
@@ -191,9 +179,11 @@
       <div class="card">
         <div class="card-header">
           <h3 class="card-title" *ngIf="isUpdating">
-            Editar información de reporte
+            Editar información de reporte de precipitación extrema
           </h3>
-          <h3 class="card-title" *ngIf="!isUpdating">Crear nuevo reporte</h3>
+          <h3 class="card-title" *ngIf="!isUpdating">
+            Crear nuevo reporte de precipitación extrema
+          </h3>
         </div>
         <div class="card-body">
           <form #formReporte="ngForm" ngNativeValidate>
@@ -206,7 +196,10 @@
                 [(ngModel)]="reporte.estacion"
                 required
               >
-                <option *ngFor="let estacion of estaciones" [value]="estacion.id">
+                <option
+                  *ngFor="let estacion of estaciones"
+                  [value]="estacion.id"
+                >
                   {{ estacion.nombre }}
                 </option>
               </select>
@@ -222,26 +215,76 @@
                 required
               />
             </div>
-            <div class="form-group">
-              <label for="valor">Valor*</label><br />
-              <input
-                type="Float"
-                maxlength="2"
-                class="form-control"
-                name="valor"
-                id="valor"
-                [(ngModel)]="reporte.valor"
-                required
-              />
+            <label for="fecha">Eventos</label><br />
+            <div class="px-3 pb-3">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  name="inundacion"
+                  id="inundacion"
+                  [(ngModel)]="reporte.inundacion"
+                />
+                <label class="form-check-label" for="inundacion"
+                  >Inundación</label
+                >
+              </div>
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  name="granizo"
+                  id="granizo"
+                  [(ngModel)]="reporte.granizo"
+                />
+                <label class="form-check-label" for="granizo">Granizo</label>
+              </div>
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  name="rayos"
+                  id="rayos"
+                  [(ngModel)]="reporte.rayos"
+                />
+                <label class="form-check-label" for="rayos">Rayos</label>
+              </div>
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  name="deslizamiento"
+                  id="deslizamiento"
+                  [(ngModel)]="reporte.deslizamiento"
+                />
+                <label class="form-check-label" for="deslizamiento"
+                  >Deslizamiento</label
+                >
+              </div>
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  name="vientos"
+                  id="vientos"
+                  [(ngModel)]="reporte.vientos"
+                />
+                <label class="form-check-label" for="vientos"
+                  >Vientos Fuerte</label
+                >
+              </div>
             </div>
-            <div class="form-group">
-              <label for="comentario">Comentario*</label><br />
-              <textarea
-                name="comentario"
-                id="comentario"
-                class="form-control"
-                [(ngModel)]="reporte.comentario"
-              ></textarea>
+            <div class="form-check form-switch pb-3">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                name="notificacion"
+                id="notificacion"
+                [(ngModel)]="reporte.notificacion"
+              />
+              <label class="form-check-label" for="notificacion"
+                >Enviar Notificación</label
+              >
             </div>
             <div>
               <button
@@ -250,7 +293,12 @@
               >
                 Cancelar
               </button>
-              <button class="btn btn-default float-right" (click)="saveReporte(formReporte)">Guardar</button>
+              <button
+                class="btn btn-default float-right"
+                (click)="saveReporte(formReporte)"
+              >
+                Guardar
+              </button>
             </div>
           </form>
         </div>
@@ -258,49 +306,3 @@
     </div>
   </div>
 </div>
-<ng-template #contenido let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title">
-      Editar el valor del reporte {{ reporte.Observador.Estacion.nombre }}
-      {{ time(reporte.fecha) }} {{ date(reporte.fecha) }}
-    </h4>
-    <button
-      class="close"
-      aria-label="close"
-      type="button"
-      (click)="modal.close()"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <div class="form-group">
-      <label for="valor">Valor del reporte</label><br />
-      <input
-        type="number"
-        name="valor"
-        id="valor"
-        class="form-control"
-        [(ngModel)]="reporte.valor"
-      />
-    </div>
-    <div class="form-group">
-      <label for="comentario">Comentario del reporte</label><br />
-      <textarea
-        name="comentario"
-        id="comentario"
-        class="form-control"
-        [(ngModel)]="reporte.comentario"
-      ></textarea>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-default"
-      (click)="saveValor(); modal.close()"
-    >
-      Actualizar
-    </button>
-  </div>
-</ng-template>

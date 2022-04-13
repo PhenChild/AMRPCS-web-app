@@ -537,4 +537,137 @@ export class DbService {
       headers: this.getHeader(),
     });
   }
+
+  // Cuestionario de sequías Endpoints
+  /**
+   * Obtener reportes
+   * @returns respuesta del servidor
+   */
+  getCuestionarios(filtro: any): any {
+    var query = '';
+    if (filtro.observador != '') {
+      query += 'observador=' + filtro.observador + '&';
+    }
+    if (filtro.estacion != '') {
+      query += 'estacion=' + filtro.estacion + '&';
+    }
+    if (filtro.fechaInicio != '') {
+      query += 'fechaInicio=' + filtro.fechaInicio + '&';
+    }
+    if (filtro.fechaFin != '') {
+      query += 'fechaFin=' + filtro.fechaFin + '&';
+    }
+    if (filtro.codEstacion != '') {
+      query += 'codigo=' + filtro.codEstacion + '&';
+    }
+    if (filtro.pais != '') {
+      query += 'pais=' + filtro.pais + '&';
+    }
+    return this.http.get(this.dbURL + 'cuestionario/getAll/filtro?' + query, {
+      headers: this.getHeader(),
+    });
+  }
+
+  addCuestionario(reporte: any): any {
+    return this.http.post(this.dbURL + 'cuestionario/new', reporte, {
+      headers: this.getHeader(),
+    });
+  }
+
+  // Precipitación Extrema Endpoints
+  /**
+   * Obtener reportes
+   * @returns respuesta del servidor
+   */
+  getReportesPrecExtrema(filtro: any): any {
+    var query = '';
+    if (filtro.observador != '') {
+      query += 'observador=' + filtro.observador + '&';
+    }
+    if (filtro.estacion != '') {
+      query += 'estacion=' + filtro.estacion + '&';
+    }
+    if (filtro.fechaInicio != '') {
+      query += 'fechaInicio=' + filtro.fechaInicio + '&';
+    }
+    if (filtro.fechaFin != '') {
+      query += 'fechaFin=' + filtro.fechaFin + '&';
+    }
+    if (filtro.codEstacion != '') {
+      query += 'codigo=' + filtro.codEstacion + '&';
+    }
+    if (filtro.pais != '') {
+      query += 'pais=' + filtro.pais + '&';
+    }
+    return this.http.get(this.dbURL + 'extrema/getAll/filtro?' + query, {
+      headers: this.getHeader(),
+    });
+  }
+
+  addPrecipitacionExtrema(reporte: any): any {
+    return this.http.post(this.dbURL + 'extrema/new', reporte, {
+      headers: this.getHeader(),
+    });
+  }
+
+  updatePrecipitacionExtrema(reporte: any) {
+    return this.http.post(this.dbURL + 'extrema/update', reporte, {
+      headers: this.getHeader(),
+    });
+  }
+
+  getFiltroOcupaciones(filtro: any): any {
+    var query = '';
+    if (filtro.descripcion != '') {
+      query += 'descripcion=' + filtro.descripcion + '&';
+    }
+    return this.http.get(this.dbURL + 'ocupacion/getAll/filtro?' + query, {
+      headers: this.getHeader(),
+    });
+  }
+
+  /**
+   * Eliminar Ocupacion
+   * @param ocupacion
+   * @returns respuesta del servidor
+   */
+  deleteOcupacion(ocupacion: { id: number }): any {
+    return this.http.post(
+      this.dbURL + 'ocupacion/delete',
+      { id: ocupacion.id },
+      { headers: this.getHeader() }
+    );
+  }
+
+  /**
+   * Añadir Ocupacion
+   * @param ocupacion Ocupacion
+   * @returns respuesta del servidor
+   */
+  addOcupacion(ocupacion: any): any {
+    return this.http.post(this.dbURL + 'ocupacion/new', ocupacion, {
+      headers: this.getHeader(),
+    });
+  }
+
+  /**
+   * Actualizar Ocupacion
+   * @param ocupacion Ocupacion
+   * @returns respuesta del servidor
+   */
+  updateOcupacion(ocupacion: any): any {
+    return this.http.post(this.dbURL + 'ocupacion/update', ocupacion, {
+      headers: this.getHeader(),
+    });
+  }
+
+  activateOcupacion(ocupacion: any) {
+    return this.http.post(
+      this.dbURL + 'ocupacion/activateOcupacion',
+      ocupacion,
+      {
+        headers: this.getHeader(),
+      }
+    );
+  }
 }

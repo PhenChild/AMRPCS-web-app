@@ -74,6 +74,12 @@ export const ROUTES: RouteInfo[] = [
     class: '',
   },
   {
+    path: '/admin-layout/extrema',
+    title: 'Precipitación Extrema',
+    icon: 'fa-file-alt',
+    class: '',
+  },
+  {
     path: '/admin-layout/cuestionarios',
     title: 'Cuestionario de Sequía',
     icon: 'fa-file-alt',
@@ -86,10 +92,10 @@ export const ROUTES: RouteInfo[] = [
     class: '',
   },
   {
-    path: '/admin-layout/acercade',
+    path: '/obs-layout/acercade',
     title: 'Acerca de',
     icon: 'fa-info-circle',
-    class: 'active-pro',
+    class: '',
   },
 ];
 
@@ -104,6 +110,9 @@ export const ROUTES: RouteInfo[] = [
 export class SidebarComponent implements OnInit {
   /** Items del menu */
   public menuItems!: any[];
+  public reportesItems!: any[];
+  public administracionItems!: any[];
+  public informacionItems!: any[];
 
   /** Esta o no colapsado */
   public isCollapsed = true;
@@ -116,6 +125,9 @@ export class SidebarComponent implements OnInit {
   /** Inicializador. */
   ngOnInit(): void {
     this.menuItems = ROUTES.filter((menuItem) => menuItem);
+    this.administracionItems = ROUTES.slice(0, 7);
+    this.reportesItems = ROUTES.slice(7, 12);
+    this.informacionItems = ROUTES.slice(12, 13);
     this.router.events.subscribe(() => {
       this.isCollapsed = true;
     });

@@ -1,242 +1,329 @@
-<div class="header pb-8 pt-5 pt-md-8"
-    style="min-height: 300px; background-image: url(assets/img/theme/chimborazo.jpg); background-size: cover; background-position: 0px -120px;">
-    <span class="mask bg-default opacity-6"></span>
-    <div class="container-fluid">
-        <div class="header-body">
-        </div>
-    </div>
+<div
+  class="header pb-8 pt-5 pt-md-8"
+  style="
+    min-height: 300px;
+    background-image: url(assets/img/theme/chimborazo.jpg);
+    background-size: cover;
+    background-position: 0px -120px;
+  "
+>
+  <span class="mask bg-default opacity-6"></span>
+  <div class="container-fluid">
+    <div class="header-body"></div>
+  </div>
 </div>
 <div class="container-fluid mt--9" id="table" *ngIf="!isForm">
-    <div class="row">
-        <div class="col">
-            <div class="card shadow">
-                <div class="card-header border-0">
-                    <div class="row align-items-center">
-                        <div class="col-9">
-                            <h3 class="mb-0">Reportes Acumulados de Precipitación</h3>
-                        </div>
-                        <div class="col-3 text-right text-default">
-                            <a class="btn btn-sm btn-default" (click)="isForm = !isForm"
-                              >Nuevo reporte</a
-                            >
-                          </div>
-                    </div>
-                </div>
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="form-group col-md-3">
-                            <label for="observador">Nombre de Observador</label><br>
-                            <input type="text" class="form-control" name="observador" id="fobservador"
-                                [(ngModel)]="filtro.observador">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="estacion">Nombre de Estación</label><br>
-                            <input type="text" class="form-control" name="estacion" id="festacion"
-                                [(ngModel)]="filtro.estacion">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="estacion">Código de Estación</label><br>
-                            <input type="text" class="form-control" name="estacion" id="festacion"
-                                [(ngModel)]="filtro.codEstacion">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="pais">País</label><br>
-                            <select name="pais" id="pais" class="form-control" [(ngModel)]="filtro.pais">
-                                <option *ngFor="let pais of paises" [value]="pais.id">{{pais.nombre}}</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="fechaInicio">Fecha Inicio</label><br>
-                            <input type="date" class="form-control" name="fechaInicio" id="ffechaInicio"
-                                [(ngModel)]="filtro.fechaInicio">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="fechaFin">Fecha Fin</label><br>
-                            <input type="date" class="form-control" name="fechaFin" id="ffechaFin"
-                                [(ngModel)]="filtro.fechaFin">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <button class="btn btn-default float-left" (click)="getData()">Buscar</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="container" id="tablaReportes" style="display: none;">
-                    <div class="">
-                        <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
-                            class="table-responsive align-items-center table-flush row-border hover">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th scope="col">Observador</th>
-                                    <th scope="col">Estación</th>
-                                    <th scope="col">Código Estación</th>
-                                    <th scope="col">Fecha Inicio</th>
-                                    <th scope="col">Fecha Fin</th>
-                                    <th scope="col">Valor</th>
-                                    <th scope="col">Comentario</th>
-                                    <th scope="col" *ngIf="isAdmin">Creado</th>
-                                    <th scope="col" *ngIf="isAdmin">Actualizado</th>
-                                    <th scope="col" *ngIf="isAdmin"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let reporte of reportes">
-                                    <th scope="row">
-                                        <span class="mb-0 text-sm">{{ reporte.Observador.User.nombre + " " +
-                                            reporte.Observador.User.apellido}}</span>
-                                    </th>
-                                    <td scope="row">
-                                        {{reporte.Observador.Estacion.nombre }}
-                                    </td>
-                                    <td scope="row">
-                                        {{reporte.Observador.Estacion.codigo }}
-                                    </td>
-                                    <td scope="row">
-                                        {{reporte.fechaInicio}}
-                                    </td>
-                                    <td scope="row">
-                                        {{ date(reporte.fechaFin)}}
-                                    </td>
-                                    <td scope="row">
-                                        {{reporte.valor}}
-                                    </td>
-                                    <td scope="row" width=35%>
-                                        {{reporte.comentario}}
-                                    </td>
-                                    <td *ngIf="isAdmin">
-                                        {{date(reporte.audCreatedAt)}} {{time(reporte.audCreatedAt)}}
-                                    </td>
-                                    <td *ngIf="isAdmin">
-                                        {{date(reporte.audUpdatedAt)}} {{time(reporte.audUpdatedAt)}}
-                                    </td>
-                                    <td class="text-right" scope="row" *ngIf="isAdmin">
-                                        <div ngbDropdown placement="bottom-right">
-                                            <a class="btn btn-sm btn-icon-only text-light" ngbDropdownToggle>
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </a>
-                                            <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
-                                                <a class="dropdown-item"
-                                                    (click)="openModal(contenido,reporte)">Editar</a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col-9">
+              <h3 class="mb-0">Reportes Acumulados de Precipitación</h3>
             </div>
+            <div class="col-3 text-right text-default">
+              <a class="btn btn-sm btn-default" (click)="isForm = !isForm"
+                >Nuevo reporte</a
+              >
+            </div>
+          </div>
         </div>
-    </div>
-</div>
-
-<div class="container-fluid mt--9" id="form-acumulado" *ngIf="isForm">
-    <div class="row">
-      <div class="col-xl-2"></div>
-      <div class="col-xl-8 mb-5 mb-xl-0">
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title" *ngIf="isUpdating">
-              Editar información de reporte
-            </h3>
-            <h3 class="card-title" *ngIf="!isUpdating">Crear nuevo reporte</h3>
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="form-group col-md-3">
+              <label for="observador">Nombre de Observador</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="observador"
+                id="fobservador"
+                [(ngModel)]="filtro.observador"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="estacion">Nombre de Estación</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="estacion"
+                id="festacion"
+                [(ngModel)]="filtro.estacion"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="estacion">Código de Estación</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="estacion"
+                id="festacion"
+                [(ngModel)]="filtro.codEstacion"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="pais">País</label><br />
+              <select
+                name="pais"
+                id="pais"
+                class="form-control"
+                [(ngModel)]="filtro.pais"
+              >
+                <option *ngFor="let pais of paises" [value]="pais.id">
+                  {{ pais.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="fechaInicio">Fecha Inicio</label><br />
+              <input
+                type="date"
+                class="form-control"
+                name="fechaInicio"
+                id="ffechaInicio"
+                [(ngModel)]="filtro.fechaInicio"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="fechaFin">Fecha Fin</label><br />
+              <input
+                type="date"
+                class="form-control"
+                name="fechaFin"
+                id="ffechaFin"
+                [(ngModel)]="filtro.fechaFin"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <button class="btn btn-default float-left" (click)="getData()">
+                Buscar
+              </button>
+            </div>
           </div>
-          <div class="form-group col-md-3">
-            <label for="estacion">Estación*</label><br />
-            <select
-              name="estacion"
-              id="estacion"
-              class="form-control"
-              [(ngModel)]="reporte.estacion"
-              required
+        </div>
+        <div class="container" id="tablaReportes" style="display: none">
+          <div class="">
+            <table
+              datatable
+              [dtOptions]="dtOptions"
+              [dtTrigger]="dtTrigger"
+              class="table-responsive align-items-center table-flush row-border hover"
             >
-              <option *ngFor="let estacion of estaciones" [value]="estacion.id">
-                {{ estacion.nombre }}
-              </option>
-            </select>
-          </div>
-          <div class="card-body">
-            <form #formAcumulado="ngForm" ngNativeValidate>
-              <div class="form-group">
-                <label for="fechaInicio">Fecha Inicio*</label><br />
-                <input
-                  type="date"
-                  class="form-control"
-                  name="fechaInicio"
-                  id="fechaInicio"
-                  [(ngModel)]="reporte.fechaInicio"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="fechaFin">Fecha Final*</label><br />
-                <input
-                  type="date"
-                  class="form-control"
-                  name="fechaFin"
-                  id="fechaFin"
-                  [(ngModel)]="reporte.fechaFin"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="valor">Valor*</label><br />
-                <input
-                  type="Float"
-                  maxlength="2"
-                  class="form-control"
-                  name="valor"
-                  id="valor"
-                  [(ngModel)]="reporte.valor"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                <label for="comentario">Comentario*</label><br />
-                <textarea
-                  name="comentario"
-                  id="comentario"
-                  class="form-control"
-                  [(ngModel)]="reporte.comentario"
-                ></textarea>
-              </div>
-              <div>
-                <button
-                  class="btn btn-secondary float-left"
-                  (click)="isForm = !isForm"
-                >
-                  Cancelar
-                </button>
-                <button class="btn btn-default float-right" (click)="saveReporte(formAcumulado)">Guardar</button>
-              </div>
-            </form>
+              <thead class="thead-light">
+                <tr>
+                  <th scope="col">Observador</th>
+                  <th scope="col">Estación</th>
+                  <th scope="col">Código Estación</th>
+                  <th scope="col">Fecha Inicio</th>
+                  <th scope="col">Fecha Fin</th>
+                  <th scope="col">Valor</th>
+                  <th scope="col">Comentario</th>
+                  <th scope="col" *ngIf="isAdmin">Creado</th>
+                  <th scope="col" *ngIf="isAdmin">Actualizado</th>
+                  <th scope="col" *ngIf="isAdmin"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let reporte of reportes">
+                  <th scope="row">
+                    <span class="mb-0 text-sm">{{
+                      reporte.Observador.User.nombre +
+                        " " +
+                        reporte.Observador.User.apellido
+                    }}</span>
+                  </th>
+                  <td scope="row">
+                    {{ reporte.Observador.Estacion.nombre }}
+                  </td>
+                  <td scope="row">
+                    {{ reporte.Observador.Estacion.codigo }}
+                  </td>
+                  <td scope="row">
+                    {{ reporte.fechaInicio }}
+                  </td>
+                  <td scope="row">
+                    {{ date(reporte.fechaFin) }}
+                  </td>
+                  <td scope="row">
+                    {{ reporte.valor }}
+                  </td>
+                  <td scope="row" width="35%">
+                    {{ reporte.comentario }}
+                  </td>
+                  <td *ngIf="isAdmin">
+                    {{ date(reporte.audCreatedAt) }}
+                    {{ time(reporte.audCreatedAt) }}
+                  </td>
+                  <td *ngIf="isAdmin">
+                    {{ date(reporte.audUpdatedAt) }}
+                    {{ time(reporte.audUpdatedAt) }}
+                  </td>
+                  <td class="text-right" scope="row" *ngIf="isAdmin">
+                    <div ngbDropdown placement="bottom-right">
+                      <a
+                        class="btn btn-sm btn-icon-only text-light"
+                        ngbDropdownToggle
+                      >
+                        <i class="fas fa-ellipsis-v"></i>
+                      </a>
+                      <div
+                        ngbDropdownMenu
+                        class="dropdown-menu-right dropdown-menu-arrow"
+                      >
+                        <a
+                          class="dropdown-item"
+                          (click)="openModal(contenido, reporte)"
+                          >Editar</a
+                        >
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>
 
+<div class="container-fluid mt--9" id="form-acumulado" *ngIf="isForm">
+  <div class="row">
+    <div class="col-xl-2"></div>
+    <div class="col-xl-8 mb-5 mb-xl-0">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title" *ngIf="isUpdating">
+            Editar información de reporte
+          </h3>
+          <h3 class="card-title" *ngIf="!isUpdating">Crear nuevo reporte</h3>
+        </div>
+        <div class="card-body">
+          <form #formAcumulado="ngForm" ngNativeValidate>
+            <div class="form-group">
+              <label for="estacion">Estación*</label><br />
+              <select
+                name="estacion"
+                id="estacion"
+                class="form-control"
+                [(ngModel)]="reporte.estacion"
+                required
+              >
+                <option
+                  *ngFor="let estacion of estaciones"
+                  [value]="estacion.id"
+                >
+                  {{ estacion.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="fechaInicio">Fecha Inicio*</label><br />
+              <input
+                type="date"
+                class="form-control"
+                name="fechaInicio"
+                id="fechaInicio"
+                [(ngModel)]="reporte.fechaInicio"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="fechaFin">Fecha Final*</label><br />
+              <input
+                type="date"
+                class="form-control"
+                name="fechaFin"
+                id="fechaFin"
+                [(ngModel)]="reporte.fechaFin"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="valor">Valor*</label><br />
+              <input
+                type="Float"
+                maxlength="2"
+                class="form-control"
+                name="valor"
+                id="valor"
+                [(ngModel)]="reporte.valor"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="comentario">Comentario*</label><br />
+              <textarea
+                name="comentario"
+                id="comentario"
+                class="form-control"
+                [(ngModel)]="reporte.comentario"
+              ></textarea>
+            </div>
+            <div>
+              <button
+                class="btn btn-secondary float-left"
+                (click)="isForm = !isForm"
+              >
+                Cancelar
+              </button>
+              <button
+                class="btn btn-default float-right"
+                (click)="saveReporte(formAcumulado)"
+              >
+                Guardar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <ng-template #contenido let-modal>
-    <div class="modal-header">
-        <h4 class="modal-title">Editar el valor del reporte {{reporte.Observador.Estacion.nombre}}
-            {{reporte.fechaInicio}}</h4>
-        <button class="close" aria-label="close" type="button" (click)="modal.close()">
-            <span aria-hidden="true">&times;</span>
-        </button>
+  <div class="modal-header">
+    <h4 class="modal-title">
+      Editar el valor del reporte {{ reporte.Observador.Estacion.nombre }}
+      {{ reporte.fechaInicio }}
+    </h4>
+    <button
+      class="close"
+      aria-label="close"
+      type="button"
+      (click)="modal.close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="valor">Valor del reporte</label><br />
+      <input
+        type="number"
+        name="valor"
+        id="valor"
+        class="form-control"
+        [(ngModel)]="reporte.valor"
+      />
     </div>
-    <div class="modal-body">
-        <div class="form-group">
-            <label for="valor">Valor del reporte</label><br>
-            <input type="number" name="valor" id="valor" class="form-control" [(ngModel)]="reporte.valor">
-        </div>
-        <div class="form-group">
-            <label for="comentario">Comentario del reporte</label><br>
-            <textarea name="comentario" id="comentario" class="form-control"
-                [(ngModel)]="reporte.comentario"></textarea>
-        </div>
+    <div class="form-group">
+      <label for="comentario">Comentario del reporte</label><br />
+      <textarea
+        name="comentario"
+        id="comentario"
+        class="form-control"
+        [(ngModel)]="reporte.comentario"
+      ></textarea>
     </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" (click)="saveValor();modal.close()">Actualizar</button>
-    </div>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-default"
+      (click)="saveValor(); modal.close()"
+    >
+      Actualizar
+    </button>
+  </div>
 </ng-template>

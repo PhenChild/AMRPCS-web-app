@@ -22,6 +22,7 @@ import { FileUploadModule } from "ng2-file-upload";
 import { CuestionariosComponent } from './cuestionarios/cuestionarios.component';
 import { OcupacionComponent } from './ocupacion/ocupacion.component';
 import { MisReportesComponent } from './mis-reportes/mis-reportes.component';
+import { ExtremaComponent } from "./extrema/extrema.component";
 
 @NgModule({
     imports: [
@@ -50,6 +51,7 @@ import { MisReportesComponent } from './mis-reportes/mis-reportes.component';
         CuestionariosComponent,
         OcupacionComponent,
         MisReportesComponent,
+        ExtremaComponent
     ],
     exports: [
         UsuariosComponent,

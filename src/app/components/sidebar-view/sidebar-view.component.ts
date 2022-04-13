@@ -44,6 +44,18 @@ export const ROUTES: RouteInfo[] = [
     class: '',
   },
   {
+    path: '/view-layout/extrema',
+    title: 'Precipitación Extrema',
+    icon: 'fa-file-alt',
+    class: '',
+  },
+  {
+    path: '/view-layout/cuestionarios',
+    title: 'Cuestionarios de sequía',
+    icon: 'fa-file-alt',
+    class: '',
+  },
+  {
     path: '/view-layout/graficos',
     title: 'Gráficos',
     icon: 'fa-chart-bar',
@@ -53,7 +65,7 @@ export const ROUTES: RouteInfo[] = [
     path: '/view-layout/acercade',
     title: 'Acerca de',
     icon: 'fa-info-circle',
-    class: 'active-pro',
+    class: '',
   },
 ];
 
@@ -68,17 +80,24 @@ export const ROUTES: RouteInfo[] = [
 export class SidebarViewComponent implements OnInit {
   /** Items del menu */
   public menuItems!: any[];
+  public reportesItems!: any[];
+  public redItems!: any[];
+  public informacionItems!: any[];
 
   /** Esta o no colapsado */
   public isCollapsed = true;
 
   /** Constructor */
-  constructor(private router: Router) //private authService: AuthService
-  {}
+  constructor(
+    private router: Router //private authService: AuthService
+  ) {}
 
   /** Inicializador. */
   ngOnInit(): void {
     this.menuItems = ROUTES.filter((menuItem) => menuItem);
+    this.redItems = ROUTES.slice(0, 2);
+    this.reportesItems = ROUTES.slice(2, 7);
+    this.informacionItems = ROUTES.slice(7, 8);
     this.router.events.subscribe(() => {
       this.isCollapsed = true;
     });

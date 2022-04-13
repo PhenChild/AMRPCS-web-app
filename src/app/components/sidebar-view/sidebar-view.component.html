@@ -13,11 +13,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <!-- Brand -->
-    <a
-      class="navbar-brand pt-0"
-      routerLinkActive="active"
-      routerLink="/auth-layout/login"
-    >
+    <a class="navbar-brand py-0">
       <img
         src="./assets/img/brand/Logo.png"
         class="navbar-brand-img"
@@ -52,9 +48,11 @@
       </div>
       <!-- Form -->
       <!-- Navigation -->
+      <hr class="text-white bg-white my-1" />
+      <h6 class="navbar-heading text-white py-1 m-0">RED</h6>
       <ul class="navbar-nav">
         <li
-          *ngFor="let menuItem of menuItems"
+          *ngFor="let menuItem of redItems"
           class="{{ menuItem.class }} nav-item "
         >
           <a
@@ -68,17 +66,42 @@
           </a>
         </li>
       </ul>
-      <!--<hr class="text-white bg-white my-3 ">
-       Divider 
-      <h6 class="navbar-heading text-muted">Información</h6>
+      <hr class="text-white bg-white my-1" />
+      <h6 class="navbar-heading text-white py-1 m-0">REPORTES</h6>
       <ul class="navbar-nav">
-        <li class="nav-item active-pro">
-          <a class="nav-link text-white" [routerLink]="['/obs-layout/acercade']" routerLinkActive="active"
-            routerLink="/obs-layout/acercade">
-            <i class="ni ni-spaceship"></i> Acerca de
+        <li
+          *ngFor="let menuItem of reportesItems"
+          class="{{ menuItem.class }} nav-item "
+        >
+          <a
+            routerLinkActive="active"
+            routerLink="{{ menuItem.path }}"
+            class="nav-link text-white"
+            (click)="refresh(menuItem.path)"
+          >
+            <i class="fa {{ menuItem.icon }}"></i>
+            {{ menuItem.title }}
           </a>
         </li>
-      </ul>-->
+      </ul>
+      <hr class="text-white bg-white my-1" />
+      <h6 class="navbar-heading text-white py-1 m-0">INFORMACIÓN</h6>
+      <ul class="navbar-nav">
+        <li
+          *ngFor="let menuItem of informacionItems"
+          class="{{ menuItem.class }} nav-item"
+        >
+          <a
+            routerLinkActive="active"
+            routerLink="{{ menuItem.path }}"
+            class="nav-link text-white"
+            (click)="refresh(menuItem.path)"
+          >
+            <i class="fa {{ menuItem.icon }}"></i>
+            {{ menuItem.title }}
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </nav>

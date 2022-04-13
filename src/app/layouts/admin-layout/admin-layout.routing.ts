@@ -15,6 +15,7 @@ import { AcercadeComponent } from 'src/app/pages/acercade/acercade.component';
 import { GraficosComponent } from 'src/app/pages/graficos/graficos.component';
 import { OcupacionComponent } from 'src/app/pages/ocupacion/ocupacion.component';
 import { CuestionariosComponent } from 'src/app/pages/cuestionarios/cuestionarios.component';
+import { ExtremaComponent } from 'src/app/pages/extrema/extrema.component';
 
 export const adminLayoutRoutes: Routes = [
   { path: 'usuarios', component: UsuariosComponent },
@@ -27,6 +28,7 @@ export const adminLayoutRoutes: Routes = [
   { path: 'reportes', component: ReportesComponent },
   { path: 'acumulados', component: AcumuladosComponent },
   { path: 'cuestionarios', component: CuestionariosComponent },
+  { path: 'extrema', component: ExtremaComponent },
   { path: 'perfil', component: PerfilComponent },
   { path: 'graficos', component: GraficosComponent },
   { path: 'acercade', component: AcercadeComponent },
