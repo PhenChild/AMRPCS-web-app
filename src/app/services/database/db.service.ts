@@ -386,6 +386,16 @@ export class DbService {
   // REPORTES ENDPOINTS
 
   /**
+   * Obtener reportes de un observador
+   * @returns respuesta del servidor
+   */
+   getMisReportes(filtro: any): any {
+    return this.http.post(this.dbURL + 'observers/myReports', filtro, {
+      headers: this.getHeader(),
+    });
+  }
+
+  /**
    * Obtener reportes
    * @returns respuesta del servidor
    */
