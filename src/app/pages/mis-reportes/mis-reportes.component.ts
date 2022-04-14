@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
 import { NgForm } from '@angular/forms';
 import { DataTableDirective } from 'angular-datatables';
 import { ToastrService } from 'ngx-toastr';
@@ -66,6 +67,7 @@ export class MisReportesComponent implements OnInit, OnDestroy {
       .getMisReportes(this.filtro)
       .subscribe((data: any) => {
         console.log(data);
+        //new AngularCsv(data, 'test');
       });
   }
 
