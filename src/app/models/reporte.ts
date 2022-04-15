@@ -1,33 +1,34 @@
 /** Modelo para los reportes. */
 export class Reporte {
+  /** Id del registro. */
+  id!: string;
 
-    /** Id del registro. */
-    id!: string;
+  fecha!: string;
 
-    fecha!: string;
+  valor!: number;
 
-    valor!: number;
+  comentario!: string;
 
-    comentario!: string;
-
-    Observador!: {
-        Estacion: {
-            id: number;
-            codigo: string;
-            nombre: string;
-        },
-        User:{
-            id: number;
-            nombre: string;
-            apellido: string;
-        }
+  Observador!: {
+    Estacion: {
+      id: number;
+      codigo: string;
+      nombre: string;
     };
+    User: {
+      id: number;
+      nombre: string;
+      apellido: string;
+    };
+  };
 
-    estacion!: string;
+  state!: string;
 
-    audCreatedAt!: string;
+  estacion!: string;
 
-    audDeletedAt!: string;
+  audCreatedAt!: string;
 
-    audUpdatedAt!: string;
+  audDeletedAt!: string;
+
+  audUpdatedAt!: string;
 }

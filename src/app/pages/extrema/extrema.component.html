@@ -113,6 +113,7 @@
                 <th scope="col">Estación</th>
                 <th scope="col">Código Estación</th>
                 <th scope="col">Fecha</th>
+                <th scope="col">Comentario</th>
                 <th scope="col" *ngIf="isAdmin">Creado</th>
                 <th scope="col" *ngIf="isAdmin">Actualizado</th>
                 <th scope="col" *ngIf="isAdmin"></th>
@@ -120,7 +121,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let reporte of reportes">
-                <th scope="row" width="30%">
+                <th scope="row" width="15%">
                   <div class="media align-items-center">
                     <div class="media-body">
                       <span class="mb-0 text-sm">{{
@@ -131,14 +132,17 @@
                     </div>
                   </div>
                 </th>
-                <td width="30%">
+                <td width="15%">
                   {{ reporte.Observador.Estacion.nombre }}
                 </td>
-                <td width="25%">
+                <td width="15%">
                   {{ reporte.Observador.Estacion.codigo }}
                 </td>
-                <td width="25%">
+                <td width="15%">
                   {{ date(reporte.fecha) + " " + time(reporte.fecha) }}
+                </td>
+                <td width="40%">
+                  {{ reporte.comentario }}
                 </td>
                 <td *ngIf="isAdmin">
                   {{ date(reporte.audCreatedAt) }}

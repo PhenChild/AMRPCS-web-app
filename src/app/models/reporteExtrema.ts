@@ -19,6 +19,8 @@ export class ReporteExtrema {
 
   notificacion!: boolean;
 
+  comentario!: string;
+
   Observador!: {
     Estacion: {
       id: number;

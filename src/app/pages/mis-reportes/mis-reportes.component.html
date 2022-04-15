@@ -1,85 +1,354 @@
-<div class="header pb-8 pt-5 pt-md-8"
-    style="min-height: 300px; background-image: url(assets/img/theme/chimborazo.jpg); background-size: cover; background-position: 0px -120px;">
-    <span class="mask bg-default opacity-6"></span>
-    <div class="container-fluid">
-        <div class="header-body">
-        </div>
-    </div>
+<div
+  class="header pb-8 pt-5 pt-md-8"
+  style="
+    min-height: 300px;
+    background-image: url(assets/img/theme/chimborazo.jpg);
+    background-size: cover;
+    background-position: 0px -120px;
+  "
+>
+  <span class="mask bg-default opacity-6"></span>
+  <div class="container-fluid">
+    <div class="header-body"></div>
+  </div>
 </div>
 <div class="container-fluid mt--9" id="table">
-    <div class="row">
-        <div class="col">
-            <div class="card shadow">
-                <div class="card-header border-0">
-                    <div class="row align-items-center">
-                        <div class="col-9">
-                            <h3 class="mb-0">Mis Reportes</h3>
-                        </div>
-                    </div>
-                </div>
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="form-group col-md-3">
-                          <label for="estacion">Estación</label><br />
-                          <select
-                            name="estacion"
-                            id="estacion"
-                            class="form-control"
-                            [(ngModel)]="filtro.estacion"
-                          >
-                            <option *ngFor="let estacion of estaciones" [value]="estacion.id">
-                              {{ estacion.nombre }}
-                            </option>
-                          </select>
-                        </div>
-                        <div class="form-group col-md-3">
-                          <label for="pais">Tipo</label><br />
-                          <select
-                            name="tipo"
-                            id="tipo"
-                            class="form-control"
-                            [(ngModel)]="filtro.tipo"
-                          >
-                            <option value="precipitacion">
-                              Precipitación
-                            </option>
-                            <option value="acumulado">
-                              Precipitación Acumulado
-                            </option>
-                            <option value="extrema">
-                              Precipitación Extrema
-                            </option>
-                            <option value="cuestionario">
-                              Cuestionarios de Sequía
-                            </option>
-                          </select>
-                        </div>
-                        <div class="form-group col-md-3">
-                          <label for="fechaInicio">Fecha Inicio</label><br />
-                          <input
-                            type="date"
-                            class="form-control"
-                            name="fechaInicio"
-                            id="ffechaInicio"
-                            [(ngModel)]="filtro.fechaInicio"
-                          />
-                        </div>
-                        <div class="form-group col-md-3">
-                          <label for="fechaFin">Fecha Fin</label><br />
-                          <input
-                            type="date"
-                            class="form-control"
-                            name="fechaFin"
-                            id="ffechaFin"
-                            [(ngModel)]="filtro.fechaFin"
-                          />
-                        </div>
-                        <div class="form-group col-md-3">
-                            <button class="btn btn-default float-right" (click)="getData()">Buscar</button>
-                        </div>
-                    </div>
-                </div>
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col-9">
+              <h3 class="mb-0">Mis Reportes</h3>
             </div>
+          </div>
         </div>
+        <form class="container" ngNativeValidate>
+          <div class="row align-items-center">
+            <div class="form-group col-md-3">
+              <label for="estacion">Estación</label><br />
+              <select
+                name="estacion"
+                id="estacion"
+                class="form-control"
+                [(ngModel)]="filtro.estacion"
+                required
+              >
+                <option
+                  *ngFor="let estacion of estaciones"
+                  [value]="estacion.id"
+                >
+                  {{ estacion.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="pais">Tipo</label><br />
+              <select
+                name="tipo"
+                id="tipo"
+                class="form-control"
+                [(ngModel)]="filtro.tipo"
+                required
+              >
+                <option value="precipitacion">Precipitación</option>
+                <option value="acumulado">Precipitación Acumulado</option>
+                <option value="extrema">Precipitación Extrema</option>
+                <option value="cuestionario">Cuestionarios de Sequía</option>
+              </select>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="fechaInicio">Fecha Inicio</label><br />
+              <input
+                type="date"
+                class="form-control"
+                name="fechaInicio"
+                id="ffechaInicio"
+                [(ngModel)]="filtro.fechaInicio"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="fechaFin">Fecha Fin</label><br />
+              <input
+                type="date"
+                class="form-control"
+                name="fechaFin"
+                id="ffechaFin"
+                [(ngModel)]="filtro.fechaFin"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <button class="btn btn-default float-left" (click)="getData()">
+                Buscar
+              </button>
+            </div>
+          </div>
+        </form>
+        <!-- TABLA PRECIPITACIONES DIARIA -->
+        <div class="container" id="tablaPrecipitaciones" style="display: none">
+          <table
+            datatable
+            [dtOptions]="dtOptions"
+            [dtTrigger]="dtTrigger1"
+            class="table-responsive align-items-center table-flush row-border hover"
+          >
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Observador</th>
+                <th scope="col">Estación</th>
+                <th scope="col">Código Estación</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Valor</th>
+                <th scope="col">Comentario</th>
+                <th scope="col">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let reporte of precipitaciones">
+                <th scope="row">
+                  <div class="media align-items-center">
+                    <div class="media-body">
+                      <span class="mb-0 text-sm">{{
+                        reporte.Observador.User.nombre +
+                          " " +
+                          reporte.Observador.User.apellido
+                      }}</span>
+                    </div>
+                  </div>
+                </th>
+                <td>
+                  {{ reporte.Observador.Estacion.nombre }}
+                </td>
+                <td>
+                  {{ reporte.Observador.Estacion.codigo }}
+                </td>
+                <td>
+                  {{ date(reporte.fecha) + " " + time(reporte.fecha) }}
+                </td>
+                <td>
+                  {{ reporte.valor }}
+                </td>
+                <td width="35%">
+                  {{ reporte.comentario }}
+                </td>
+                <td class="text-right">
+                  <div ngbDropdown placement="bottom-right">
+                    <a
+                      class="btn btn-sm btn-icon-only text-light"
+                      ngbDropdownToggle
+                    >
+                      <i class="fas fa-ellipsis-v"></i>
+                    </a>
+                    <div
+                      ngbDropdownMenu
+                      class="dropdown-menu-right dropdown-menu-arrow"
+                    >
+                      <a class="dropdown-item">Editar</a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- TABLA PRECIPITACIONES ACUMULADAS -->
+        <div class="container" id="tablaAcumulados" style="display: none">
+          <table
+            datatable
+            [dtOptions]="dtOptions"
+            [dtTrigger]="dtTrigger2"
+            class="table-responsive align-items-center table-flush row-border hover"
+          >
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Observador</th>
+                <th scope="col">Estación</th>
+                <th scope="col">Código Estación</th>
+                <th scope="col">Fecha Inicio</th>
+                <th scope="col">Fecha Fin</th>
+                <th scope="col">Valor</th>
+                <th scope="col">Comentario</th>
+                <th scope="col">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let reporte of acumulados">
+                <th scope="row">
+                  <div class="media align-items-center">
+                    <div class="media-body">
+                      <span class="mb-0 text-sm">{{
+                        reporte.Observador.User.nombre +
+                          " " +
+                          reporte.Observador.User.apellido
+                      }}</span>
+                    </div>
+                  </div>
+                </th>
+                <td>
+                  {{ reporte.Observador.Estacion.nombre }}
+                </td>
+                <td>
+                  {{ reporte.Observador.Estacion.codigo }}
+                </td>
+                <td scope="row">
+                  {{ reporte.fechaInicio }}
+                </td>
+                <td scope="row">
+                  {{ date(reporte.fechaFin) }}
+                </td>
+                <td>
+                  {{ reporte.valor }}
+                </td>
+                <td width="35%">
+                  {{ reporte.comentario }}
+                </td>
+                <td class="text-right">
+                  <div ngbDropdown placement="bottom-right">
+                    <a
+                      class="btn btn-sm btn-icon-only text-light"
+                      ngbDropdownToggle
+                    >
+                      <i class="fas fa-ellipsis-v"></i>
+                    </a>
+                    <div
+                      ngbDropdownMenu
+                      class="dropdown-menu-right dropdown-menu-arrow"
+                    >
+                      <a class="dropdown-item">Editar</a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- TABLA PRECIPITACIONES EXTREMA -->
+        <div class="container" id="tablaExtremas" style="display: none">
+          <table
+            datatable
+            [dtOptions]="dtOptions"
+            [dtTrigger]="dtTrigger3"
+            class="table-responsive align-items-center table-flush row-border hover"
+          >
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Observador</th>
+                <th scope="col">Estación</th>
+                <th scope="col">Código Estación</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Comentario</th>
+                <th scope="col">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let reporte of extremas">
+                <th scope="row">
+                  <div class="media align-items-center">
+                    <div class="media-body">
+                      <span class="mb-0 text-sm">{{
+                        reporte.Observador.User.nombre +
+                          " " +
+                          reporte.Observador.User.apellido
+                      }}</span>
+                    </div>
+                  </div>
+                </th>
+                <td>
+                  {{ reporte.Observador.Estacion.nombre }}
+                </td>
+                <td>
+                  {{ reporte.Observador.Estacion.codigo }}
+                </td>
+                <td scope="row">
+                  {{ date(reporte.fecha) }}
+                </td>
+                <td width="35%">
+                  {{ reporte.comentario }}
+                </td>
+                <td class="text-right">
+                  <div ngbDropdown placement="bottom-right">
+                    <a
+                      class="btn btn-sm btn-icon-only text-light"
+                      ngbDropdownToggle
+                    >
+                      <i class="fas fa-ellipsis-v"></i>
+                    </a>
+                    <div
+                      ngbDropdownMenu
+                      class="dropdown-menu-right dropdown-menu-arrow"
+                    >
+                      <a class="dropdown-item">Editar</a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- TABLA CUESTIONARIOS -->
+        <div class="container" id="tablaCuestionarios" style="display: none">
+          <table
+            datatable
+            [dtOptions]="dtOptions"
+            [dtTrigger]="dtTrigger4"
+            class="table-responsive align-items-center table-flush row-border hover"
+          >
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Observador</th>
+                <th scope="col">Estación</th>
+                <th scope="col">Código Estación</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Comentario</th>
+                <th scope="col">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let reporte of cuestionarios">
+                <th scope="row">
+                  <div class="media align-items-center">
+                    <div class="media-body">
+                      <span class="mb-0 text-sm">{{
+                        reporte.Observador.User.nombre +
+                          " " +
+                          reporte.Observador.User.apellido
+                      }}</span>
+                    </div>
+                  </div>
+                </th>
+                <td>
+                  {{ reporte.Observador.Estacion.nombre }}
+                </td>
+                <td>
+                  {{ reporte.Observador.Estacion.codigo }}
+                </td>
+                <td scope="row">
+                  {{ date(reporte.fecha) }}
+                </td>
+                <td width="35%">
+                  {{ reporte.comentario }}
+                </td>
+                <td class="text-right">
+                  <div ngbDropdown placement="bottom-right">
+                    <a
+                      class="btn btn-sm btn-icon-only text-light"
+                      ngbDropdownToggle
+                    >
+                      <i class="fas fa-ellipsis-v"></i>
+                    </a>
+                    <div
+                      ngbDropdownMenu
+                      class="dropdown-menu-right dropdown-menu-arrow"
+                    >
+                      <a class="dropdown-item">Editar</a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

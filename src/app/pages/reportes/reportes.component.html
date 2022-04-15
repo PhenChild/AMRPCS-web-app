@@ -93,11 +93,19 @@
                 [(ngModel)]="filtro.fechaFin"
               />
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-2">
               <button class="btn btn-default float-left" (click)="getData()">
                 Buscar
               </button>
             </div>
+          </div>
+          <div class="col-md-12 px-0" *ngIf="isData">
+            <button
+              class="btn btn-default float-left mb-3"
+              (click)="downloadData()"
+            >
+              Descargar CSV
+            </button>
           </div>
         </div>
         <div class="container" id="tablaReportes" style="display: none">
@@ -206,7 +214,10 @@
                 [(ngModel)]="reporte.estacion"
                 required
               >
-                <option *ngFor="let estacion of estaciones" [value]="estacion.id">
+                <option
+                  *ngFor="let estacion of estaciones"
+                  [value]="estacion.id"
+                >
                   {{ estacion.nombre }}
                 </option>
               </select>
@@ -250,7 +261,12 @@
               >
                 Cancelar
               </button>
-              <button class="btn btn-default float-right" (click)="saveReporte(formReporte)">Guardar</button>
+              <button
+                class="btn btn-default float-right"
+                (click)="saveReporte(formReporte)"
+              >
+                Guardar
+              </button>
             </div>
           </form>
         </div>

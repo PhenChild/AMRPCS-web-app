@@ -11,6 +11,7 @@ import { Reporte } from 'src/app/models/reporte';
 import { DbService } from 'src/app/services/database/db.service';
 import Utils from 'src/app/utils/utils';
 import { NgForm } from '@angular/forms';
+import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
 
 @Component({
   selector: 'app-reportes',
@@ -53,6 +54,7 @@ export class ReportesComponent implements OnInit {
   isDtInitialized: boolean = false;
   isUpdating: boolean = false;
   isForm: boolean = false;
+  isData: boolean = false;
 
   constructor(
     location: Location,
@@ -108,6 +110,7 @@ export class ReportesComponent implements OnInit {
 
     this.dbService.getReportes(this.filtro).subscribe((data: any) => {
       this.reportes = data as any;
+      this.isData = true;
       this.dtTrigger.next();
       const table = <HTMLInputElement>document.getElementById('tablaReportes');
       table.style.display = 'block';
@@ -154,5 +157,43 @@ export class ReportesComponent implements OnInit {
 
   date(fecha: any) {
     return Utils.date(fecha);
+  }
+
+  downloadData() {
+    const data = this.reportes.map(function (reporte) {
+      var obj = {
+        id: reporte.id,
+        fecha_reporte: reporte.fecha,
+        valor: reporte.valor,
+        comentario: reporte.comentario,
+        estado: reporte.state.includes('A') ? 'A' : 'I',
+        codigo_estacion: reporte.Observador.Estacion.codigo,
+        nombre_observador:
+          reporte.Observador.User.nombre +
+          ' ' +
+          reporte.Observador.User.apellido,
+      };
+      return obj;
+    });
+    var options = {
+      fieldSeparator: ',',
+      quoteStrings: '"',
+      decimalseparator: '.',
+      showLabels: true,
+      showTitle: true,
+      title: 'Reportes de precipitación Diaria',
+      useBom: true,
+      headers: [
+        'id',
+        'fecha_reporte',
+        'valor',
+        'comentario',
+        'estado',
+        'codigo_estacion',
+        'nombre_observador',
+      ],
+      useHeader: true,
+    };
+    new AngularCsv(data, 'test', options);
   }
 }
