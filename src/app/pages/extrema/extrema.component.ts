@@ -10,6 +10,7 @@ import { Pais } from 'src/app/models/pais';
 import { ReporteExtrema } from 'src/app/models/reporteExtrema';
 import { DbService } from 'src/app/services/database/db.service';
 import Utils from 'src/app/utils/utils';
+import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
 
 @Component({
   selector: 'app-extrema',
@@ -21,6 +22,8 @@ export class ExtremaComponent implements OnInit {
   dtElement!: DataTableDirective;
   public location!: Location;
   isAdmin = false;
+  isObserver = false;
+
   /** Opciones para los datatbles. */
   dtOptions: DataTables.Settings = {
     pagingType: 'full_numbers',
@@ -52,6 +55,7 @@ export class ExtremaComponent implements OnInit {
   isDtInitialized: boolean = false;
   isUpdating: boolean = false;
   isForm: boolean = false;
+  isData: boolean = false;
 
   constructor(
     location: Location,
@@ -70,14 +74,15 @@ export class ExtremaComponent implements OnInit {
     titlee = titlee.split('/')[1];
     if (titlee === 'admin-layout') {
       this.isAdmin = true;
+    } else if (titlee === 'obs-layout') {
+      this.isObserver = true;
+      this.dbService.getEstacionesSelfUsuario().subscribe((data: any) => {
+        this.estaciones = data.map((item: any) => item.Estacion);
+      });
     }
 
     this.dbService.getPaises().subscribe((data: any) => {
       this.paises = data as any;
-    });
-
-    this.dbService.getEstacionesSelfUsuario().subscribe((data: any) => {
-      this.estaciones = data.map((item: any) => item.Estacion);
     });
 
     let estacion = this.router.snapshot.paramMap.get('estacion');
@@ -108,6 +113,7 @@ export class ExtremaComponent implements OnInit {
       .getReportesPrecExtrema(this.filtro)
       .subscribe((data: any) => {
         this.reportes = data as any;
+        this.isData = true;
         this.dtTrigger.next();
         const table = <HTMLInputElement>(
           document.getElementById('tablaReportes')
@@ -137,12 +143,43 @@ export class ExtremaComponent implements OnInit {
       this.reporte.rayos = this.reporte.rayos ? 1 : 0;
       this.reporte.deslizamiento = this.reporte.deslizamiento ? 1 : 0;
       this.reporte.vientos = this.reporte.vientos ? 1 : 0;
-      console.log(this.reporte);
       this.dbService.addPrecipitacionExtrema(this.reporte).subscribe(
         (data: any) => {
           this.tService.success('Reporte creado con éxito', 'Envío exitoso');
           this.isForm = !this.isForm;
           form.resetForm();
+        },
+        (err: any) => {
+          this.tService.error('', 'Ha ocurrido un error');
+        }
+      );
+    }
+  }
+
+  deleteReporte(reporte: any): void {
+    if (confirm('¿Está seguro de eliminar este reporte?')) {
+      this.reporte = reporte;
+      this.dbService.deletePrecipitacionExtrema(this.reporte).subscribe(
+        (data: any) => {
+          this.tService.success(
+            'Reporte eliminado con éxito.',
+            'Envío exitoso'
+          );
+          this.getData();
+        },
+        (err: any) => {
+          this.tService.error('', 'Ha ocurrido un error');
+        }
+      );
+    }
+  }
+
+  activarReporte(reporte: any) {
+    if (confirm('¿Está seguro de activar este reporte?')) {
+      this.dbService.activatePrecipitacionExtrema(reporte).subscribe(
+        (data: any) => {
+          this.tService.success('Reporte activado con éxito.', 'Envío exitoso');
+          this.getData();
         },
         (err: any) => {
           this.tService.error('', 'Ha ocurrido un error');
@@ -157,5 +194,58 @@ export class ExtremaComponent implements OnInit {
 
   date(fecha: any) {
     return Utils.date(fecha);
+  }
+
+  downloadData() {
+    const data = this.reportes.map(function (reporte) {
+      var obj = {
+        codigo_estacion: reporte.Observador.Estacion.codigo,
+        nombre_observador:
+          reporte.Observador.User.nombre +
+          ' ' +
+          reporte.Observador.User.apellido,
+        fecha_reporte: reporte.fecha,
+        notificacion: reporte.notificacion,
+        inundacion: reporte.inundacion,
+        granizo: reporte.granizo,
+        rayos: reporte.rayos,
+        deslizamiento: reporte.deslizamiento,
+        vientos: reporte.vientos,
+        comentario: reporte.comentario
+          ? reporte.comentario.replace('\n', '')
+          : '',
+      };
+      return obj;
+    });
+    var titulo = 'Reportes de precipitación Extrema';
+    if (this.filtro.fechaInicio) {
+      titulo += '| FILTRO: Fecha inicio: ' + this.filtro.fechaInicio;
+    }
+    if (this.filtro.fechaFin) {
+      titulo += ' - Fecha Fin: ' + this.filtro.fechaFin;
+    }
+    var options = {
+      fieldSeparator: ',',
+      quoteStrings: '"',
+      decimalseparator: '.',
+      showLabels: true,
+      showTitle: true,
+      title: titulo,
+      useBom: true,
+      headers: [
+        'codigo_estacion',
+        'nombre_observador',
+        'fecha_reporte',
+        'notificacion',
+        'inundacion',
+        'granizo',
+        'rayos',
+        'deslizamiento',
+        'vientos',
+        'comentario',
+      ],
+      useHeader: true,
+    };
+    new AngularCsv(data, 'reportes_precipitacion_extrema', options);
   }
 }

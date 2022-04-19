@@ -389,7 +389,7 @@ export class DbService {
    * Obtener reportes de un observador
    * @returns respuesta del servidor
    */
-   getMisReportes(filtro: any): any {
+  getMisReportes(filtro: any): any {
     return this.http.post(this.dbURL + 'observers/myReports', filtro, {
       headers: this.getHeader(),
     });
@@ -430,28 +430,25 @@ export class DbService {
     });
   }
 
-  addReporteAcumulado(reporte: any): any {
-    return this.http.post(this.dbURL + 'acumulado/new', reporte, {
+  updateReporteValor(reporte: any) {
+    return this.http.post(this.dbURL + 'precipitacion/update', reporte, {
       headers: this.getHeader(),
     });
   }
 
-  getReportesGraficos(filtro: any): any {
-    var query = '';
-    if (filtro.estacion != '') {
-      query += 'estacion=' + filtro.estacion + '&';
-    }
-    if (filtro.fechaInicio != '') {
-      query += 'fechaInicio=' + filtro.fechaInicio + '&';
-    }
-    if (filtro.fechaFin != '') {
-      query += 'fechaFin=' + filtro.fechaFin + '&';
-    }
-    return this.http.get(
-      this.dbURL + 'precipitacion/getAll/filtroGrafico?' + query,
-      { headers: this.getHeader() }
-    );
+  deleteReporte(reporte: any) {
+    return this.http.post(this.dbURL + 'precipitacion/delete', reporte, {
+      headers: this.getHeader(),
+    });
   }
+
+  activateReporte(reporte: any) {
+    return this.http.post(this.dbURL + 'precipitacion/activate', reporte, {
+      headers: this.getHeader(),
+    });
+  }
+
+  //REPORTE ACUMULADO ENDPOINTS
 
   /**
    * Obtener reportes
@@ -480,6 +477,47 @@ export class DbService {
     return this.http.get(this.dbURL + 'acumulado/getAll/filtro?' + query, {
       headers: this.getHeader(),
     });
+  }
+
+  addReporteAcumulado(reporte: any): any {
+    return this.http.post(this.dbURL + 'acumulado/new', reporte, {
+      headers: this.getHeader(),
+    });
+  }
+
+  updateReporteValorAcumulado(reporte: any) {
+    return this.http.post(this.dbURL + 'acumulado/update', reporte, {
+      headers: this.getHeader(),
+    });
+  }
+
+  deleteReporteAcumulado(reporte: any) {
+    return this.http.post(this.dbURL + 'acumulado/delete', reporte, {
+      headers: this.getHeader(),
+    });
+  }
+
+  activateReporteAcumulado(reporte: any) {
+    return this.http.post(this.dbURL + 'acumulado/activate', reporte, {
+      headers: this.getHeader(),
+    });
+  }
+
+  getReportesGraficos(filtro: any): any {
+    var query = '';
+    if (filtro.estacion != '') {
+      query += 'estacion=' + filtro.estacion + '&';
+    }
+    if (filtro.fechaInicio != '') {
+      query += 'fechaInicio=' + filtro.fechaInicio + '&';
+    }
+    if (filtro.fechaFin != '') {
+      query += 'fechaFin=' + filtro.fechaFin + '&';
+    }
+    return this.http.get(
+      this.dbURL + 'precipitacion/getAll/filtroGrafico?' + query,
+      { headers: this.getHeader() }
+    );
   }
 
   updateUserPassword(usuario: any): any {
@@ -512,18 +550,6 @@ export class DbService {
 
   getProfile() {
     return this.http.get(this.dbURL + 'getMe', { headers: this.getHeader() });
-  }
-
-  updateReporteValor(reporte: any) {
-    return this.http.post(this.dbURL + 'precipitacion/update', reporte, {
-      headers: this.getHeader(),
-    });
-  }
-
-  updateReporteValorAcumulado(reporte: any) {
-    return this.http.post(this.dbURL + 'acumulado/update', reporte, {
-      headers: this.getHeader(),
-    });
   }
 
   /**Active Endpoints */
@@ -578,8 +604,20 @@ export class DbService {
     });
   }
 
-  addCuestionario(reporte: any): any {
-    return this.http.post(this.dbURL + 'cuestionario/new', reporte, {
+  addCuestionario(cuestionario: any): any {
+    return this.http.post(this.dbURL + 'cuestionario/web/new', cuestionario, {
+      headers: this.getHeader(),
+    });
+  }
+
+  deleteCuestionario(cuestionario: any) {
+    return this.http.post(this.dbURL + 'cuestionario/delete', cuestionario, {
+      headers: this.getHeader(),
+    });
+  }
+
+  activateCuestionario(cuestionario: any) {
+    return this.http.post(this.dbURL + 'cuestionario/activate', cuestionario, {
       headers: this.getHeader(),
     });
   }
@@ -625,6 +663,19 @@ export class DbService {
       headers: this.getHeader(),
     });
   }
+
+  deletePrecipitacionExtrema(reporte: any) {
+    return this.http.post(this.dbURL + 'extrema/delete', reporte, {
+      headers: this.getHeader(),
+    });
+  }
+
+  activatePrecipitacionExtrema(reporte: any) {
+    return this.http.post(this.dbURL + 'extrema/activate', reporte, {
+      headers: this.getHeader(),
+    });
+  }
+  // OCUPACIÓN EDNPOINTS
 
   getFiltroOcupaciones(filtro: any): any {
     var query = '';

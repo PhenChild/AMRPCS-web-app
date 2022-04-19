@@ -22,7 +22,10 @@
               <h3 class="mb-0">Cuestionarios de Sequías</h3>
             </div>
             <div class="col-3 text-right text-default">
-              <a class="btn btn-sm btn-default" (click)="isForm = !isForm"
+              <a
+                class="btn btn-sm btn-default"
+                *ngIf="isObserver"
+                (click)="isForm = !isForm"
                 >Nuevo reporte</a
               >
             </div>
@@ -98,6 +101,14 @@
                 Buscar
               </button>
             </div>
+            <div class="col-md-12" *ngIf="isData">
+              <button
+                class="btn btn-default float-left mb-3"
+                (click)="downloadData()"
+              >
+                Descargar CSV
+              </button>
+            </div>
           </div>
         </div>
         <div class="container" id="tablaCuestionarios" style="display: none">
@@ -117,7 +128,8 @@
                   <th scope="col">Comentario</th>
                   <th scope="col" *ngIf="isAdmin">Creado</th>
                   <th scope="col" *ngIf="isAdmin">Actualizado</th>
-                  <th scope="col" *ngIf="isAdmin"></th>
+                  <th scope="col" *ngIf="isAdmin">Estado</th>
+                  <th scope="col" *ngIf="isAdmin">Acción</th>
                 </tr>
               </thead>
               <tbody>
@@ -136,7 +148,7 @@
                     {{ cuestionario.Observador.Estacion.codigo }}
                   </td>
                   <td scope="row">
-                    {{ cuestionario.fecha }}
+                    {{ date(cuestionario.fecha) }}
                   </td>
                   <td scope="row" width="35%">
                     {{ cuestionario.comentario }}
@@ -148,6 +160,9 @@
                   <td *ngIf="isAdmin">
                     {{ date(cuestionario.audUpdatedAt) }}
                     {{ time(cuestionario.audUpdatedAt) }}
+                  </td>
+                  <td *ngIf="isAdmin">
+                    {{ cuestionario.state }}
                   </td>
                   <td class="text-right" scope="row" *ngIf="isAdmin">
                     <div ngbDropdown placement="bottom-right">
@@ -162,6 +177,18 @@
                         class="dropdown-menu-right dropdown-menu-arrow"
                       >
                         <a class="dropdown-item">Editar</a>
+                        <a
+                          class="dropdown-item"
+                          (click)="activarCuestionario(cuestionario)"
+                          *ngIf="cuestionario.state.includes('I')"
+                          >Activar</a
+                        >
+                        <a
+                          class="dropdown-item"
+                          (click)="deleteCuestionario(cuestionario)"
+                          *ngIf="cuestionario.state.includes('A')"
+                          >Eliminar</a
+                        >
                       </div>
                     </div>
                   </td>
@@ -189,7 +216,7 @@
           </h3>
         </div>
         <div class="card-body">
-          <form #formAcumulado="ngForm" ngNativeValidate>
+          <form #formCuestionario="ngForm" ngNativeValidate>
             <div class="form-group">
               <label for="estacion">Estación*</label><br />
               <select
@@ -334,6 +361,92 @@
                 <option value="7">Mucho menos que suficiente</option>
               </select>
             </div>
+            <div class="form-group">
+              <label for="comentario">Comentario</label><br />
+              <textarea
+                name="comentario"
+                id="comentario"
+                class="form-control"
+                [(ngModel)]="cuestionario.comentario"
+              ></textarea>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <label for="file">Archivo</label><br />
+                <input
+                  *ngIf="uploader.queue.length < 4"
+                  type="file"
+                  class="input-group custom-file-upload mb-4"
+                  ng2FileSelect
+                  [uploader]="uploader"
+                  accept=".jpg, .jpeg, .png"
+                  multiple
+                />
+              </div>
+              <div class="col-12" *ngIf="uploader.queue.length != 0">
+                <table class="table">
+                  <thead class="thead-light">
+                    <tr>
+                      <th scope="col">Nombre</th>
+                      <th scope="col">Tamaño</th>
+                      <th scope="col">Estado</th>
+                      <th scope="col">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of uploader.queue">
+                      <td scope="row" class="text-wrap">
+                        <strong>{{ item?.file?.name }}</strong>
+                      </td>
+                      <td *ngIf="uploader.options.isHTML5" nowrap>
+                        {{ item?.file?.size / 1024 / 1024 | number: ".2" }} MB
+                      </td>
+                      <td class="text-center">
+                        <span *ngIf="item.isUploading"
+                          ><i class="fa fa-spinner"></i
+                        ></span>
+                        <span *ngIf="item.isSuccess"
+                          ><i class="fa fa-check-circle"></i
+                        ></span>
+                        <span *ngIf="item.isCancel"
+                          ><i class="fa fa-times-circle text-black"></i
+                        ></span>
+                        <span *ngIf="item.isError"
+                          ><i class="fa fa-exclamation-circle text-black"></i
+                        ></span>
+                      </td>
+                      <td nowrap>
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-xs"
+                          (click)="item.remove()"
+                        >
+                          <span class="fa fa-trash"></span> Eliminar
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div class="progress-wrapper pt-0">
+                  <div class="progress-info">
+                    <div class="progress-label">
+                      <span>Progreso</span>
+                    </div>
+                    <div class="progress-percentage">
+                      <span>{{ uploader.progress + "%" }}</span>
+                    </div>
+                  </div>
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      [ngStyle]="{ width: uploader.progress + '%' }"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
             <div>
               <button
                 class="btn btn-secondary float-left"
@@ -343,7 +456,7 @@
               </button>
               <button
                 class="btn btn-default float-right"
-                (click)="saveReporte(formAcumulado)"
+                (click)="saveCuestionario(formCuestionario)"
               >
                 Guardar
               </button>

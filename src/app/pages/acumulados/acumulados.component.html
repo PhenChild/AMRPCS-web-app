@@ -22,7 +22,10 @@
               <h3 class="mb-0">Reportes Acumulados de Precipitación</h3>
             </div>
             <div class="col-3 text-right text-default">
-              <a class="btn btn-sm btn-default" (click)="isForm = !isForm"
+              <a
+                class="btn btn-sm btn-default"
+                *ngIf="isObserver"
+                (click)="isForm = !isForm"
                 >Nuevo reporte</a
               >
             </div>
@@ -93,9 +96,17 @@
                 [(ngModel)]="filtro.fechaFin"
               />
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-2">
               <button class="btn btn-default float-left" (click)="getData()">
                 Buscar
+              </button>
+            </div>
+            <div class="col-md-12" *ngIf="isData">
+              <button
+                class="btn btn-default float-left mb-3"
+                (click)="downloadData()"
+              >
+                Descargar CSV
               </button>
             </div>
           </div>
@@ -119,7 +130,8 @@
                   <th scope="col">Comentario</th>
                   <th scope="col" *ngIf="isAdmin">Creado</th>
                   <th scope="col" *ngIf="isAdmin">Actualizado</th>
-                  <th scope="col" *ngIf="isAdmin"></th>
+                  <th scope="col" *ngIf="isAdmin">Estado</th>
+                  <th scope="col" *ngIf="isAdmin">Acción</th>
                 </tr>
               </thead>
               <tbody>
@@ -157,6 +169,9 @@
                     {{ date(reporte.audUpdatedAt) }}
                     {{ time(reporte.audUpdatedAt) }}
                   </td>
+                  <td *ngIf="isAdmin">
+                    {{ reporte.state }}
+                  </td>
                   <td class="text-right" scope="row" *ngIf="isAdmin">
                     <div ngbDropdown placement="bottom-right">
                       <a
@@ -173,6 +188,18 @@
                           class="dropdown-item"
                           (click)="openModal(contenido, reporte)"
                           >Editar</a
+                        >
+                        <a
+                          class="dropdown-item"
+                          (click)="activarReporte(reporte)"
+                          *ngIf="reporte.state.includes('I')"
+                          >Activar</a
+                        >
+                        <a
+                          class="dropdown-item"
+                          (click)="deleteReporte(reporte)"
+                          *ngIf="reporte.state.includes('A')"
+                          >Eliminar</a
                         >
                       </div>
                     </div>
@@ -284,8 +311,9 @@
 <ng-template #contenido let-modal>
   <div class="modal-header">
     <h4 class="modal-title">
-      Editar el valor del reporte {{ reporte.Observador.Estacion.nombre }}
-      {{ reporte.fechaInicio }}
+      Editar el valor del reporte de la Estación:
+      {{ reporte.Observador.Estacion.nombre }} del {{ reporte.fechaInicio }} al
+      {{ date(reporte.fechaFin) }}
     </h4>
     <button
       class="close"

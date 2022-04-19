@@ -1,35 +1,36 @@
 /** Modelo para los reportes. */
 export class ReporteAcumulado {
+  /** Id del registro. */
+  id!: string;
 
-    /** Id del registro. */
-    id!: string;
+  fechaInicio!: string;
 
-    fechaInicio!: string;
-    
-    fechaFin!: string;
+  fechaFin!: string;
 
-    valor!: number;
+  valor!: number;
 
-    comentario!: string;
+  comentario!: string;
 
-    Observador!: {
-        Estacion: {
-            id: number;
-            codigo: string;
-            nombre: string;
-        },
-        User:{
-            id: number;
-            nombre: string;
-            apellido: string;
-        }
+  state!: string;
+
+  Observador!: {
+    Estacion: {
+      id: number;
+      codigo: string;
+      nombre: string;
     };
+    User: {
+      id: number;
+      nombre: string;
+      apellido: string;
+    };
+  };
 
-    estacion!: string;
+  estacion!: string;
 
-    audCreatedAt!: string;
+  audCreatedAt!: string;
 
-    audDeletedAt!: string;
+  audDeletedAt!: string;
 
-    audUpdatedAt!: string;
+  audUpdatedAt!: string;
 }
