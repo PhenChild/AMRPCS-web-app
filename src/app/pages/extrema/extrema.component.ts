@@ -122,38 +122,31 @@ export class ExtremaComponent implements OnInit {
       });
   }
 
-  saveValor() {
-    if (confirm('¿Desea actualizar la información del reporte?')) {
-      this.dbService.updatePrecipitacionExtrema(this.reporte).subscribe(
-        (data: any) => {
-          this.tService.success('Valor actualizado con éxito', 'Envío exitoso');
-          this.getData();
-        },
-        (err: any) => {
-          this.tService.error('', 'Ha ocurrido un error');
-        }
-      );
-    }
+  actualizar(reporte: ReporteExtrema): void {
+    this.reporte = reporte;
+    this.isUpdating = true;
+    this.reporte.estacion = reporte.Observador.Estacion.id;
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-reporte');
+    table.style.display = 'none';
+    form.style.display = 'block';
   }
 
-  saveReporte(form: NgForm) {
-    if (confirm('¿Desea crear un nuevo reporte de precipitación extrema?')) {
-      this.reporte.inundacion = this.reporte.inundacion ? 1 : 0;
-      this.reporte.granizo = this.reporte.granizo ? 1 : 0;
-      this.reporte.rayos = this.reporte.rayos ? 1 : 0;
-      this.reporte.deslizamiento = this.reporte.deslizamiento ? 1 : 0;
-      this.reporte.vientos = this.reporte.vientos ? 1 : 0;
-      this.dbService.addPrecipitacionExtrema(this.reporte).subscribe(
-        (data: any) => {
-          this.tService.success('Reporte creado con éxito', 'Envío exitoso');
-          this.isForm = !this.isForm;
-          form.resetForm();
-        },
-        (err: any) => {
-          this.tService.error('', 'Ha ocurrido un error');
-        }
-      );
+  nuevo(): void {
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-reporte');
+    table.style.display = 'none';
+    form.style.display = 'block';
+  }
+
+  formDone(event: any) {
+    if (event) {
+      this.getData();
     }
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-reporte');
+    table.style.display = 'block';
+    form.style.display = 'none';
   }
 
   deleteReporte(reporte: any): void {

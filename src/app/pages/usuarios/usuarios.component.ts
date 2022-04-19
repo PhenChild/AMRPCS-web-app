@@ -19,6 +19,7 @@ import { Estacion } from 'src/app/models/estacion';
 import { Location } from '@angular/common';
 import Utils from 'src/app/utils/utils';
 import { data } from 'jquery';
+import { Ocupacion } from 'src/app/models/ocupacion';
 
 /**
  * Componente para la pagina de usuarios.
@@ -59,6 +60,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   /** Usuario seleccionado */
   usuario = new User();
   paises: Pais[] = [];
+  ocupaciones: Ocupacion[] = [];
 
   confpassword = '';
 
@@ -143,6 +145,9 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
     this.dbService.getPaises().subscribe((data: any) => {
       this.filtroPaises = data as any;
+    });
+    this.dbService.getOcupaciones().subscribe((data: any) => {
+      this.ocupaciones = data as any;
     });
 
     this.uploader.onAfterAddingFile = (file) => {

@@ -676,6 +676,11 @@ export class DbService {
     });
   }
   // OCUPACIÓN EDNPOINTS
+  getOcupaciones(): any {
+    return this.http.get(this.dbURL + 'ocupacion/getAll', {
+      headers: this.getHeader(),
+    });
+  }
 
   getFiltroOcupaciones(filtro: any): any {
     var query = '';

@@ -1,389 +1,638 @@
-<div class="header pb-8 pt-5 pt-md-8"
-    style="min-height: 300px; background-image: url(assets/img/theme/chimborazo.jpg); background-size: cover; background-position: 0px -120px;">
-    <span class="mask bg-default opacity-6"></span>
-    <div class="container-fluid">
-        <div class="header-body">
-        </div>
-    </div>
+<div
+  class="header pb-8 pt-5 pt-md-8"
+  style="
+    min-height: 300px;
+    background-image: url(assets/img/theme/chimborazo.jpg);
+    background-size: cover;
+    background-position: 0px -120px;
+  "
+>
+  <span class="mask bg-default opacity-6"></span>
+  <div class="container-fluid">
+    <div class="header-body"></div>
+  </div>
 </div>
 <div class="container-fluid mt--9" id="table">
-    <div class="row">
-        <div class="col">
-            <div class="card shadow">
-                <div class="card-header border-0">
-                    <div class="row align-items-center">
-                        <div class="col-9" *ngIf="isAdmin">
-                            <h3 class="mb-0">Lista de Usuarios</h3>
-                        </div>
-                        <div class="col-9" *ngIf="!isAdmin">
-                            <h3 class="mb-0">Lista de Observadores</h3>
-                        </div>
-                        <div class="col-3 text-right text-default" *ngIf="isAdmin">
-                            <a [routerLink]="['/admin-layout/form-usuario']" class="btn btn-sm btn-default">Nuevo
-                                Usuario</a>
-                        </div>
+  <div class="row">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col-9" *ngIf="isAdmin">
+              <h3 class="mb-0">Lista de Usuarios</h3>
+            </div>
+            <div class="col-9" *ngIf="!isAdmin">
+              <h3 class="mb-0">Lista de Observadores</h3>
+            </div>
+            <div class="col-3 text-right text-default" *ngIf="isAdmin">
+              <a
+                [routerLink]="['/admin-layout/form-usuario']"
+                class="btn btn-sm btn-default"
+                >Nuevo Usuario</a
+              >
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row align-items-center">
+            <div class="form-group col-md-3">
+              <label for="nombreFiltro">Nombre</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="nombreFiltro"
+                id="nombreFiltro"
+                [(ngModel)]="filtro.nombre"
+              />
+            </div>
+            <div class="form-group col-md-3" *ngIf="isAdmin">
+              <label for="correo">Correo</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="correo"
+                id="fcorreo"
+                [(ngModel)]="filtro.email"
+              />
+            </div>
+            <div class="form-group col-md-3">
+              <label for="pais">País</label><br />
+              <select
+                name="pais"
+                id="pais"
+                class="form-control"
+                [(ngModel)]="filtro.pais"
+              >
+                <option *ngFor="let pais of filtroPaises" [value]="pais.nombre">
+                  {{ pais.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-3" *ngIf="!isAdmin"></div>
+            <div class="form-group col-md-3" *ngIf="isAdmin">
+              <label for="rol">Rol</label><br />
+              <select
+                class="form-control form-select form-select-sm"
+                name="frol"
+                id="rol"
+                [(ngModel)]="filtro.rol"
+              >
+                <option value="observer">Observador</option>
+                <option value="admin">Administrador</option>
+              </select>
+            </div>
+            <div class="form-group col-md-3">
+              <button class="btn btn-default float-left" (click)="getData()">
+                Buscar
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="container" style="display: none" id="tablaUsuarios">
+          <table
+            datatable
+            [dtOptions]="dtOptions"
+            [dtTrigger]="dtTrigger"
+            class="table-responsive align-items-center table-flush row-border hover"
+          >
+            <thead class="thead-light">
+              <tr>
+                <th width="40%" scope="col">Nombre</th>
+                <th scope="col" *ngIf="isAdmin">Tel&eacute;fono</th>
+                <th scope="col" *ngIf="isAdmin">Correo</th>
+                <th width="10%" scope="col">País</th>
+                <th scope="col" *ngIf="isAdmin">Rol</th>
+                <th scope="col" *ngIf="isAdmin">Creado</th>
+                <th scope="col" *ngIf="isAdmin">Actualizado</th>
+                <th scope="col" *ngIf="isAdmin">Estado</th>
+                <th scope="col" *ngIf="isAdmin">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let usuario of usuarios">
+                <th scope="row">
+                  <div class="media align-items-center">
+                    <div class="media-body">
+                      <span class="mb-0 text-sm">{{
+                        usuario.nombre + " " + usuario.apellido
+                      }}</span>
                     </div>
-                </div>
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="form-group col-md-3">
-                            <label for="nombreFiltro">Nombre</label><br>
-                            <input type="text" class="form-control" name="nombreFiltro" id="nombreFiltro"
-                                [(ngModel)]="filtro.nombre">
-                        </div>
-                        <div class="form-group col-md-3" *ngIf="isAdmin">
-                            <label for="correo">Correo</label><br>
-                            <input type="text" class="form-control" name="correo" id="fcorreo"
-                                [(ngModel)]="filtro.email">
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="pais">País</label><br>
-                            <select name="pais" id="pais" class="form-control" [(ngModel)]="filtro.pais">
-                                <option *ngFor="let pais of filtroPaises" [value]="pais.nombre">{{pais.nombre}}</option>
-                            </select>
-                        </div>
-                        <div class="col-md-3" *ngIf="!isAdmin"></div>
-                        <div class="form-group col-md-3" *ngIf="isAdmin">
-                            <label for="rol">Rol</label><br>
-                            <select class="form-control form-select form-select-sm" name="frol" id="rol"
-                                [(ngModel)]="filtro.rol">
-                                <option value="observer">Observador</option>
-                                <option value="admin">Administrador</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-3">
-                            <button class="btn btn-default float-right" (click)="getData()">Buscar</button>
-                        </div>
+                  </div>
+                </th>
+                <td *ngIf="isAdmin">
+                  {{ usuario.telefono }}
+                </td>
+                <td *ngIf="isAdmin">
+                  {{ usuario.email }}
+                </td>
+                <td>
+                  {{ usuario.Pais.nombre }}
+                </td>
+                <td *ngIf="isAdmin">
+                  {{ usuario.role }}
+                </td>
+                <td *ngIf="isAdmin">
+                  {{ date(usuario.audCreatedAt) }}
+                  {{ time(usuario.audCreatedAt) }}
+                </td>
+                <td *ngIf="isAdmin">
+                  {{ date(usuario.audUpdatedAt) }}
+                  {{ time(usuario.audUpdatedAt) }}
+                </td>
+                <td *ngIf="isAdmin">
+                  {{ usuario.state }}
+                </td>
+                <td class="text-right" *ngIf="isAdmin">
+                  <div ngbDropdown placement="bottom-right">
+                    <a
+                      class="btn btn-sm btn-icon-only text-light"
+                      ngbDropdownToggle
+                    >
+                      <i class="fas fa-ellipsis-v"></i>
+                    </a>
+                    <div
+                      ngbDropdownMenu
+                      class="dropdown-menu-right dropdown-menu-arrow"
+                    >
+                      <a class="dropdown-item" (click)="editarUsuario(usuario)"
+                        >Ver/Editar Información</a
+                      >
+                      <a
+                        class="dropdown-item"
+                        (click)="editarFoto(usuario)"
+                        *ngIf="isAdmin"
+                        >Ver/Editar Foto</a
+                      >
+                      <a
+                        class="dropdown-item"
+                        (click)="editarPassword(usuario)"
+                        *ngIf="isAdmin"
+                        >Editar Contraseña</a
+                      >
+                      <a
+                        class="dropdown-item"
+                        (click)="activar(usuario)"
+                        *ngIf="isAdmin && usuario.state.includes('I')"
+                        >Activar</a
+                      >
+                      <a
+                        class="dropdown-item"
+                        (click)="deleteUsuario(usuario)"
+                        *ngIf="isAdmin && usuario.state.includes('A')"
+                        >Eliminar</a
+                      >
                     </div>
-                </div>
-                <div class="container" style="display: none;" id="tablaUsuarios">
-                    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger"
-                        class="table-responsive align-items-center table-flush row-border hover">
-                        <thead class="thead-light">
-                            <tr>
-                                <th width="40%" scope="col">Nombre</th>
-                                <th scope="col" *ngIf="isAdmin">Tel&eacute;fono</th>
-                                <th scope="col" *ngIf="isAdmin">Correo</th>
-                                <th width="10%" scope="col">País</th>
-                                <th scope="col" *ngIf="isAdmin">Rol</th>
-                                <th scope="col" *ngIf="isAdmin">Creado</th>
-                                <th scope="col" *ngIf="isAdmin">Actualizado</th>
-                                <th scope="col" *ngIf="isAdmin">Estado</th>
-                                <th scope="col" *ngIf="isAdmin">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let usuario of usuarios">
-                                <th scope="row">
-                                    <div class="media align-items-center">
-                                        <div class="media-body">
-                                            <span class="mb-0 text-sm">{{usuario.nombre +" "+usuario.apellido}}</span>
-                                        </div>
-                                    </div>
-                                </th>
-                                <td *ngIf="isAdmin">
-                                    {{usuario.telefono}}
-                                </td>
-                                <td *ngIf="isAdmin">
-                                    {{usuario.email}}
-                                </td>
-                                <td>
-                                    {{usuario.Pais.nombre}}
-                                </td>
-                                <td *ngIf="isAdmin">
-                                    {{usuario.role}}
-                                </td>
-                                <td *ngIf="isAdmin">
-                                    {{date(usuario.audCreatedAt)}} {{time(usuario.audCreatedAt)}}
-                                </td>
-                                <td *ngIf="isAdmin">
-                                    {{date(usuario.audUpdatedAt)}} {{time(usuario.audUpdatedAt)}}
-                                </td>
-                                <td *ngIf="isAdmin">
-                                    {{usuario.state}}
-                                </td>
-                                <td class="text-right" *ngIf="isAdmin">
-                                    <div ngbDropdown placement="bottom-right">
-                                        <a class="btn btn-sm btn-icon-only text-light" ngbDropdownToggle>
-                                            <i class="fas fa-ellipsis-v"></i>
-                                        </a>
-                                        <div ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">
-                                            <a class="dropdown-item" (click)="editarUsuario(usuario)">Ver/Editar
-                                                Información</a>
-                                            <a class="dropdown-item" (click)="editarFoto(usuario)"
-                                                *ngIf="isAdmin">Ver/Editar Foto</a>
-                                            <a class="dropdown-item" (click)="editarPassword(usuario)"
-                                                *ngIf="isAdmin">Editar
-                                                Contraseña</a>
-                                            <a class="dropdown-item" (click)="activar(usuario)"
-                                                *ngIf="isAdmin && usuario.state.includes('I')">Activar</a>
-                                            <a class="dropdown-item" (click)="deleteUsuario(usuario)"
-                                                *ngIf="isAdmin && usuario.state.includes('A')">Eliminar</a>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+      </div>
     </div>
+  </div>
 </div>
-<div class="container-fluid mt--9" id="form-usuario" style="display: none;">
-    <div class="row">
-        <div class="col-xl-2"></div>
-        <div class="col-xl-8 mb-5 mb-xl-0">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title" *ngIf="isAdmin">Ver/Editar Información de Usuario</h3>
-                    <h3 class="card-title" *ngIf="!isAdmin">Ver Información de Usuario</h3>
-                </div>
-                <div class="card-body">
-                    <form #formUsuario="ngForm" ngNativeValidate>
-                        <div class="form-group">
-                            <label for="nombre">Nombres*</label><br>
-                            <input type="text" class="form-control" name="nombre" id="nombre"
-                                [(ngModel)]="usuario.nombre" [disabled]="!isAdmin" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="apellido">Apellidos*</label><br>
-                            <input type="text" class="form-control" name="apellido" id="apellido"
-                                [(ngModel)]="usuario.apellido" [disabled]="!isAdmin" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="telefono">Tel&eacute;fono*</label><br>
-                            <input type="text" class="form-control" name="telefono" id="telefono"
-                                [(ngModel)]="usuario.telefono" [disabled]="!isAdmin" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="pais">País*</label><br>
-                            <select name="pais" id="pais" class="form-control" [(ngModel)]="usuario.idPais"
-                                [disabled]="!isAdmin" required>
-                                <option *ngFor="let pais of paises" [value]="pais.id">{{pais.nombre}}</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="correo">Correo*</label><br>
-                            <input type="email" class="form-control" name="correo" id="correo"
-                                [(ngModel)]="usuario.email" [disabled]="!isAdmin" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="rol">Rol del Usuario*</label><br>
-                            <select class="form-control form-select form-select-sm" name="rol" id="rol"
-                                [(ngModel)]="usuario.role" (change)="tableEstacion()" [disabled]="!isAdmin" required>
-                                <option value="observer">Observador</option>
-                                <option value="admin">Administrador</option>
-                            </select>
-                        </div>
-                        <div class="form-group" id="form-estacion">
-                            <label for="estacion">Estaciones</label><br>
-                            <div class="container my-3">
-                                <table class="table hover">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th scope="col">Nombre</th>
-                                            <th scope="col">Código</th>
-                                            <th scope="col" *ngIf="isAdmin">Acción</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let sEstacion of selectedEstaciones">
-                                            <td scope="row" width="50%" class="text-wrap">{{sEstacion.nombre}}
-                                            </td>
-                                            <td scope="row" width="30%" class="text-wrap">{{sEstacion.codigo}}</td>
-                                            <td scope="row" class="" *ngIf="isAdmin">
-                                                <button type="button" class="btn btn-danger btn-xs"
-                                                    (click)="unselectEstacion(sEstacion)">
-                                                    <i class="fa fa-trash"></i>Eliminar
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div class="container" *ngIf="isAdmin">
-                                <div class="row align-items-center">
-                                    <div class="form-group col-md-4">
-                                        <label for="nombreEstacion">Nombre</label><br>
-                                        <input type="text" class="form-control" name="nombreEstacion"
-                                            id="nombreEstacion" [(ngModel)]="filtroEstacion.nombre">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="codigo">Código</label><br>
-                                        <input type="text" class="form-control" name="codigo" id="fcodigo"
-                                            [(ngModel)]="filtroEstacion.codigo">
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <button class="btn btn-default float-right"
-                                            (click)="getDataEstaciones()">Buscar</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="container" id="tablaEstaciones" style="display: none;">
-                                <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger1"
-                                    class="table align-items-center table-flush row-border hover">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th scope="col">Nombre</th>
-                                            <th scope="col">C&oacute;digo</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let estacion of estaciones" (click)="selectEstacion(estacion)">
-                                            <th scope="row">
-                                                <div class="media align-items-center">
-                                                    <div class="media-body">
-                                                        <span class="mb-0 text-sm">{{estacion.nombre}}</span>
-                                                    </div>
-                                                </div>
-                                            </th>
-                                            <td>
-                                                {{estacion.codigo}}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div>
-                            <button class="btn btn-secondary float-left"
-                                (click)="cancelar(formUsuario)">Cancelar</button>
-                            <button class="btn btn-default float-right" (click)="submit(formUsuario)"
-                                *ngIf="isAdmin">Guardar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<div class="container-fluid mt--9" id="form-usuario" style="display: none">
+  <div class="row">
+    <div class="col-xl-2"></div>
+    <div class="col-xl-8 mb-5 mb-xl-0">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title" *ngIf="isAdmin">
+            Ver/Editar Información de Usuario
+          </h3>
+          <h3 class="card-title" *ngIf="!isAdmin">
+            Ver Información de Usuario
+          </h3>
         </div>
+        <div class="card-body">
+          <form #formUsuario="ngForm" ngNativeValidate>
+            <div class="form-group">
+              <label for="nombre">Nombres*</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="nombre"
+                id="nombre"
+                [(ngModel)]="usuario.nombre"
+                [disabled]="!isAdmin"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="apellido">Apellidos*</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="apellido"
+                id="apellido"
+                [(ngModel)]="usuario.apellido"
+                [disabled]="!isAdmin"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="genero">Género*</label><br />
+              <select
+                name="genero"
+                id="genero"
+                class="form-control"
+                [(ngModel)]="usuario.genero"
+                required
+              >
+                <option value="M">Maculino</option>
+                <option value="F">Femenino</option>
+                <option value="Otro">Otro</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="telefono">Tel&eacute;fono*</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="telefono"
+                id="telefono"
+                [(ngModel)]="usuario.telefono"
+                [disabled]="!isAdmin"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="ocupacion">Ocupación*</label><br />
+              <select
+                name="ocupacion"
+                id="ocupacion"
+                class="form-control"
+                [(ngModel)]="usuario.idOcupacion"
+                [disabled]="!isAdmin"
+                required
+              >
+                <option
+                  *ngFor="let ocupacion of ocupaciones"
+                  [value]="ocupacion.id"
+                >
+                  {{ ocupacion.descripcion }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="pais">País*</label><br />
+              <select
+                name="pais"
+                id="pais"
+                class="form-control"
+                [(ngModel)]="usuario.idPais"
+                [disabled]="!isAdmin"
+                required
+              >
+                <option *ngFor="let pais of paises" [value]="pais.id">
+                  {{ pais.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="correo">Correo*</label><br />
+              <input
+                type="email"
+                class="form-control"
+                name="correo"
+                id="correo"
+                [(ngModel)]="usuario.email"
+                [disabled]="!isAdmin"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="rol">Rol del Usuario*</label><br />
+              <select
+                class="form-control form-select form-select-sm"
+                name="rol"
+                id="rol"
+                [(ngModel)]="usuario.role"
+                (change)="tableEstacion()"
+                [disabled]="!isAdmin"
+                required
+              >
+                <option value="observer">Observador</option>
+                <option value="admin">Administrador</option>
+              </select>
+            </div>
+            <div class="form-group" id="form-estacion">
+              <label for="estacion">Estaciones</label><br />
+              <div class="container my-3">
+                <table class="table hover">
+                  <thead class="thead-light">
+                    <tr>
+                      <th scope="col">Nombre</th>
+                      <th scope="col">Código</th>
+                      <th scope="col" *ngIf="isAdmin">Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let sEstacion of selectedEstaciones">
+                      <td scope="row" width="50%" class="text-wrap">
+                        {{ sEstacion.nombre }}
+                      </td>
+                      <td scope="row" width="30%" class="text-wrap">
+                        {{ sEstacion.codigo }}
+                      </td>
+                      <td scope="row" class="" *ngIf="isAdmin">
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-xs"
+                          (click)="unselectEstacion(sEstacion)"
+                        >
+                          <i class="fa fa-trash"></i>Eliminar
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="container" *ngIf="isAdmin">
+                <div class="row align-items-center">
+                  <div class="form-group col-md-4">
+                    <label for="nombreEstacion">Nombre</label><br />
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="nombreEstacion"
+                      id="nombreEstacion"
+                      [(ngModel)]="filtroEstacion.nombre"
+                    />
+                  </div>
+                  <div class="form-group col-md-4">
+                    <label for="codigo">Código</label><br />
+                    <input
+                      type="text"
+                      class="form-control"
+                      name="codigo"
+                      id="fcodigo"
+                      [(ngModel)]="filtroEstacion.codigo"
+                    />
+                  </div>
+                  <div class="form-group col-md-4">
+                    <button
+                      class="btn btn-default float-right"
+                      (click)="getDataEstaciones()"
+                    >
+                      Buscar
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="container" id="tablaEstaciones" style="display: none">
+                <table
+                  datatable
+                  [dtOptions]="dtOptions"
+                  [dtTrigger]="dtTrigger1"
+                  class="table align-items-center table-flush row-border hover"
+                >
+                  <thead class="thead-light">
+                    <tr>
+                      <th scope="col">Nombre</th>
+                      <th scope="col">C&oacute;digo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr
+                      *ngFor="let estacion of estaciones"
+                      (click)="selectEstacion(estacion)"
+                    >
+                      <th scope="row">
+                        <div class="media align-items-center">
+                          <div class="media-body">
+                            <span class="mb-0 text-sm">{{
+                              estacion.nombre
+                            }}</span>
+                          </div>
+                        </div>
+                      </th>
+                      <td>
+                        {{ estacion.codigo }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div>
+              <button
+                class="btn btn-secondary float-left"
+                (click)="cancelar(formUsuario)"
+              >
+                Cancelar
+              </button>
+              <button
+                class="btn btn-default float-right"
+                (click)="submit(formUsuario)"
+                *ngIf="isAdmin"
+              >
+                Guardar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
-<div class="container-fluid mt--9" id="form-update-password" style="display: none;">
-    <div class="row">
-        <div class="col-xl-2"></div>
-        <div class="col-xl-8 mb-5 mb-xl-0">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Actualizar Contraseña del Usuario</h3>
-                </div>
-                <div class="card-body">
-                    <form #formPassUsuario="ngForm" ngNativeValidate>
-                        <div class="form-group">
-                            <label for="correoPass">Correo del Usuario</label><br>
-                            <input type="text" disabled class="form-control" name="correoPass" id="correoPass"
-                                [(ngModel)]="usuario.email">
-                        </div>
-                        <div class="form-group">
-                            <label for="contrasena">Nueva Contraseña</label><br>
-                            <input type="password" class="form-control" name="contrasena" id="contrasena"
-                                [(ngModel)]="usuario.password" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="confcontrasena">Confirmar Contraseña</label><br>
-                            <input type="password" class="form-control" name="confcontrasena" id="confcontrasena"
-                                [(ngModel)]="confpassword" required>
-                        </div>
-                        <div>
-                            <button class="btn btn-secondary float-left"
-                                (click)="cancelarPassword(formPassUsuario)">Cancelar</button>
-                            <button class="btn btn-default float-right"
-                                (click)="submitPassword(formPassUsuario)">Guardar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<div
+  class="container-fluid mt--9"
+  id="form-update-password"
+  style="display: none"
+>
+  <div class="row">
+    <div class="col-xl-2"></div>
+    <div class="col-xl-8 mb-5 mb-xl-0">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Actualizar Contraseña del Usuario</h3>
         </div>
+        <div class="card-body">
+          <form #formPassUsuario="ngForm" ngNativeValidate>
+            <div class="form-group">
+              <label for="correoPass">Correo del Usuario</label><br />
+              <input
+                type="text"
+                disabled
+                class="form-control"
+                name="correoPass"
+                id="correoPass"
+                [(ngModel)]="usuario.email"
+              />
+            </div>
+            <div class="form-group">
+              <label for="contrasena">Nueva Contraseña</label><br />
+              <input
+                type="password"
+                class="form-control"
+                name="contrasena"
+                id="contrasena"
+                [(ngModel)]="usuario.password"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="confcontrasena">Confirmar Contraseña</label><br />
+              <input
+                type="password"
+                class="form-control"
+                name="confcontrasena"
+                id="confcontrasena"
+                [(ngModel)]="confpassword"
+                required
+              />
+            </div>
+            <div>
+              <button
+                class="btn btn-secondary float-left"
+                (click)="cancelarPassword(formPassUsuario)"
+              >
+                Cancelar
+              </button>
+              <button
+                class="btn btn-default float-right"
+                (click)="submitPassword(formPassUsuario)"
+              >
+                Guardar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
-<div class="container-fluid mt--9" id="form-update-foto" style="display: none;">
-    <div class="row">
-        <div class="col-xl-2"></div>
-        <div class="col-xl-8 mb-5 mb-xl-0">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">Actualizar la Foto del Usuario</h3>
-                </div>
-                <div class="card-body">
-                    <form #formPassUsuario="ngForm">
-                        <div class="form-group">
-                            <label for="correoFoto">Correo del Usuario</label><br>
-                            <input type="text" disabled class="form-control" name="correoFoto" id="correoFoto"
-                                [(ngModel)]="usuario.email">
-                        </div>
-                        <div class="row justify-content-center">
-                            <div class="col-md-5">
-                                <img *ngIf="!usuario.foto" src="../../../assets/img/more/default-user.jpg"
-                                    class=" img-fluid rounded-circle" alt="user image">
-                                <img *ngIf="usuario.foto" src="data:image/png;base64,{{usuario.foto}}"
-                                    class="img-fluid rounded-circle" alt="user image">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <label for="file">Archivo</label><br>
-                                <input *ngIf="uploader.queue.length == 0" type="file"
-                                    class="input-group custom-file-upload mb-4" ng2FileSelect [uploader]="uploader"
-                                    accept=".jpg,.jpeg,.png" />
-                            </div>
-                            <div class="col-12" *ngIf="uploader.queue.length != 0">
-                                <table class="table">
-                                    <thead class="thead-light">
-                                        <tr>
-                                            <th scope="col">Nombre</th>
-                                            <th scope="col">Tamaño</th>
-                                            <th scope="col">Estado</th>
-                                            <th scope="col">Acciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let item of uploader.queue">
-                                            <td scope="row" class="text-wrap"><strong>{{ item?.file?.name }}</strong>
-                                            </td>
-                                            <td *ngIf="uploader.options.isHTML5" nowrap>{{ item?.file?.size/1024/1024 |
-                                                number:'.2' }} MB</td>
-                                            <td class="text-center">
-                                                <span *ngIf="item.isUploading"><i class="fa fa-spinner"></i></span>
-                                                <span *ngIf="item.isSuccess"><i class="fa fa-check-circle"></i></span>
-                                                <span *ngIf="item.isCancel"><i
-                                                        class="fa fa-times-circle text-black"></i></span>
-                                                <span *ngIf="item.isError"><i
-                                                        class="fa fa-exclamation-circle text-black"></i></span>
-                                            </td>
-                                            <td nowrap>
-                                                <button type="button" class="btn btn-danger btn-xs"
-                                                    (click)="item.remove()">
-                                                    <span class="fa fa-trash"></span> Eliminar
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <div class="progress-wrapper pt-0">
-                                    <div class="progress-info">
-                                        <div class="progress-label">
-                                            <span>Progreso</span>
-                                        </div>
-                                        <div class="progress-percentage">
-                                            <span>{{uploader.progress + "%"}}</span>
-                                        </div>
-                                    </div>
-                                    <div class="progress">
-                                        <div class="progress-bar" role="progressbar"
-                                            [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <button class="btn btn-secondary float-left" (click)="cancelarFoto()">Cancelar</button>
-                            <button class="btn btn-default float-right" (click)="subirFoto()">Guardar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<div class="container-fluid mt--9" id="form-update-foto" style="display: none">
+  <div class="row">
+    <div class="col-xl-2"></div>
+    <div class="col-xl-8 mb-5 mb-xl-0">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Actualizar la Foto del Usuario</h3>
         </div>
+        <div class="card-body">
+          <form #formPassUsuario="ngForm">
+            <div class="form-group">
+              <label for="correoFoto">Correo del Usuario</label><br />
+              <input
+                type="text"
+                disabled
+                class="form-control"
+                name="correoFoto"
+                id="correoFoto"
+                [(ngModel)]="usuario.email"
+              />
+            </div>
+            <div class="row justify-content-center">
+              <div class="col-md-5">
+                <img
+                  *ngIf="!usuario.foto"
+                  src="../../../assets/img/more/default-user.jpg"
+                  class="img-fluid rounded-circle"
+                  alt="user image"
+                />
+                <img
+                  *ngIf="usuario.foto"
+                  src="data:image/png;base64,{{ usuario.foto }}"
+                  class="img-fluid rounded-circle"
+                  alt="user image"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <label for="file">Archivo</label><br />
+                <input
+                  *ngIf="uploader.queue.length == 0"
+                  type="file"
+                  class="input-group custom-file-upload mb-4"
+                  ng2FileSelect
+                  [uploader]="uploader"
+                  accept=".jpg,.jpeg,.png"
+                />
+              </div>
+              <div class="col-12" *ngIf="uploader.queue.length != 0">
+                <table class="table">
+                  <thead class="thead-light">
+                    <tr>
+                      <th scope="col">Nombre</th>
+                      <th scope="col">Tamaño</th>
+                      <th scope="col">Estado</th>
+                      <th scope="col">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of uploader.queue">
+                      <td scope="row" class="text-wrap">
+                        <strong>{{ item?.file?.name }}</strong>
+                      </td>
+                      <td *ngIf="uploader.options.isHTML5" nowrap>
+                        {{ item?.file?.size / 1024 / 1024 | number: ".2" }} MB
+                      </td>
+                      <td class="text-center">
+                        <span *ngIf="item.isUploading"
+                          ><i class="fa fa-spinner"></i
+                        ></span>
+                        <span *ngIf="item.isSuccess"
+                          ><i class="fa fa-check-circle"></i
+                        ></span>
+                        <span *ngIf="item.isCancel"
+                          ><i class="fa fa-times-circle text-black"></i
+                        ></span>
+                        <span *ngIf="item.isError"
+                          ><i class="fa fa-exclamation-circle text-black"></i
+                        ></span>
+                      </td>
+                      <td nowrap>
+                        <button
+                          type="button"
+                          class="btn btn-danger btn-xs"
+                          (click)="item.remove()"
+                        >
+                          <span class="fa fa-trash"></span> Eliminar
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div class="progress-wrapper pt-0">
+                  <div class="progress-info">
+                    <div class="progress-label">
+                      <span>Progreso</span>
+                    </div>
+                    <div class="progress-percentage">
+                      <span>{{ uploader.progress + "%" }}</span>
+                    </div>
+                  </div>
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      role="progressbar"
+                      [ngStyle]="{ width: uploader.progress + '%' }"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <button
+                class="btn btn-secondary float-left"
+                (click)="cancelarFoto()"
+              >
+                Cancelar
+              </button>
+              <button class="btn btn-default float-right" (click)="subirFoto()">
+                Guardar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

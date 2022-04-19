@@ -34,7 +34,7 @@ export class ReporteExtrema {
     };
   };
 
-  estacion!: string;
+  estacion!: number;
 
   audCreatedAt!: string;
 

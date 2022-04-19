@@ -1,0 +1,106 @@
+<div class="container-fluid mt--9" id="form-precipitacion">
+  <div class="row">
+    <div class="col-xl-2"></div>
+    <div class="col-xl-8 mb-5 mb-xl-0">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title" *ngIf="isUpdating">
+            Editar información de reporte
+          </h3>
+          <h3 class="card-title" *ngIf="!isUpdating">Crear nuevo reporte</h3>
+        </div>
+        <div class="card-body">
+          <form #formReporte="ngForm" ngNativeValidate>
+            <div class="form-group" *ngIf="isUpdating">
+              <label for="estacionadmin">Estación*</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="estacionadmin"
+                id="estacionadmin"
+                value="{{ reporte.Observador.Estacion.nombre }}"
+                required
+                disabled
+              />
+            </div>
+            <div class="form-group" *ngIf="!isUpdating">
+              <label for="estacion">Estación*</label><br />
+              <select
+                name="estacion"
+                id="estacion"
+                class="form-control"
+                [(ngModel)]="reporte.estacion"
+                required
+              >
+                <option
+                  *ngFor="let estacion of estaciones"
+                  [value]="estacion.id"
+                >
+                  {{ estacion.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group" *ngIf="isUpdating">
+              <label for="fechaadmin">Fecha*</label><br />
+              <input
+                type="text"
+                class="form-control"
+                name="fechaadmin"
+                id="fechaadmin"
+                value="{{ date(reporte.fecha) }}"
+                required
+                disabled
+              />
+            </div>
+            <div class="form-group" *ngIf="!isUpdating">
+              <label for="fecha">Fecha*</label><br />
+              <input
+                type="datetime-local"
+                class="form-control"
+                name="fecha"
+                id="fecha"
+                [(ngModel)]="reporte.fecha"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="valor">Valor*</label><br />
+              <input
+                type="Float"
+                maxlength="3"
+                class="form-control"
+                name="valor"
+                id="valor"
+                [(ngModel)]="reporte.valor"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="comentario">Comentario</label><br />
+              <textarea
+                name="comentario"
+                id="comentario"
+                class="form-control"
+                [(ngModel)]="reporte.comentario"
+              ></textarea>
+            </div>
+            <div>
+              <button
+                class="btn btn-secondary float-left"
+                (click)="cancelar(formReporte)"
+              >
+                Cancelar
+              </button>
+              <button
+                class="btn btn-default float-right"
+                (click)="saveReporte(formReporte)"
+              >
+                Guardar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

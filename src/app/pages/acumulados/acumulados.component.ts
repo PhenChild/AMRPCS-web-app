@@ -120,22 +120,31 @@ export class AcumuladosComponent implements OnInit {
     });
   }
 
-  openModal(contenido: any, reporte: ReporteAcumulado): void {
+  actualizar(reporte: ReporteAcumulado): void {
     this.reporte = reporte;
-    this.modal.open(contenido, { size: 'lg' });
+    this.isUpdating = true;
+    this.reporte.estacion = reporte.Observador.Estacion.id.toString();
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-reporte');
+    table.style.display = 'none';
+    form.style.display = 'block';
   }
 
-  saveValor() {
-    if (confirm('¿Desea actualizar la información del reporte?')) {
-      this.dbService.updateReporteValorAcumulado(this.reporte).subscribe(
-        (data: any) => {
-          this.tService.success('Valor actualizado con éxito', 'Envío exitoso');
-        },
-        (err: any) => {
-          this.tService.error('', 'Ha ocurrido un error');
-        }
-      );
+  nuevo(): void {
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-reporte');
+    table.style.display = 'none';
+    form.style.display = 'block';
+  }
+
+  formDone(event: any) {
+    if (event) {
+      this.getData();
     }
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-reporte');
+    table.style.display = 'block';
+    form.style.display = 'none';
   }
 
   deleteReporte(reporte: any): void {
@@ -162,21 +171,6 @@ export class AcumuladosComponent implements OnInit {
         (data: any) => {
           this.tService.success('Reporte activado con éxito.', 'Envío exitoso');
           this.getData();
-        },
-        (err: any) => {
-          this.tService.error('', 'Ha ocurrido un error');
-        }
-      );
-    }
-  }
-
-  saveReporte(form: NgForm) {
-    if (confirm('¿Desea crear un nuevo reporte acumulado?')) {
-      this.dbService.addReporteAcumulado(this.reporte).subscribe(
-        (data: any) => {
-          this.tService.success('Reporte creado con éxito', 'Envío exitoso');
-          this.isForm = !this.isForm;
-          form.resetForm();
         },
         (err: any) => {
           this.tService.error('', 'Ha ocurrido un error');

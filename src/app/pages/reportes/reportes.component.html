@@ -12,7 +12,7 @@
     <div class="header-body"></div>
   </div>
 </div>
-<div class="container-fluid mt--9" id="table" *ngIf="!isForm">
+<div class="container-fluid mt--9" id="table">
   <div class="row">
     <div class="col">
       <div class="card shadow">
@@ -25,7 +25,7 @@
               <a
                 class="btn btn-sm btn-default"
                 *ngIf="isObserver"
-                (click)="isForm = !isForm"
+                (click)="nuevo()"
                 >Nuevo reporte</a
               >
             </div>
@@ -183,9 +183,7 @@
                       ngbDropdownMenu
                       class="dropdown-menu-right dropdown-menu-arrow"
                     >
-                      <a
-                        class="dropdown-item"
-                        (click)="openModal(contenido, reporte)"
+                      <a class="dropdown-item" (click)="actualizar(reporte)"
                         >Editar</a
                       >
                       <a
@@ -211,131 +209,12 @@
     </div>
   </div>
 </div>
-<div class="container-fluid mt--9" id="form-precipitacion" *ngIf="isForm">
-  <div class="row">
-    <div class="col-xl-2"></div>
-    <div class="col-xl-8 mb-5 mb-xl-0">
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title" *ngIf="isUpdating">
-            Editar información de reporte
-          </h3>
-          <h3 class="card-title" *ngIf="!isUpdating">Crear nuevo reporte</h3>
-        </div>
-        <div class="card-body">
-          <form #formReporte="ngForm" ngNativeValidate>
-            <div class="form-group">
-              <label for="estacion">Estación*</label><br />
-              <select
-                name="estacion"
-                id="estacion"
-                class="form-control"
-                [(ngModel)]="reporte.estacion"
-                required
-              >
-                <option
-                  *ngFor="let estacion of estaciones"
-                  [value]="estacion.id"
-                >
-                  {{ estacion.nombre }}
-                </option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="fecha">Fecha*</label><br />
-              <input
-                type="datetime-local"
-                class="form-control"
-                name="fecha"
-                id="fecha"
-                [(ngModel)]="reporte.fecha"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="valor">Valor*</label><br />
-              <input
-                type="Float"
-                maxlength="2"
-                class="form-control"
-                name="valor"
-                id="valor"
-                [(ngModel)]="reporte.valor"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="comentario">Comentario</label><br />
-              <textarea
-                name="comentario"
-                id="comentario"
-                class="form-control"
-                [(ngModel)]="reporte.comentario"
-              ></textarea>
-            </div>
-            <div>
-              <button
-                class="btn btn-secondary float-left"
-                (click)="isForm = !isForm"
-              >
-                Cancelar
-              </button>
-              <button
-                class="btn btn-default float-right"
-                (click)="saveReporte(formReporte)"
-              >
-                Guardar
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<ng-template #contenido let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title">
-      Editar el valor del reporte {{ reporte.Observador.Estacion.nombre }}
-      {{ time(reporte.fecha) }} {{ date(reporte.fecha) }}
-    </h4>
-    <button
-      class="close"
-      aria-label="close"
-      type="button"
-      (click)="modal.close()"
-    >
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
-    <div class="form-group">
-      <label for="valor">Valor del reporte</label><br />
-      <input
-        type="number"
-        name="valor"
-        id="valor"
-        class="form-control"
-        [(ngModel)]="reporte.valor"
-      />
-    </div>
-    <div class="form-group">
-      <label for="comentario">Comentario del reporte</label><br />
-      <textarea
-        name="comentario"
-        id="comentario"
-        class="form-control"
-        [(ngModel)]="reporte.comentario"
-      ></textarea>
-    </div>
-  </div>
-  <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-default"
-      (click)="saveValor(); modal.close()"
-    >
-      Actualizar
-    </button>
-  </div>
-</ng-template>
+<app-form-reporte
+  id="form-reporte"
+  style="display: none"
+  [reporte]="reporte"
+  [isObserver]="isObserver"
+  [isAdmin]="isAdmin"
+  [isUpdating]="isUpdating"
+  (isDoneEvent)="formDone($event)"
+></app-form-reporte>

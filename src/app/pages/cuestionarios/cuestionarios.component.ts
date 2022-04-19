@@ -1,6 +1,5 @@
 import { Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { ToastrService } from 'ngx-toastr';
@@ -60,18 +59,6 @@ export class CuestionariosComponent implements OnInit {
   cuestionario!: Cuestionario;
   idCuestionario!: number;
 
-  /* Data for upload image */
-  url!: string | ArrayBuffer | null;
-  format!: string;
-
-  uploader!: FileUploader;
-
-  response!: string;
-
-  isSuccess!: boolean;
-  isCancel!: boolean;
-  isError!: boolean;
-
   constructor(
     location: Location,
     private dbService: DbService,
@@ -79,23 +66,6 @@ export class CuestionariosComponent implements OnInit {
     private router: ActivatedRoute
   ) {
     this.location = location;
-
-    this.uploader = new FileUploader({
-      url: dbService.dbURL + 'cuestionario/web/newPicture',
-      method: 'POST',
-      itemAlias: 'file',
-      queueLimit: 4,
-      headers: [
-        {
-          name: 'x-access-token',
-          value: sessionStorage.getItem('token')!,
-        },
-      ],
-    });
-
-    this.response = '';
-
-    this.uploader.response.subscribe((res) => (this.response = res));
   }
 
   ngOnInit(): void {
@@ -127,42 +97,6 @@ export class CuestionariosComponent implements OnInit {
       this.filtro.fechaFin = Utils.date2(ff);
       this.getData();
     }
-
-    this.cuestionario = new Cuestionario();
-
-    this.isCancel = false;
-    this.isError = false;
-    this.isSuccess = false;
-
-    this.uploader.onAfterAddingFile = (file) => {
-      file.withCredentials = false;
-    };
-
-    this.uploader.onBeforeUploadItem = (item: any) => {
-      this.uploader.options.additionalParameter = {
-        id: this.idCuestionario,
-        estacion: this.cuestionario.estacion,
-      };
-    };
-
-    this.uploader.onCompleteAll = () => {
-      const table = <HTMLInputElement>document.getElementById('perfil');
-      const form = <HTMLInputElement>(
-        document.getElementById('form-update-foto')
-      );
-      this.isForm = false;
-      this.tService.success('Cuestionario enviado con éxito.', 'Envío exitoso');
-      this.uploader.clearQueue();
-    };
-
-    /*this.uploader.onCompleteItem = (
-      item: any,
-      response: any,
-      status: any,
-      headers: any
-    ) => {
-      console.log(response);
-    };*/
   }
 
   getData(): void {
@@ -189,40 +123,32 @@ export class CuestionariosComponent implements OnInit {
     });
   }
 
-  saveValor() {
-    /*if (confirm("¿Desea actualizar la información del reporte?")) {
-      this.dbService.updateReporteValorAcumulado(this.reporte)
-        .subscribe((data: any) => {
-          this.tService.success("Valor actualizado con éxito", "Envío exitoso");
-        }, (err: any) => {
-          this.tService.error("", "Ha ocurrido un error");
-        })
-    }*/
+  actualizar(cuestionario: Cuestionario): void {
+    this.cuestionario = cuestionario;
+    this.isUpdating = true;
+    this.cuestionario.estacion = cuestionario.Observador.Estacion.id;
+    console.log(cuestionario);
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-reporte');
+    table.style.display = 'none';
+    form.style.display = 'block';
   }
 
-  saveCuestionario(form: NgForm) {
-    if (form.valid) {
-      if (confirm('¿Desea crear un nuevo cuestionario de sequía?')) {
-        this.dbService.addCuestionario(this.cuestionario).subscribe(
-          (data: any) => {
-            this.idCuestionario = data.id;
-            if (this.uploader.queue.length == 0) {
-              this.isForm = false;
-              this.tService.success(
-                'Cuestionario enviado con éxito.',
-                'Envío exitoso'
-              );
-              form.resetForm();
-            } else {
-              this.uploader.uploadAll();
-            }
-          },
-          (err: any) => {
-            this.tService.error('', 'Ha ocurrido un error');
-          }
-        );
-      }
+  nuevo(): void {
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-reporte');
+    table.style.display = 'none';
+    form.style.display = 'block';
+  }
+
+  formDone(event: any) {
+    if (event) {
+      this.getData();
     }
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-reporte');
+    table.style.display = 'block';
+    form.style.display = 'none';
   }
 
   deleteCuestionario(cuestionario: any): void {

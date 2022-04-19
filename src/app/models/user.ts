@@ -1,43 +1,51 @@
-export class User{
-/** Modelo para los usuarios. */
-    /** Id del usuario */
-    id!: string;
-    
-    /** Contraseña del usuario */
-    password!: string;
+export class User {
+  /** Modelo para los usuarios. */
+  /** Id del usuario */
+  id!: string;
 
-    /** Nombre del usuario */
-    nombre!: string;
+  /** Contraseña del usuario */
+  password!: string;
 
-    /** Apellido del usuario */
-    apellido!: string;
+  /** Nombre del usuario */
+  nombre!: string;
 
-    /** Telefono del usuario. */
-    telefono!: string;
+  /** Apellido del usuario */
+  apellido!: string;
 
-    /** Email del usuario */
-    email!: string;
+  /** Telefono del usuario. */
+  telefono!: string;
 
-    /** Rol del usuario */
-    role!: string;
+  /** Email del usuario */
+  email!: string;
 
-    idPais!: number;
+  /** Rol del usuario */
+  role!: string;
 
-    token!: string;
-    
-    foto!: string;
+  idPais!: number;
 
-    estaciones!: [];
+  token!: string;
 
-    /** Fecha de creación */
-    audCreatedAt!: string;
+  foto!: string;
 
-    /** Fecha de actualización */
-    audUpdatedAt!: string;
+  estaciones!: [];
 
-    state!: string;
+  Ocupacion!: {
+    descripcion: string;
+  };
 
-    Pais!:{
-        nombre: string;
-    }
+  idOcupacion!: number;
+
+  genero!: string;
+
+  /** Fecha de creación */
+  audCreatedAt!: string;
+
+  /** Fecha de actualización */
+  audUpdatedAt!: string;
+
+  state!: string;
+
+  Pais!: {
+    nombre: string;
+  };
 }

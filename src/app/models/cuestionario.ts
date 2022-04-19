@@ -29,7 +29,7 @@ export class Cuestionario {
     };
   };
 
-  estacion!: string;
+  estacion!: number;
 
   audCreatedAt!: string;
 

@@ -12,7 +12,7 @@
     <div class="header-body"></div>
   </div>
 </div>
-<div class="container-fluid mt--9" id="table" *ngIf="!isForm">
+<div class="container-fluid mt--9" id="table">
   <div class="row">
     <div class="col">
       <div class="card shadow">
@@ -25,7 +25,7 @@
               <a
                 class="btn btn-sm btn-default"
                 *ngIf="isObserver"
-                (click)="isForm = !isForm"
+                (click)="nuevo()"
                 >Nuevo reporte</a
               >
             </div>
@@ -179,7 +179,9 @@
                       ngbDropdownMenu
                       class="dropdown-menu-right dropdown-menu-arrow"
                     >
-                      <a class="dropdown-item">Editar</a>
+                      <a class="dropdown-item" (click)="actualizar(reporte)"
+                        >Editar</a
+                      >
                       <a
                         class="dropdown-item"
                         (click)="activarReporte(reporte)"
@@ -203,137 +205,12 @@
     </div>
   </div>
 </div>
-<div class="container-fluid mt--9" id="form-precipitacion" *ngIf="isForm">
-  <div class="row">
-    <div class="col-xl-2"></div>
-    <div class="col-xl-8 mb-5 mb-xl-0">
-      <div class="card">
-        <div class="card-header">
-          <h3 class="card-title" *ngIf="isUpdating">
-            Editar información de reporte de precipitación extrema
-          </h3>
-          <h3 class="card-title" *ngIf="!isUpdating">
-            Crear nuevo reporte de precipitación extrema
-          </h3>
-        </div>
-        <div class="card-body">
-          <form #formReporte="ngForm" ngNativeValidate>
-            <div class="form-group">
-              <label for="estacion">Estación*</label><br />
-              <select
-                name="estacion"
-                id="estacion"
-                class="form-control"
-                [(ngModel)]="reporte.estacion"
-                required
-              >
-                <option
-                  *ngFor="let estacion of estaciones"
-                  [value]="estacion.id"
-                >
-                  {{ estacion.nombre }}
-                </option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="fecha">Fecha*</label><br />
-              <input
-                type="datetime-local"
-                class="form-control"
-                name="fecha"
-                id="fecha"
-                [(ngModel)]="reporte.fecha"
-                required
-              />
-            </div>
-            <label for="fecha">Eventos</label><br />
-            <div class="px-3 pb-3">
-              <div class="form-check">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  name="inundacion"
-                  id="inundacion"
-                  [(ngModel)]="reporte.inundacion"
-                />
-                <label class="form-check-label" for="inundacion"
-                  >Inundación</label
-                >
-              </div>
-              <div class="form-check">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  name="granizo"
-                  id="granizo"
-                  [(ngModel)]="reporte.granizo"
-                />
-                <label class="form-check-label" for="granizo">Granizo</label>
-              </div>
-              <div class="form-check">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  name="rayos"
-                  id="rayos"
-                  [(ngModel)]="reporte.rayos"
-                />
-                <label class="form-check-label" for="rayos">Rayos</label>
-              </div>
-              <div class="form-check">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  name="deslizamiento"
-                  id="deslizamiento"
-                  [(ngModel)]="reporte.deslizamiento"
-                />
-                <label class="form-check-label" for="deslizamiento"
-                  >Deslizamiento</label
-                >
-              </div>
-              <div class="form-check">
-                <input
-                  type="checkbox"
-                  class="form-check-input"
-                  name="vientos"
-                  id="vientos"
-                  [(ngModel)]="reporte.vientos"
-                />
-                <label class="form-check-label" for="vientos"
-                  >Vientos Fuerte</label
-                >
-              </div>
-            </div>
-            <div class="form-check form-switch pb-3">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                name="notificacion"
-                id="notificacion"
-                [(ngModel)]="reporte.notificacion"
-              />
-              <label class="form-check-label" for="notificacion"
-                >Enviar Notificación</label
-              >
-            </div>
-            <div>
-              <button
-                class="btn btn-secondary float-left"
-                (click)="isForm = !isForm"
-              >
-                Cancelar
-              </button>
-              <button
-                class="btn btn-default float-right"
-                (click)="saveReporte(formReporte)"
-              >
-                Guardar
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<app-form-extrema
+  id="form-reporte"
+  style="display: none"
+  [reporte]="reporte"
+  [isObserver]="isObserver"
+  [isAdmin]="isAdmin"
+  [isUpdating]="isUpdating"
+  (isDoneEvent)="formDone($event)"
+></app-form-extrema>

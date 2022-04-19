@@ -10,7 +10,6 @@ import { Estacion } from 'src/app/models/estacion';
 import { Reporte } from 'src/app/models/reporte';
 import { DbService } from 'src/app/services/database/db.service';
 import Utils from 'src/app/utils/utils';
-import { NgForm } from '@angular/forms';
 import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
 
 @Component({
@@ -120,40 +119,31 @@ export class ReportesComponent implements OnInit {
     });
   }
 
-  openModal(contenido: any, reporte: Reporte): void {
+  actualizar(reporte: Reporte): void {
     this.reporte = reporte;
-    this.modal.open(contenido, { size: 'lg' });
+    this.isUpdating = true;
+    this.reporte.estacion = reporte.Observador.Estacion.id.toString();
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-reporte');
+    table.style.display = 'none';
+    form.style.display = 'block';
   }
 
-  saveValor() {
-    if (confirm('¿Desea actualizar la información del reporte?')) {
-      this.dbService.updateReporteValor(this.reporte).subscribe(
-        (data: any) => {
-          this.tService.success('Valor actualizado con éxito', 'Envío exitoso');
-          this.getData();
-        },
-        (err: any) => {
-          this.tService.error('', 'Ha ocurrido un error');
-        }
-      );
-    }
+  nuevo(): void {
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-reporte');
+    table.style.display = 'none';
+    form.style.display = 'block';
   }
 
-  saveReporte(form: NgForm) {
-    if (form.valid) {
-      if (confirm('¿Desea crear un nuevo reporte?')) {
-        this.dbService.addReporte(this.reporte).subscribe(
-          (data: any) => {
-            this.tService.success('Reporte creado con éxito', 'Envío exitoso');
-            this.isForm = !this.isForm;
-            form.resetForm();
-          },
-          (err: any) => {
-            this.tService.error('', 'Ha ocurrido un error');
-          }
-        );
-      }
+  formDone(event: any) {
+    if (event) {
+      this.getData();
     }
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-reporte');
+    table.style.display = 'block';
+    form.style.display = 'none';
   }
 
   deleteReporte(reporte: any): void {
