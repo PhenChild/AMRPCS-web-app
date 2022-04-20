@@ -71,6 +71,14 @@
               </button>
             </div>
           </form>
+          <div class="col-md-12 px-0" *ngIf="isData">
+            <button
+              class="btn btn-default float-left mb-3"
+              (click)="downloadData()"
+            >
+              Descargar CSV
+            </button>
+          </div>
         </div>
         <div class="container">
           <canvas id="chart"></canvas>

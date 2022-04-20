@@ -72,6 +72,14 @@
               </button>
             </div>
           </div>
+          <div class="col-md-12 px-0" *ngIf="isData">
+            <button
+              class="btn btn-default float-left mb-3"
+              (click)="downloadData()"
+            >
+              Descargar CSV
+            </button>
+          </div>
         </div>
         <div class="container" id="tablaEstaciones" style="display: none">
           <table
@@ -526,6 +534,12 @@
               </table>
             </div>
             <div>
+              <button
+              class="btn btn-default float-left mb-3"
+              (click)="downloadDataEspecifico()"
+            >
+              Descargar CSV
+            </button>
               <button
                 class="btn btn-secondary float-left"
                 (click)="cancelar(formEstacion)"
