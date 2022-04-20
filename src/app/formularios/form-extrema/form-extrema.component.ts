@@ -23,7 +23,7 @@ export class FormExtremaComponent implements OnInit {
   constructor(private dbService: DbService, private tService: ToastrService) {}
 
   ngOnInit(): void {
-    if (this.isObserver) {
+    if (this.isObserver && !this.isUpdating) {
       this.dbService.getEstacionesSelfUsuario().subscribe((data: any) => {
         this.estaciones = data.map((item: any) => item.Estacion);
       });

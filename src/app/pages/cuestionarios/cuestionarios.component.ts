@@ -127,7 +127,6 @@ export class CuestionariosComponent implements OnInit {
     this.cuestionario = cuestionario;
     this.isUpdating = true;
     this.cuestionario.estacion = cuestionario.Observador.Estacion.id;
-    console.log(cuestionario);
     const table = <HTMLInputElement>document.getElementById('table');
     const form = <HTMLInputElement>document.getElementById('form-reporte');
     table.style.display = 'none';

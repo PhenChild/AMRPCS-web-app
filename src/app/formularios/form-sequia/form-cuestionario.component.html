@@ -66,7 +66,36 @@
               />
             </div>
             <div class="form-group">
-              <label for="respSuelo">Condición de suelo*</label><br />
+              <label for="respSuelo">Condición de suelo*</label>
+              <button
+                class="btn btn-secondary btn-xs ml-2 py-1"
+                type="button"
+                data-toggle="collapse"
+                data-target="#suelo"
+                aria-expanded="false"
+                aria-controls="suelo"
+              >
+                <i class="fa fa-info"></i>
+              </button>
+              <div class="collapse" id="suelo">
+                <div class="card card-body text-sm">
+                  TIP: La humedad del suelo es la cantidad de agua que hay en el
+                  suelo. Para responder a esta pregunta, alrededor de su lugar
+                  de observación (estación), busque un punto lo más plano
+                  posible y expuesto al sol, sin intervención humana (riego).
+                  Cuando cae agua al suelo, esta cubre los espacios de aire
+                  presentes en el mismo. El suelo está saturado cuando el agua
+                  ha cubierto todos estos espacios. ¿Cuál es el contenido de
+                  agua en el suelo del lugar seleccionado? ¿Está encharcado
+                  (saturado)? Si coloca el dedo, ¿percibe humedad? ¿Qué tal en
+                  los primeros 5 cm de profundidad? (húmedo). ¿Qué tal a 10 cm
+                  de profundidad? (subhúmedo) ¿Aún no? Las raíces de las plantas
+                  generalmente aprovechan los recursos hasta los 50 cm de
+                  profundidad. (seco y muy seco) Si las ráfagas de viento
+                  desprenden partículas del suelo, es un indicador de erosión.
+                </div>
+              </div>
+              <br />
               <select
                 name="respSuelo"
                 id="respSuelo"
@@ -84,7 +113,34 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="respVeg">Condición de la vegetación*</label><br />
+              <label for="respVeg">Condición de la vegetación*</label
+              ><button
+                class="btn btn-secondary btn-xs ml-2 py-1"
+                type="button"
+                data-toggle="collapse"
+                data-target="#vegetacion"
+                aria-expanded="false"
+                aria-controls="vegetacion"
+              >
+                <i class="fa fa-info"></i>
+              </button>
+              <div class="collapse" id="vegetacion">
+                <div class="card card-body text-sm">
+                  TIP: Observe el paisaje que se encuentra alrededor de su lugar
+                  de observación (estación). Trate de enfocarse en las plantas
+                  de ciclo anual (hierbas, cultivos, etc) que se encuentren en
+                  áreas naturales o cultivos de secano (sin riego ni
+                  intervención humana). Analice la respuesta de estas plantas a
+                  la falta de agua: ¿Cómo están sus hojas? ¿hay muerte por
+                  déficit hídrico? Las plantas también pueden ser afectadas por
+                  exceso de humedad. Si la región está ubicada en una zona árida
+                  o desértica, puede evaluar la presencia de estas plantas de
+                  ciclo anual como indicador de condiciones húmedas. ¿Hay un
+                  reverdecimiento inusual del entorno? ¿Florecimientos?¿Qué
+                  tanto?. Si no hay, seleccione la opción "Normal".
+                </div>
+              </div>
+              <br />
               <select
                 name="respVeg"
                 id="respVeg"
@@ -106,7 +162,25 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="respPrec">Lluvias percibidas*</label><br />
+              <label for="respPrec">Lluvias percibidas*</label
+              ><button
+                class="btn btn-secondary btn-xs ml-2 py-1"
+                type="button"
+                data-toggle="collapse"
+                data-target="#lluvias"
+                aria-expanded="false"
+                aria-controls="lluvias"
+              >
+                <i class="fa fa-info"></i>
+              </button>
+              <div class="collapse" id="lluvias">
+                <div class="card card-body text-sm">
+                  TIP: ¿A lo largo del mes anterior, cómo ha percibido la
+                  cantidad de agua precipitada (lluvías, aguanieve, granizo,
+                  nieve, etc)?
+                </div>
+              </div>
+              <br />
               <select
                 name="respPrec"
                 id="respPrec"
@@ -126,7 +200,25 @@
             <div class="form-group">
               <label for="respTempPrec"
                 >Temporalidad de las precipitaciones*</label
-              ><br />
+              ><button
+                class="btn btn-secondary btn-xs ml-2 py-1"
+                type="button"
+                data-toggle="collapse"
+                data-target="#temporalidad"
+                aria-expanded="false"
+                aria-controls="temporalidad"
+              >
+                <i class="fa fa-info"></i>
+              </button>
+              <div class="collapse" id="temporalidad">
+                <div class="card card-body text-sm">
+                  TIP: De acuerdo con la región donde está ubicado su lugar de
+                  observación (estación), ¿A lo largo del mes anterior, han
+                  ocurrido precipitaciones (lluvías, aguanieve, granizo, nieve,
+                  etc) fuera de temporada?¿Qué tan intensas han sido?
+                </div>
+              </div>
+              <br />
               <select
                 name="respTempPrec"
                 id="respTempPrec"
@@ -144,7 +236,24 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="respTemps">Temperaturas observadas*</label><br />
+              <label for="respTemps">Temperaturas observadas*</label
+              ><button
+                class="btn btn-secondary btn-xs ml-2 py-1"
+                type="button"
+                data-toggle="collapse"
+                data-target="#temperaturas"
+                aria-expanded="false"
+                aria-controls="temperaturas"
+              >
+                <i class="fa fa-info"></i>
+              </button>
+              <div class="collapse" id="temperaturas">
+                <div class="card card-body text-sm">
+                  TIP: ¿A lo largo del mes anterior, en general, cómo ha
+                  percibido la temperatura?
+                </div>
+              </div>
+              <br />
               <select
                 name="respTemps"
                 id="respTemps"
@@ -162,9 +271,30 @@
               </select>
             </div>
             <div class="form-group">
-              <label for="respGana"
-                >Disponibilidad de agua para el ganado*</label
-              ><br />
+              <label for="respGana">Disponibilidad de agua*</label
+              ><button
+                class="btn btn-secondary btn-xs ml-2 py-1"
+                type="button"
+                data-toggle="collapse"
+                data-target="#agua"
+                aria-expanded="false"
+                aria-controls="agua"
+              >
+                <i class="fa fa-info"></i>
+              </button>
+              <div class="collapse" id="agua">
+                <div class="card card-body text-sm">
+                  TIP: En la región donde está ubicado su lugar de observación
+                  (estación), durante el mes anterior, ¿Hay inconvenientes que
+                  estén teniendo los agricultores o ganaderos en la provisión de
+                  agua? ¿Ha sufrido de algún corte del suministro hídrico debido
+                  a problemas en la cantidad de agua de las fuentes de
+                  provisión? ¿o escuchado noticias de alerta? ¿Cómo están los
+                  niveles o caudales de ríos, lagos, embalses, pozos que se
+                  encuentran en los alrededores?
+                </div>
+              </div>
+              <br />
               <select
                 name="respGana"
                 id="respGana"
@@ -216,7 +346,12 @@
                   <tbody>
                     <tr *ngFor="let item of uploader.queue">
                       <td scope="row" class="text-wrap">
-                        <strong>{{ item?.file?.name }}</strong>
+                        <strong>{{ item?.file?.name }}</strong
+                        ><br />
+                        <img
+                          [src]="getPreview(item)"
+                          class="img-thumbnail img-max"
+                        />
                       </td>
                       <td *ngIf="uploader.options.isHTML5" nowrap>
                         {{ item?.file?.size / 1024 / 1024 | number: ".2" }} MB
@@ -247,7 +382,6 @@
                     </tr>
                   </tbody>
                 </table>
-
                 <div class="progress-wrapper pt-0">
                   <div class="progress-info">
                     <div class="progress-label">

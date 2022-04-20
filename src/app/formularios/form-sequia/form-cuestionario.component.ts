@@ -6,6 +6,7 @@ import { Cuestionario } from 'src/app/models/cuestionario';
 import { Estacion } from 'src/app/models/estacion';
 import { DbService } from 'src/app/services/database/db.service';
 import Utils from 'src/app/utils/utils';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-form-cuestionario',
@@ -21,6 +22,7 @@ export class FormCuestionarioComponent implements OnInit {
 
   estaciones: Estacion[] = [];
   idCuestionario!: number;
+  public previewPath: any;
 
   /* Data for upload image */
   url!: string | ArrayBuffer | null;
@@ -33,7 +35,11 @@ export class FormCuestionarioComponent implements OnInit {
   isSuccess!: boolean;
   isCancel!: boolean;
   isError!: boolean;
-  constructor(private dbService: DbService, private tService: ToastrService) {
+  constructor(
+    private dbService: DbService,
+    private tService: ToastrService,
+    private sanitizer: DomSanitizer
+  ) {
     this.uploader = new FileUploader({
       url: dbService.dbURL + 'cuestionario/web/newPicture',
       method: 'POST',
@@ -53,7 +59,7 @@ export class FormCuestionarioComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.isObserver) {
+    if (this.isObserver && !this.isUpdating) {
       this.dbService.getEstacionesSelfUsuario().subscribe((data: any) => {
         this.estaciones = data.map((item: any) => item.Estacion);
       });
@@ -117,9 +123,16 @@ export class FormCuestionarioComponent implements OnInit {
   cancelar(form: NgForm) {
     form.resetForm();
     this.isDoneEvent.emit(false);
+    this.uploader.clearQueue();
   }
 
   date(fecha: any) {
     return Utils.date(fecha);
+  }
+
+  getPreview(item: any) {
+    return this.sanitizer.bypassSecurityTrustUrl(
+      window.URL.createObjectURL(item._file)
+    );
   }
 }

@@ -51,8 +51,8 @@
                 [(ngModel)]="filtro.tipo"
                 required
               >
-                <option value="precipitacion">Precipitación</option>
-                <option value="acumulado">Precipitación Acumulado</option>
+                <option value="precipitacion">Precipitación Diaria</option>
+                <option value="acumulado">Precipitación Acumulada</option>
                 <option value="extrema">Precipitación Extrema</option>
                 <option value="cuestionario">Cuestionarios de Sequía</option>
               </select>
@@ -143,7 +143,11 @@
                       ngbDropdownMenu
                       class="dropdown-menu-right dropdown-menu-arrow"
                     >
-                      <a class="dropdown-item">Editar</a>
+                      <a
+                        class="dropdown-item"
+                        (click)="actualizarReporte(reporte)"
+                        >Editar</a
+                      >
                     </div>
                   </div>
                 </td>
@@ -214,7 +218,11 @@
                       ngbDropdownMenu
                       class="dropdown-menu-right dropdown-menu-arrow"
                     >
-                      <a class="dropdown-item">Editar</a>
+                      <a
+                        class="dropdown-item"
+                        (click)="actualizarAcumulado(reporte)"
+                        >Editar</a
+                      >
                     </div>
                   </div>
                 </td>
@@ -237,7 +245,7 @@
                 <th scope="col">Código Estación</th>
                 <th scope="col">Fecha</th>
                 <th scope="col">Comentario</th>
-                <th scope="col">Acción</th>
+                <!--<th scope="col">Acción</th>-->
               </tr>
             </thead>
             <tbody>
@@ -265,7 +273,7 @@
                 <td width="35%">
                   {{ reporte.comentario }}
                 </td>
-                <td class="text-right">
+                <!--<td class="text-right">
                   <div ngbDropdown placement="bottom-right">
                     <a
                       class="btn btn-sm btn-icon-only text-light"
@@ -280,7 +288,7 @@
                       <a class="dropdown-item">Editar</a>
                     </div>
                   </div>
-                </td>
+                </td>-->
               </tr>
             </tbody>
           </table>
@@ -304,29 +312,29 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let reporte of cuestionarios">
+              <tr *ngFor="let cuestionario of cuestionarios">
                 <th scope="row">
                   <div class="media align-items-center">
                     <div class="media-body">
                       <span class="mb-0 text-sm">{{
-                        reporte.Observador.User.nombre +
+                        cuestionario.Observador.User.nombre +
                           " " +
-                          reporte.Observador.User.apellido
+                          cuestionario.Observador.User.apellido
                       }}</span>
                     </div>
                   </div>
                 </th>
                 <td>
-                  {{ reporte.Observador.Estacion.nombre }}
+                  {{ cuestionario.Observador.Estacion.nombre }}
                 </td>
                 <td>
-                  {{ reporte.Observador.Estacion.codigo }}
+                  {{ cuestionario.Observador.Estacion.codigo }}
                 </td>
                 <td scope="row">
-                  {{ date(reporte.fecha) }}
+                  {{ date(cuestionario.fecha) }}
                 </td>
                 <td width="35%">
-                  {{ reporte.comentario }}
+                  {{ cuestionario.comentario }}
                 </td>
                 <td class="text-right">
                   <div ngbDropdown placement="bottom-right">
@@ -340,7 +348,11 @@
                       ngbDropdownMenu
                       class="dropdown-menu-right dropdown-menu-arrow"
                     >
-                      <a class="dropdown-item">Editar</a>
+                      <a
+                        class="dropdown-item"
+                        (click)="actualizarCuestionario(cuestionario)"
+                        >Editar</a
+                      >
                     </div>
                   </div>
                 </td>
@@ -352,3 +364,30 @@
     </div>
   </div>
 </div>
+<app-form-reporte
+  id="form-reporte"
+  style="display: none"
+  [reporte]="reporte"
+  [isObserver]="true"
+  [isAdmin]="false"
+  [isUpdating]="isUpdatingReporte"
+  (isDoneEvent)="formReporteDone($event)"
+></app-form-reporte>
+<app-form-acumulado
+  id="form-acumulado"
+  style="display: none"
+  [reporte]="acumulado"
+  [isObserver]="true"
+  [isAdmin]="false"
+  [isUpdating]="isUpdatingAcumulado"
+  (isDoneEvent)="formAcumuladoDone($event)"
+></app-form-acumulado>
+<app-form-cuestionario
+  id="form-cuestionario"
+  style="display: none"
+  [cuestionario]="cuestionario"
+  [isObserver]="true"
+  [isAdmin]="false"
+  [isUpdating]="isUpdatingCuestionario"
+  (isDoneEvent)="formDoneCuestionario($event)"
+></app-form-cuestionario>

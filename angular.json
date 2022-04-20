@@ -38,7 +38,7 @@
             "scripts": [
               "node_modules/chart.js/dist/chart.min.js",
               "node_modules/clipboard/dist/clipboard.min.js",
-              "node_modules/jquery/dist/jquery.js",
+              "node_modules/jquery/dist/jquery.min.js",
               "node_modules/datatables.net/js/jquery.dataTables.js"
             ]
           },
@@ -118,7 +118,7 @@
             "scripts": [
               "node_modules/chart.js/dist/Chart.min.js",
               "node_modules/clipboard/dist/clipboard.min.js",
-              "node_modules/jquery/dist/jquery.js",
+              "node_modules/jquery/dist/jquery.min.js",
               "node_modules/datatables.net/js/jquery.dataTables.js"
             ]
           }

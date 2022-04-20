@@ -44,13 +44,19 @@ export class MisReportesComponent implements OnInit, OnDestroy {
   extremas: ReporteExtrema[] = [];
   cuestionarios: Cuestionario[] = [];
 
+  reporte!: Reporte;
+  acumulado!: ReporteAcumulado;
+  cuestionario!: Cuestionario;
+
   /** Operador del datatable de las estaciones */
   dtTrigger1: Subject<any> = new Subject<any>();
   dtTrigger2: Subject<any> = new Subject<any>();
   dtTrigger3: Subject<any> = new Subject<any>();
   dtTrigger4: Subject<any> = new Subject<any>();
 
-  isUpdating: boolean = false;
+  isUpdatingReporte: boolean = false;
+  isUpdatingAcumulado: boolean = false;
+  isUpdatingCuestionario: boolean = false;
 
   filtro = {
     estacion: '',
@@ -142,5 +148,66 @@ export class MisReportesComponent implements OnInit, OnDestroy {
     this.dtTrigger2.next();
     this.dtTrigger3.next();
     this.dtTrigger4.next();
+  }
+
+  actualizarReporte(reporte: Reporte): void {
+    this.reporte = reporte;
+    this.isUpdatingReporte = true;
+    this.reporte.estacion = reporte.Observador.Estacion.id.toString();
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-reporte');
+    table.style.display = 'none';
+    form.style.display = 'block';
+  }
+
+  formReporteDone(event: any) {
+    if (event) {
+      this.getData();
+    }
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-reporte');
+    table.style.display = 'block';
+    form.style.display = 'none';
+  }
+
+  actualizarAcumulado(reporte: ReporteAcumulado): void {
+    this.acumulado = reporte;
+    this.isUpdatingAcumulado = true;
+    this.acumulado.estacion = reporte.Observador.Estacion.id.toString();
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-acumulado');
+    table.style.display = 'none';
+    form.style.display = 'block';
+  }
+
+  formAcumuladoDone(event: any) {
+    if (event) {
+      this.getData();
+    }
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-acumulado');
+    table.style.display = 'block';
+    form.style.display = 'none';
+  }
+
+  actualizarCuestionario(cuestionario: Cuestionario): void {
+    this.cuestionario = cuestionario;
+    this.isUpdatingCuestionario = true;
+    this.cuestionario.estacion = cuestionario.Observador.Estacion.id;
+    console.log(this.cuestionario);
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-cuestionario');
+    table.style.display = 'none';
+    form.style.display = 'block';
+  }
+
+  formDoneCuestionario(event: any) {
+    if (event) {
+      this.getData();
+    }
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-cuestionario');
+    table.style.display = 'block';
+    form.style.display = 'none';
   }
 }
