@@ -8,6 +8,7 @@ import { DbService } from 'src/app/services/database/db.service';
 import Utils from 'src/app/utils/utils';
 import 'chartjs-adapter-moment';
 import { NgForm } from '@angular/forms';
+import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
 
 Chart.register(...registerables);
 
@@ -25,6 +26,7 @@ export class GraficosComponent implements OnInit {
   };
   myChart!: Chart;
   isDrawn = false;
+  isData: boolean = false;
 
   reportes = [];
 
@@ -33,7 +35,7 @@ export class GraficosComponent implements OnInit {
     private modal: NgbModal,
     private tService: ToastrService,
     private router: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     let estacion = this.router.snapshot.paramMap.get('estacion');
@@ -54,6 +56,7 @@ export class GraficosComponent implements OnInit {
   }
 
   getData(): void {
+    this.isData = true;
     if (this.isDrawn) {
       this.myChart.destroy();
     }
@@ -146,5 +149,31 @@ export class GraficosComponent implements OnInit {
         'Error'
       );
     }
+  }
+
+  downloadData() {
+    const data = this.reportes.map(function (rep: any) {
+      var obj = {
+        fecha: rep.fecha,
+        valor: rep.valor
+      };
+      return obj;
+    });
+    var titulo = "Filtro: " + this.filtro.estacion + "en período: " + this.filtro.fechaInicio + "_" + this.filtro.fechaFin;
+    var options = {
+      fieldSeparator: ',',
+      quoteStrings: '"',
+      decimalseparator: '.',
+      showLabels: true,
+      showTitle: true,
+      title: titulo,
+      useBom: true,
+      headers: [
+        'fecha',
+        'valor'
+      ],
+      useHeader: true,
+    };
+    new AngularCsv(data, this.filtro.estacion +  "_" + this.filtro.fechaInicio +  "_" + this.filtro.fechaFin, options);
   }
 }

@@ -10,9 +10,11 @@ import { FileUploader } from 'ng2-file-upload';
 import { Location } from '@angular/common';
 import { Pais } from 'src/app/models/pais';
 import { Division } from 'src/app/models/division';
+import { Reporte } from 'src/app/models/reporte';
 import { Variable } from 'src/app/models/variable';
 import { Router } from '@angular/router';
 import Utils from 'src/app/utils/utils';
+import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
 
 /**
  * Componente para la pagina de edición de estaciones.
@@ -45,9 +47,14 @@ export class EstacionesComponent implements OnInit, OnDestroy {
   isSuccess!: boolean;
   isCancel!: boolean;
   isError!: boolean;
+  isData: boolean = false;
 
   /** Lista de estaciones */
   estaciones: Estacion[] = [];
+
+  /** Lista de estaciones */
+  reportes: Reporte[] = [];
+
   /** Lista de usuarios observadores */
 
   /** Usuario observador */
@@ -173,6 +180,7 @@ export class EstacionesComponent implements OnInit, OnDestroy {
   }
 
   getData(): void {
+    this.isData = true;
     const table = <HTMLInputElement>document.getElementById('tablaEstaciones');
     table.style.display = 'none';
     if (this.isDtInitialized) {
@@ -397,8 +405,8 @@ export class EstacionesComponent implements OnInit, OnDestroy {
     let url = this.isAdmin
       ? '/admin-layout'
       : this.isObserver
-      ? '/obs-layout'
-      : '/view-layout';
+        ? '/obs-layout'
+        : '/view-layout';
     var dn = new Date(Date.now());
     var df = new Date(Date.now());
     df.setMonth(dn.getMonth() - 1);
@@ -423,8 +431,8 @@ export class EstacionesComponent implements OnInit, OnDestroy {
     let url = this.isAdmin
       ? '/admin-layout'
       : this.isObserver
-      ? '/obs-layout'
-      : '/view-layout';
+        ? '/obs-layout'
+        : '/view-layout';
     if (variable.nombre == 'Precipitación Diaria') {
       this.router.navigate([
         url + '/reportes',
@@ -476,5 +484,102 @@ export class EstacionesComponent implements OnInit, OnDestroy {
         }
       );
     }
+  }
+
+  downloadData() {
+    const json = this.estaciones.map(function (estacion) {
+      var obj = {
+        id: estacion.id,
+      };
+      return obj;
+    });
+    this.dbService.getUsuariosEstaciones(json).subscribe(
+      (usuarios: any) => {
+        var dataArr = [];
+        for (var i of usuarios) {
+          var arrNombres = i[1].map(function (nombre: any) {
+            var string = nombre.nombre;
+            return string;
+          });
+          var string = arrNombres.join(" - ");
+          var obj = {
+            codigo_estacion: i[0].codigo,
+            nombre: i[0].nombre,
+            posicion_x: i[0].posicion.coordinates[0],
+            posicion_y: i[0].posicion.coordinates[1],
+            altitud: i[0].altitud,
+            direccion: i[0].direccion,
+            referencias: i[0].referencias,
+            usuarios: string
+          }
+          dataArr.push(obj);
+        }
+        var titulo = 'Estaciones Registradas';
+        var options = {
+          fieldSeparator: ',',
+          quoteStrings: '"',
+          decimalseparator: '.',
+          showLabels: true,
+          showTitle: true,
+          title: titulo,
+          useBom: true,
+          headers: [
+            'codigo_estacion',
+            'nombre',
+            'posicion_x',
+            'posicion_y',
+            'altitud',
+            'direccion',
+            'referencias',
+            'usuarios',
+          ],
+          useHeader: true,
+        };
+        new AngularCsv(dataArr, 'Estaciones', options);
+      });
+  }
+
+  downloadDataEspecifico() {
+    var filtro =
+    {
+      observador: '',
+      estacion: '',
+      fechaInicio: '',
+      fechaFin: '',
+      codEstacion: this.estacion.codigo,
+      pais: ''
+    }
+    this.dbService.getReportes(filtro).subscribe(
+      (d: any) => {
+        const data = d.map(function (rep: Reporte) {
+          var obj = {
+            nombre: rep.Observador.User.nombre + ' ' + rep.Observador.User.apellido,
+            fecha: rep.fecha,
+            valor: rep.valor,
+            comentario: rep.comentario,
+          };
+          return obj;
+        });
+        var titulo = 'Reportes de Estacion ' + this.estacion.nombre + " - " + this.estacion.codigo + "\nCoordenadas: " +
+          this.estacion.posicion.coordinates[0] + ", " + this.estacion.posicion.coordinates[1] + ", " + this.estacion.altitud;
+        var options = {
+          fieldSeparator: ',',
+          quoteStrings: '"',
+          decimalseparator: '.',
+          showLabels: true,
+          showTitle: true,
+          title: titulo,
+          useBom: true,
+          headers: [
+            'nombre',
+            'fecha',
+            'valor',
+            'comentario'
+          ],
+          useHeader: true,
+        };
+        new AngularCsv(data, 'Estacion ' + this.estacion.nombre, options);
+      }
+    )
   }
 }

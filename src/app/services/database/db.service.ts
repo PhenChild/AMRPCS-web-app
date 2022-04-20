@@ -211,6 +211,15 @@ export class DbService {
     );
   }
 
+  getUsuariosEstaciones(estaciones: any): any {
+    return this.http.post(
+      this.dbURL + 'estacion/getUsuariosPorEstaciones',
+      { estaciones: estaciones },
+      { headers: this.getHeader() }
+    );
+  }
+
+
   /**
    * Eliminar estaciones
    * @param estacion
