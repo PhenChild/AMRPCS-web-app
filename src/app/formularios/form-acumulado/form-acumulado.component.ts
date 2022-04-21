@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import moment from 'moment';
 import { ToastrService } from 'ngx-toastr';
 import { Estacion } from 'src/app/models/estacion';
 import { ReporteAcumulado } from 'src/app/models/reporteAcumulado';
@@ -19,6 +20,8 @@ export class FormAcumuladoComponent implements OnInit {
   @Output() isDoneEvent = new EventEmitter<boolean>();
 
   estaciones: Estacion[] = [];
+  minDate: any = moment(new Date().setDate(new Date().getDate() - 5)).format("yyyy-MM-DD");
+  maxDate: any = moment(new Date().setDate(new Date().getDate() - 1)).format("yyyy-MM-DD"); 
 
   constructor(private dbService: DbService, private tService: ToastrService) {}
 
@@ -30,6 +33,7 @@ export class FormAcumuladoComponent implements OnInit {
     }
     if (!this.isUpdating) {
       this.reporte = new ReporteAcumulado();
+      this.reporte.fechaFin = moment(new Date()).format("yyyy-MM-DD");
     }
   }
 

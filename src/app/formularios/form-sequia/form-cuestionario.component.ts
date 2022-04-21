@@ -7,6 +7,7 @@ import { Estacion } from 'src/app/models/estacion';
 import { DbService } from 'src/app/services/database/db.service';
 import Utils from 'src/app/utils/utils';
 import { DomSanitizer } from '@angular/platform-browser';
+import moment from 'moment';
 
 @Component({
   selector: 'app-form-cuestionario',
@@ -66,6 +67,7 @@ export class FormCuestionarioComponent implements OnInit {
     }
     if (!this.isUpdating) {
       this.cuestionario = new Cuestionario();
+      this.cuestionario.fecha = moment(new Date()).format("yyyy-MM-DD");
     }
 
     this.isCancel = false;
