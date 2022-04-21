@@ -28,7 +28,9 @@ export class FormExtremaComponent implements OnInit {
         this.estaciones = data.map((item: any) => item.Estacion);
       });
     }
-    this.reporte = new ReporteExtrema();
+    if (!this.isUpdating) {
+      this.reporte = new ReporteExtrema();
+    }
   }
 
   saveReporte(form: NgForm) {

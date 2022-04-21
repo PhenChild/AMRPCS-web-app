@@ -123,6 +123,7 @@ export class ReportesComponent implements OnInit {
     this.isForm = true;
     this.reporte = reporte;
     this.reporte.estacion = reporte.Observador.Estacion.id.toString();
+    this.isUpdating = true;
     const table = <HTMLInputElement>document.getElementById('table');
     table.style.display = 'none';
   }

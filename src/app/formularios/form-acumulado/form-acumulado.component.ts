@@ -28,7 +28,9 @@ export class FormAcumuladoComponent implements OnInit {
         this.estaciones = data.map((item: any) => item.Estacion);
       });
     }
-    this.reporte = new ReporteAcumulado();
+    if (!this.isUpdating) {
+      this.reporte = new ReporteAcumulado();
+    }
   }
 
   saveReporte(form: NgForm) {

@@ -28,7 +28,9 @@ export class FormReporteComponent implements OnInit {
         this.estaciones = data.map((item: any) => item.Estacion);
       });
     }
-    this.reporte = new Reporte();
+    if (!this.isUpdating) {
+      this.reporte = new Reporte();
+    }
   }
 
   saveReporte(form: NgForm) {

@@ -64,7 +64,9 @@ export class FormCuestionarioComponent implements OnInit {
         this.estaciones = data.map((item: any) => item.Estacion);
       });
     }
-    this.cuestionario = new Cuestionario();
+    if (!this.isUpdating) {
+      this.cuestionario = new Cuestionario();
+    }
 
     this.isCancel = false;
     this.isError = false;
