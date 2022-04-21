@@ -120,30 +120,26 @@ export class ReportesComponent implements OnInit {
   }
 
   actualizar(reporte: Reporte): void {
+    this.isForm = true;
     this.reporte = reporte;
-    this.isUpdating = true;
     this.reporte.estacion = reporte.Observador.Estacion.id.toString();
     const table = <HTMLInputElement>document.getElementById('table');
-    const form = <HTMLInputElement>document.getElementById('form-reporte');
-    table.style.display = 'none';
-    form.style.display = 'block';
+    table.style.visibility = 'none';
   }
 
   nuevo(): void {
+    this.isForm = true;
     const table = <HTMLInputElement>document.getElementById('table');
-    const form = <HTMLInputElement>document.getElementById('form-reporte');
     table.style.display = 'none';
-    form.style.display = 'block';
   }
 
   formDone(event: any) {
+    this.isForm = false;
     if (event) {
       this.getData();
     }
     const table = <HTMLInputElement>document.getElementById('table');
-    const form = <HTMLInputElement>document.getElementById('form-reporte');
     table.style.display = 'block';
-    form.style.display = 'none';
   }
 
   deleteReporte(reporte: any): void {

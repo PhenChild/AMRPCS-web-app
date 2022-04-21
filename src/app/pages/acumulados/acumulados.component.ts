@@ -125,26 +125,23 @@ export class AcumuladosComponent implements OnInit {
     this.isUpdating = true;
     this.reporte.estacion = reporte.Observador.Estacion.id.toString();
     const table = <HTMLInputElement>document.getElementById('table');
-    const form = <HTMLInputElement>document.getElementById('form-reporte');
     table.style.display = 'none';
-    form.style.display = 'block';
+    this.isForm = true;
   }
 
   nuevo(): void {
     const table = <HTMLInputElement>document.getElementById('table');
-    const form = <HTMLInputElement>document.getElementById('form-reporte');
     table.style.display = 'none';
-    form.style.display = 'block';
+    this.isForm = true;
   }
 
   formDone(event: any) {
     if (event) {
       this.getData();
     }
+    this.isForm = false;
     const table = <HTMLInputElement>document.getElementById('table');
-    const form = <HTMLInputElement>document.getElementById('form-reporte');
     table.style.display = 'block';
-    form.style.display = 'none';
   }
 
   deleteReporte(reporte: any): void {

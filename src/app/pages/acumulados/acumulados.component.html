@@ -213,7 +213,7 @@
 </div>
 <app-form-acumulado
   id="form-reporte"
-  style="display: none"
+  *ngIf="isForm"
   [reporte]="reporte"
   [isObserver]="isObserver"
   [isAdmin]="isAdmin"
