@@ -124,7 +124,7 @@ export class ReportesComponent implements OnInit {
     this.reporte = reporte;
     this.reporte.estacion = reporte.Observador.Estacion.id.toString();
     const table = <HTMLInputElement>document.getElementById('table');
-    table.style.visibility = 'none';
+    table.style.display = 'none';
   }
 
   nuevo(): void {
