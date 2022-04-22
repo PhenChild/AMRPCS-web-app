@@ -219,7 +219,6 @@ export class DbService {
     );
   }
 
-
   /**
    * Eliminar estaciones
    * @param estacion
@@ -619,6 +618,13 @@ export class DbService {
     });
   }
 
+  updateCuestionario(cuestionario: any, eliminados: any): any {
+    cuestionario.eliminados = eliminados;
+    return this.http.post(this.dbURL + 'cuestionario/update', cuestionario, {
+      headers: this.getHeader(),
+    });
+  }
+
   deleteCuestionario(cuestionario: any) {
     return this.http.post(this.dbURL + 'cuestionario/delete', cuestionario, {
       headers: this.getHeader(),
@@ -629,6 +635,14 @@ export class DbService {
     return this.http.post(this.dbURL + 'cuestionario/activate', cuestionario, {
       headers: this.getHeader(),
     });
+  }
+
+  getCuestionariosFotos(cuestionario: any): any {
+    return this.http.post(
+      this.dbURL + 'foto/getCuestionarioFotos',
+      { id: cuestionario },
+      { headers: this.getHeader() }
+    );
   }
 
   // Precipitación Extrema Endpoints

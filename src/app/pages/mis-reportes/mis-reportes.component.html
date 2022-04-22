@@ -384,7 +384,7 @@
 ></app-form-acumulado>
 <app-form-cuestionario
   id="form-cuestionario"
-  style="display: none"
+  *ngIf="isFormCuestionario"
   [cuestionario]="cuestionario"
   [isObserver]="true"
   [isAdmin]="false"

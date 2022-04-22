@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { FileUploader } from 'ng2-file-upload';
+import { FileItem, FileUploader } from 'ng2-file-upload';
 import { ToastrService } from 'ngx-toastr';
 import { Cuestionario } from 'src/app/models/cuestionario';
 import { Estacion } from 'src/app/models/estacion';
@@ -35,6 +35,8 @@ export class FormCuestionarioComponent implements OnInit {
   isSuccess!: boolean;
   isCancel!: boolean;
   isError!: boolean;
+
+  eliminados: any[] = [];
   constructor(
     private dbService: DbService,
     private tService: ToastrService,
@@ -56,6 +58,10 @@ export class FormCuestionarioComponent implements OnInit {
     this.response = '';
 
     this.uploader.response.subscribe((res) => (this.response = res));
+
+    this.uploader.onErrorItem = (item: any) => {
+      console.log(this.response);
+    };
   }
 
   ngOnInit(): void {
@@ -66,6 +72,24 @@ export class FormCuestionarioComponent implements OnInit {
     }
     if (!this.isUpdating) {
       this.cuestionario = new Cuestionario();
+    } else {
+      console.log('hola');
+      this.dbService.getCuestionariosFotos(this.cuestionario.id).subscribe(
+        (data: any) => {
+          for (var item of data) {
+            let file = new File(item.foto.data, 'Foto' + item.id, {
+              type: 'image/plain',
+            });
+            let fileItem = new FileItem(this.uploader, file, {
+              additionalParameter: { subido: true, id: item.id },
+            });
+            this.uploader.queue.push(fileItem);
+          }
+        },
+        (err: any) => {
+          this.tService.error('', 'Ha ocurrido un error');
+        }
+      );
     }
 
     this.isCancel = false;
@@ -97,6 +121,36 @@ export class FormCuestionarioComponent implements OnInit {
   saveCuestionario(form: NgForm) {
     if (form.valid) {
       if (this.isUpdating) {
+        if (confirm('¿Desea actualizar el cuestionario de sequía?')) {
+          this.dbService
+            .updateCuestionario(this.cuestionario, this.eliminados)
+            .subscribe(
+              (data: any) => {
+                this.idCuestionario = parseInt(this.cuestionario.id);
+                for (var item of this.uploader.queue) {
+                  let file = item as any;
+                  if (file.options.additionalParameter !== undefined) {
+                    if (file.options.additionalParameter.subido) {
+                      item.remove();
+                    }
+                  }
+                }
+                if (this.uploader.queue.length == 0) {
+                  this.tService.success(
+                    'Cuestionario enviado con éxito.',
+                    'Envío exitoso'
+                  );
+                  form.resetForm();
+                  this.isDoneEvent.emit(true);
+                } else {
+                  this.uploader.uploadAll();
+                }
+              },
+              (err: any) => {
+                this.tService.error('', 'Ha ocurrido un error');
+              }
+            );
+        }
       } else {
         if (confirm('¿Desea crear un nuevo cuestionario de sequía?')) {
           this.dbService.addCuestionario(this.cuestionario).subscribe(
@@ -132,9 +186,18 @@ export class FormCuestionarioComponent implements OnInit {
     return Utils.date(fecha);
   }
 
-  getPreview(item: any) {
+  getPreview(item: FileItem) {
     return this.sanitizer.bypassSecurityTrustUrl(
       window.URL.createObjectURL(item._file)
     );
+  }
+
+  removeItem(item: any) {
+    var id = -1;
+    if (item.options.additionalParameter !== undefined) {
+      id = item.options.additionalParameter.id;
+      this.eliminados.push(id);
+    }
+    item.remove();
   }
 }

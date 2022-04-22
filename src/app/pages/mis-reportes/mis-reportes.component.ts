@@ -58,6 +58,8 @@ export class MisReportesComponent implements OnInit, OnDestroy {
   isUpdatingAcumulado: boolean = false;
   isUpdatingCuestionario: boolean = false;
 
+  isFormCuestionario: boolean = false;
+
   filtro = {
     estacion: '',
     tipo: '',
@@ -194,20 +196,17 @@ export class MisReportesComponent implements OnInit, OnDestroy {
     this.cuestionario = cuestionario;
     this.isUpdatingCuestionario = true;
     this.cuestionario.estacion = cuestionario.Observador.Estacion.id;
-    console.log(this.cuestionario);
+    this.isFormCuestionario = true;
     const table = <HTMLInputElement>document.getElementById('table');
-    const form = <HTMLInputElement>document.getElementById('form-cuestionario');
     table.style.display = 'none';
-    form.style.display = 'block';
   }
 
   formDoneCuestionario(event: any) {
     if (event) {
       this.getData();
     }
+    this.isFormCuestionario = false;
     const table = <HTMLInputElement>document.getElementById('table');
-    const form = <HTMLInputElement>document.getElementById('form-cuestionario');
     table.style.display = 'block';
-    form.style.display = 'none';
   }
 }

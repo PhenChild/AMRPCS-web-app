@@ -245,7 +245,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
    * @param usuario usuario con datos para la actualizacion del usuario
    */
   editarUsuario(usuario: any): void {
-    console.log(usuario);
     this.dbService.getPaises().subscribe((data: any) => {
       this.paises = data as any;
     });
@@ -340,7 +339,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
                 formUsuario.reset();
               },
               (err: any) => {
-                console.log(err);
                 this.tService.error('', 'Ha ocurrido un error');
                 this.addedEstaciones = [];
                 this.deletedEstaciones = [];

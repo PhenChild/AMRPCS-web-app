@@ -207,7 +207,7 @@
 </div>
 <app-form-cuestionario
   id="form-reporte"
-  style="display: none"
+  *ngIf="isForm"
   [cuestionario]="cuestionario"
   [isObserver]="isObserver"
   [isAdmin]="isAdmin"

@@ -36,7 +36,7 @@ export class AcumuladosComponent implements OnInit {
   /** Lista de reportes seleccionados*/
   reportes: ReporteAcumulado[] = [];
   paises: Pais[] = [];
-
+  fechaActual!: Date;
   /** Lista de estaciones */
   estaciones: Estacion[] = [];
 
@@ -98,6 +98,7 @@ export class AcumuladosComponent implements OnInit {
       this.getData();
     }
     this.reporte = new ReporteAcumulado();
+    this.fechaActual = new Date();
   }
 
   getData(): void {
@@ -130,9 +131,17 @@ export class AcumuladosComponent implements OnInit {
   }
 
   nuevo(): void {
-    const table = <HTMLInputElement>document.getElementById('table');
-    table.style.display = 'none';
-    this.isForm = true;
+    const horas = this.fechaActual.getHours();
+    const minutos = this.fechaActual.getMinutes();
+    const puedeReportar =
+      ((horas == 4 && minutos >= 30) || horas > 4) && horas < 10;
+    if (puedeReportar) {
+      const table = <HTMLInputElement>document.getElementById('table');
+      table.style.display = 'none';
+      this.isForm = true;
+    } else {
+      this.tService.error('', 'Disponible de 4h30 a 10h00');
+    }
   }
 
   formDone(event: any) {

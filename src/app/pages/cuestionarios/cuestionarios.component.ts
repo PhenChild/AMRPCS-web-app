@@ -35,6 +35,7 @@ export class CuestionariosComponent implements OnInit {
   /** Lista de reportes seleccionados*/
   cuestionarios: Cuestionario[] = [];
   paises: Pais[] = [];
+  fechaActual!: Date;
 
   /** Lista de estaciones */
   estaciones: Estacion[] = [];
@@ -97,6 +98,7 @@ export class CuestionariosComponent implements OnInit {
       this.filtro.fechaFin = Utils.date2(ff);
       this.getData();
     }
+    this.fechaActual = new Date();
   }
 
   getData(): void {
@@ -125,29 +127,32 @@ export class CuestionariosComponent implements OnInit {
 
   actualizar(cuestionario: Cuestionario): void {
     this.cuestionario = cuestionario;
-    this.isUpdating = true;
     this.cuestionario.estacion = cuestionario.Observador.Estacion.id;
+    this.isUpdating = true;
+    this.isForm = true;
     const table = <HTMLInputElement>document.getElementById('table');
-    const form = <HTMLInputElement>document.getElementById('form-reporte');
     table.style.display = 'none';
-    form.style.display = 'block';
   }
 
   nuevo(): void {
-    const table = <HTMLInputElement>document.getElementById('table');
-    const form = <HTMLInputElement>document.getElementById('form-reporte');
-    table.style.display = 'none';
-    form.style.display = 'block';
+    const dias = this.fechaActual.getDate();
+    const puedeReportar = dias <= 10;
+    if (puedeReportar) {
+      this.isForm = true;
+      const table = <HTMLInputElement>document.getElementById('table');
+      table.style.display = 'none';
+    } else {
+      this.tService.error('', 'Disponible los 10 primeros días del mes');
+    }
   }
 
   formDone(event: any) {
     if (event) {
       this.getData();
     }
+    this.isForm = false;
     const table = <HTMLInputElement>document.getElementById('table');
-    const form = <HTMLInputElement>document.getElementById('form-reporte');
     table.style.display = 'block';
-    form.style.display = 'none';
   }
 
   deleteCuestionario(cuestionario: any): void {
@@ -162,7 +167,6 @@ export class CuestionariosComponent implements OnInit {
           this.getData();
         },
         (err: any) => {
-          console.log(err);
           this.tService.error('', 'Ha ocurrido un error');
         }
       );
