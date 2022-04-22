@@ -136,7 +136,7 @@ export class CuestionariosComponent implements OnInit {
 
   nuevo(): void {
     const dias = this.fechaActual.getDate();
-    const puedeReportar = dias <= 30;
+    const puedeReportar = dias <= 23;
     if (puedeReportar) {
       this.isForm = true;
       const table = <HTMLInputElement>document.getElementById('table');

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import moment from 'moment';
 import { ToastrService } from 'ngx-toastr';
 import { Estacion } from 'src/app/models/estacion';
 import { Reporte } from 'src/app/models/reporte';
@@ -30,6 +31,7 @@ export class FormReporteComponent implements OnInit {
     }
     if (!this.isUpdating) {
       this.reporte = new Reporte();
+      this.reporte.fecha = moment(new Date()).format("yyyy-MM-DD");
     }
   }
 
