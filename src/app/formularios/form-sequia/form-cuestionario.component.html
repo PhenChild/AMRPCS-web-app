@@ -338,7 +338,6 @@
                   <thead class="thead-light">
                     <tr>
                       <th scope="col">Nombre</th>
-                      <th scope="col">Tamaño</th>
                       <th scope="col">Estado</th>
                       <th scope="col">Acciones</th>
                     </tr>
@@ -349,12 +348,15 @@
                         <strong>{{ item?.file?.name }}</strong
                         ><br />
                         <img
+                          *ngIf="!ifFoto(item)"
                           [src]="getPreview(item)"
                           class="img-thumbnail img-max"
                         />
-                      </td>
-                      <td *ngIf="uploader.options.isHTML5" nowrap>
-                        {{ item?.file?.size / 1024 / 1024 | number: ".2" }} MB
+                        <img
+                          *ngIf="ifFoto(item)"
+                          src="data:image/png;base64,{{ getBuffer(item) }}"
+                          class="img-thumbnail img-max"
+                        />
                       </td>
                       <td class="text-center">
                         <span *ngIf="item.isUploading"

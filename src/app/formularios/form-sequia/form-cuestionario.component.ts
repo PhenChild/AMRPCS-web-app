@@ -73,15 +73,18 @@ export class FormCuestionarioComponent implements OnInit {
     if (!this.isUpdating) {
       this.cuestionario = new Cuestionario();
     } else {
-      console.log('hola');
       this.dbService.getCuestionariosFotos(this.cuestionario.id).subscribe(
         (data: any) => {
           for (var item of data) {
-            let file = new File(item.foto.data, 'Foto' + item.id, {
+            let file = new File([], 'Foto' + item.id, {
               type: 'image/plain',
             });
             let fileItem = new FileItem(this.uploader, file, {
-              additionalParameter: { subido: true, id: item.id },
+              additionalParameter: {
+                subido: true,
+                id: item.id,
+                buffer: item.foto,
+              },
             });
             this.uploader.queue.push(fileItem);
           }
@@ -199,5 +202,19 @@ export class FormCuestionarioComponent implements OnInit {
       this.eliminados.push(id);
     }
     item.remove();
+  }
+
+  ifFoto(item: any) {
+    if (item.options.additionalParameter !== undefined) {
+      return true;
+    }
+    return false;
+  }
+
+  getBuffer(item: any) {
+    if (item.options.additionalParameter !== undefined) {
+      return item.options.additionalParameter.buffer;
+    }
+    return;
   }
 }
