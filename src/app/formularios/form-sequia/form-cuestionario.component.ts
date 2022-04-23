@@ -73,6 +73,7 @@ export class FormCuestionarioComponent implements OnInit {
     }
     if (!this.isUpdating) {
       this.cuestionario = new Cuestionario();
+      this.cuestionario.fecha = moment(new Date()).format('DD/MM/yyyy');
     } else {
       this.dbService.getCuestionariosFotos(this.cuestionario.id).subscribe(
         (data: any) => {

@@ -5,6 +5,7 @@ import { Estacion } from 'src/app/models/estacion';
 import { ReporteExtrema } from 'src/app/models/reporteExtrema';
 import { DbService } from 'src/app/services/database/db.service';
 import Utils from 'src/app/utils/utils';
+import moment from 'moment';
 
 @Component({
   selector: 'app-form-extrema',
@@ -30,10 +31,13 @@ export class FormExtremaComponent implements OnInit {
     }
     if (!this.isUpdating) {
       this.reporte = new ReporteExtrema();
+      this.reporte.fecha = moment(new Date()).format('yyyy-MM-DDThh:mm');
     }
   }
 
   saveReporte(form: NgForm) {
+    console.log(this.reporte);
+
     if (form.valid) {
       if (this.isUpdating) {
         if (confirm('¿Desea actualizar la información del reporte?')) {

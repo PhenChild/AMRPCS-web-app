@@ -31,7 +31,7 @@ export class FormReporteComponent implements OnInit {
     }
     if (!this.isUpdating) {
       this.reporte = new Reporte();
-      this.reporte.fecha = moment(new Date()).format("yyyy-MM-DD");
+      this.reporte.fecha = moment(new Date()).format('yyyy-MM-DD');
     }
   }
 
