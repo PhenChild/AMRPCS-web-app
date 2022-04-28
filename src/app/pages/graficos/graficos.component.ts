@@ -152,28 +152,41 @@ export class GraficosComponent implements OnInit {
   }
 
   downloadData() {
-    const data = this.reportes.map(function (rep: any) {
-      var obj = {
-        fecha: rep.fecha,
-        valor: rep.valor
+    console.log(this.reportes)
+    this.dbService.getInfoEstacion(this.filtro.estacion).subscribe((data: any) => {
+      console.log(data)
+      const arr = this.reportes.map(function (rep: any) {
+        let re1 = /.000Z/gi
+        let re2 = /T/gi
+        let f = rep.fecha.replace(re1, '')
+        var obj = {
+          'Observador': rep.Observador.User.nombre + " " + rep.Observador.User.apellido,
+          'Fecha': f.replace(re2, ' '),
+          'Valor': rep.valor,
+          'Comentario': rep.comentario,
+        };
+        return obj;
+      });
+      var titulo = "Filtro: " + this.filtro.estacion + " - " + data.codigo + " en período: " + this.filtro.fechaInicio + "_" + this.filtro.fechaFin + 
+      "\nUbicación: " + data.division1.nombre + ', ' + data.division2.nombre + ', ' +  data.division3.nombre;;
+      var options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalseparator: '.',
+        showLabels: true,
+        showTitle: true,
+        title: titulo,
+        useBom: true,
+        headers: [
+          'Observador',
+          'Fecha',
+          'Valor',
+          'Comentario',
+        ],
+        useHeader: true,
       };
-      return obj;
-    });
-    var titulo = "Filtro: " + this.filtro.estacion + "en período: " + this.filtro.fechaInicio + "_" + this.filtro.fechaFin;
-    var options = {
-      fieldSeparator: ',',
-      quoteStrings: '"',
-      decimalseparator: '.',
-      showLabels: true,
-      showTitle: true,
-      title: titulo,
-      useBom: true,
-      headers: [
-        'fecha',
-        'valor'
-      ],
-      useHeader: true,
-    };
-    new AngularCsv(data, this.filtro.estacion +  "_" + this.filtro.fechaInicio +  "_" + this.filtro.fechaFin, options);
+      new AngularCsv(arr, this.filtro.estacion + "_" + this.filtro.fechaInicio + "_" + this.filtro.fechaFin, options);
+    })
+    
   }
 }

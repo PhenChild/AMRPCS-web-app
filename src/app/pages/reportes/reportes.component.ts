@@ -195,14 +195,14 @@ export class ReportesComponent implements OnInit {
   downloadData() {
     const data = this.reportes.map(function (reporte) {
       var obj = {
-        codigo_estacion: reporte.Observador.Estacion.codigo,
-        nombre_observador:
+        'Cód. Estación': reporte.Observador.Estacion.codigo,
+        'Observador':
           reporte.Observador.User.nombre +
           ' ' +
           reporte.Observador.User.apellido,
-        fecha_reporte: reporte.fecha,
-        valor: reporte.valor,
-        comentario: reporte.comentario
+        'Fecha': reporte.fecha,
+        'Valor': reporte.valor,
+        'Comentario': reporte.comentario
           ? reporte.comentario.replace('\n', '')
           : '',
       };
@@ -224,11 +224,11 @@ export class ReportesComponent implements OnInit {
       title: titulo,
       useBom: true,
       headers: [
-        'codigo_estacion',
-        'nombre_observador',
-        'fecha_reporte',
-        'valor',
-        'comentario',
+        'Cód. Estación',
+        'Observador',
+        'Fecha',
+        'Valor',
+        'Comentario',
       ],
       useHeader: true,
     };

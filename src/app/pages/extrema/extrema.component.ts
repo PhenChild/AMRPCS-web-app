@@ -188,23 +188,27 @@ export class ExtremaComponent implements OnInit {
 
   downloadData() {
     const data = this.reportes.map(function (reporte) {
-      var obj = {
-        codigo_estacion: reporte.Observador.Estacion.codigo,
-        nombre_observador:
-          reporte.Observador.User.nombre +
-          ' ' +
-          reporte.Observador.User.apellido,
-        fecha_reporte: reporte.fecha,
-        notificacion: reporte.notificacion,
-        inundacion: reporte.inundacion,
-        granizo: reporte.granizo,
-        rayos: reporte.rayos,
-        deslizamiento: reporte.deslizamiento,
-        vientos: reporte.vientos,
-        comentario: reporte.comentario
-          ? reporte.comentario.replace('\n', '')
-          : '',
-      };
+      var obj = null
+      if (reporte.Observador.Estacion.nombre.slice(0, 2) != 'PP') {
+        obj = {
+          'Cód. Estación': reporte.Observador.Estacion.codigo,
+          'Estación': reporte.Observador.Estacion.nombre,
+          'Observador':
+            reporte.Observador.User.nombre +
+            ' ' +
+            reporte.Observador.User.apellido,
+          'Fecha': reporte.fecha,
+          'Fue notificado?': (reporte.notificacion) ? 'Sí': 'No',
+          'Inundación': reporte.inundacion,
+          'Granizo': reporte.granizo,
+          'Rayos': reporte.rayos,
+          'Deslizamientos': reporte.deslizamiento,
+          'Vientos Fuertes': reporte.vientos,
+          'Comentarios': reporte.comentario
+            ? reporte.comentario.replace('\n', '')
+            : '',
+        };
+      }
       return obj;
     });
     var titulo = 'Reportes de precipitación Extrema';
@@ -223,16 +227,17 @@ export class ExtremaComponent implements OnInit {
       title: titulo,
       useBom: true,
       headers: [
-        'codigo_estacion',
-        'nombre_observador',
-        'fecha_reporte',
-        'notificacion',
-        'inundacion',
-        'granizo',
-        'rayos',
-        'deslizamiento',
-        'vientos',
-        'comentario',
+        'Cód. Estación',
+        'Estación',
+        'Observador',
+        'Fecha',
+        'Fue notificado?',
+        'Inundación',
+        'Granizo',
+        'Rayos',
+        'Deslizamientos',
+        'Vientos Fuertes',
+        'Comentarios',
       ],
       useHeader: true,
     };

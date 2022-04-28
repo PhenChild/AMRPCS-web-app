@@ -497,44 +497,50 @@ export class EstacionesComponent implements OnInit, OnDestroy {
       (usuarios: any) => {
         var dataArr = [];
         for (var i of usuarios) {
-          var arrNombres = i[1].map(function (nombre: any) {
-            var string = nombre.nombre;
-            return string;
-          });
-          var string = arrNombres.join(" - ");
-          var obj = {
-            codigo_estacion: i[0].codigo,
-            nombre: i[0].nombre,
-            posicion_x: i[0].posicion.coordinates[0],
-            posicion_y: i[0].posicion.coordinates[1],
-            altitud: i[0].altitud,
-            direccion: i[0].direccion,
-            referencias: i[0].referencias,
-            usuarios: string
+          if (i[0].nombre.slice(0, 2) != 'PP') {
+            var arrNombres = i[1].map(function (nombre: any) {
+              var string = nombre.nombre;
+              return string;
+            });
+            var string = arrNombres.join(" - ");
+            var obj = {
+              'Cód. Estación': i[0].codigo,
+              'Nombre': i[0].nombre,
+              'Longitud': i[0].posicion.coordinates[0],
+              'Latitud': i[0].posicion.coordinates[1],
+              'Altitud': i[0].altitud,
+              'Direccion': i[0].direccion,
+              'Referencias': i[0].referencias,
+              'Usuarios': string,
+              'Ubicación': i[0].division1.nombre + ', ' + i[0].division2.nombre + ', ' + i[0].division3.nombre,
+              'Pais': i[0].Division.Pai.nombre
+            }
+            dataArr.push(obj);
           }
-          dataArr.push(obj);
         }
         var titulo = 'Estaciones Registradas';
-        var options = {
-          fieldSeparator: ',',
-          quoteStrings: '"',
-          decimalseparator: '.',
-          showLabels: true,
-          showTitle: true,
-          title: titulo,
-          useBom: true,
-          headers: [
-            'codigo_estacion',
-            'nombre',
-            'posicion_x',
-            'posicion_y',
-            'altitud',
-            'direccion',
-            'referencias',
-            'usuarios',
-          ],
-          useHeader: true,
-        };
+          var options = {
+            fieldSeparator: ',',
+            quoteStrings: '"',
+            decimalseparator: '.',
+            showLabels: true,
+            showTitle: true,
+            title: titulo,
+            useBom: true,
+            headers: [
+              'Cód. Estación',
+              'Nombre',
+              'Longitud',
+              'Latitud',
+              'Altitud',
+              'Direccion',
+              'Referencias',
+              'Usuarios',
+              'Ubicación',
+              'Pais',
+            ],
+            useHeader: true,
+          };
         new AngularCsv(dataArr, 'Estaciones', options);
       });
   }
@@ -552,16 +558,20 @@ export class EstacionesComponent implements OnInit, OnDestroy {
     this.dbService.getReportes(filtro).subscribe(
       (d: any) => {
         const data = d.map(function (rep: Reporte) {
+          let re1 = /.000Z/gi
+          let re2 = /T/gi
+          let f = rep.fecha.replace(re1, '')
           var obj = {
-            nombre: rep.Observador.User.nombre + ' ' + rep.Observador.User.apellido,
-            fecha: rep.fecha,
-            valor: rep.valor,
-            comentario: rep.comentario,
+            'Observador': rep.Observador.User.nombre + ' ' + rep.Observador.User.apellido,
+            'Fecha': f.replace(re2, ' '),
+            'Valor': rep.valor,
+            'Comentario': rep.comentario,
           };
           return obj;
         });
         var titulo = 'Reportes de Estacion ' + this.estacion.nombre + " - " + this.estacion.codigo + "\nCoordenadas: " +
-          this.estacion.posicion.coordinates[0] + ", " + this.estacion.posicion.coordinates[1] + ", " + this.estacion.altitud;
+          this.estacion.posicion.coordinates[0] + ", " + this.estacion.posicion.coordinates[1] + ", " + this.estacion.altitud + "\nUbicación: " +
+          this.estacion.division1.nombre + ', ' + this.estacion.division2.nombre + ', ' +  this.estacion.division3.nombre;
         var options = {
           fieldSeparator: ',',
           quoteStrings: '"',
@@ -571,10 +581,10 @@ export class EstacionesComponent implements OnInit, OnDestroy {
           title: titulo,
           useBom: true,
           headers: [
-            'nombre',
-            'fecha',
-            'valor',
-            'comentario'
+            'Observador',
+            'Fecha',
+            'Valor',
+            'Comentario',
           ],
           useHeader: true,
         };
