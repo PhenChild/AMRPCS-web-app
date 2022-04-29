@@ -24,7 +24,7 @@ export class DbService {
    * Constructor
    * @param http
    */
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /**
    * Cabezera
@@ -252,6 +252,12 @@ export class DbService {
   updateEstacion(estacion: any): any {
     delete estacion.foto;
     return this.http.post(this.dbURL + 'estacion/update', estacion, {
+      headers: this.getHeader(),
+    });
+  }
+
+  getInfoEstacion(nombre: any): any {
+    return this.http.post(this.dbURL + 'estacion/getInfoEstacion', { estacion: nombre }, {
       headers: this.getHeader(),
     });
   }

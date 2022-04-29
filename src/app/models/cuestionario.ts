@@ -13,6 +13,8 @@ export class Cuestionario {
   respGana!: number;
 
   comentario!: string;
+  
+  total!: number;
 
   state!: string;
 

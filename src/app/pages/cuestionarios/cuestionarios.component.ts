@@ -12,6 +12,13 @@ import Utils from 'src/app/utils/utils';
 import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
 import { FileUploader } from 'ng2-file-upload';
 
+const ARR1 = ['Saturado', 'Húmedo', 'Subhúmedo', 'Normal', 'Seco', 'Muy Seco', 'Erosionable']
+const ARR2 = ['Clorótica/Aguachinada', 'Verde pálido/perdió la intensidad del verdor', 'Normal (Verde intenso)', 'Verde Azulado (Condición de estrés hídrica)', 'Marchitez sin defoliación', 'Marchitez con defoliación', 'Marchitez permanente (muerte)']
+const ARR3 = ['Mucho más de lo normal', 'Más de lo normal', 'Poco más de lo normal', 'Normal', 'Poco menos que lo normal', 'Menos que lo normal', 'Mucho menos que lo normal']
+const ARR4 = ['Muy adelantadas', 'Más adelantadas de lo normal', 'Poco más adelantadas de lo normal', 'Normal', 'Ligeramente retrasadas de lo normal', 'Más retrasadas de lo normal', 'Muy retrasadas']
+const ARR5 = ['Mucho más frío de lo normal', 'Más frío de lo normal', 'Poco más frío de lo normal', 'Normal', 'Poco más cálido que lo normal', 'Más cálido que lo normal', 'Mucho más cálido que lo normal']
+const ARR6 = ['Mucho más que suficiente', 'Más que suficiente', 'Poco más que suficiente', 'Sufuciente', 'Poco menos que suficiente', 'Menos que suficiente (escasa)', 'Mucho menos que suficiente']
+
 @Component({
   selector: 'app-cuestionarios',
   templateUrl: './cuestionarios.component.html',
@@ -192,20 +199,53 @@ export class CuestionariosComponent implements OnInit {
   }
   downloadData() {
     const data = this.cuestionarios.map(function (cuestionario) {
+      let puntaje = cuestionario.respSuelo + cuestionario.respVeg + cuestionario.respPrec + cuestionario.respTempPrec + cuestionario.respTemps + cuestionario.respGana
+      var equivalente
+      if (6 >= puntaje && puntaje <= 10) {
+        equivalente = 'Humedad muy alta'        
+      }
+      else if (11 >= puntaje && puntaje <= 14) {
+        equivalente = 'Humedad alta'
+      }
+      else if (15 >= puntaje && puntaje <= 18) {
+        equivalente = 'Humedad moderada '
+      }
+      else if (19 >= puntaje && puntaje <= 22) {
+        equivalente = 'Humedad baja'
+      }
+      else if (23 >= puntaje && puntaje <= 26) {
+        equivalente = 'Neutro'
+      }
+      else if (27 >= puntaje && puntaje <= 30) {
+        equivalente = 'Sequía baja'
+      }
+      else if (31 >= puntaje && puntaje <= 34) {
+        equivalente = 'Sequía moderada'
+      }
+      else if (35 >= puntaje && puntaje <= 38) {
+        equivalente = 'Sequía alta'
+      }
+      else if (39 >= puntaje && puntaje <= 42) {
+        equivalente = 'Sequía muy alta'
+      }
+      
       var obj = {
-        codigo_estacion: cuestionario.Observador.Estacion.codigo,
-        nombre_observador:
+        'Cód. Estación': cuestionario.Observador.Estacion.codigo,
+        'Estación': cuestionario.Observador.Estacion.nombre,
+        'Observador':
           cuestionario.Observador.User.nombre +
           ' ' +
           cuestionario.Observador.User.apellido,
-        fecha_reporte: cuestionario.fecha,
-        respSuelo: cuestionario.respSuelo,
-        respVeg: cuestionario.respVeg,
-        respPrec: cuestionario.respPrec,
-        respTempPrec: cuestionario.respTempPrec,
-        respTemps: cuestionario.respTemps,
-        respGana: cuestionario.respGana,
-        comentario: cuestionario.comentario
+        'Fecha': cuestionario.fecha.slice(0, 10),
+        'Cond. Suelo': ARR1[cuestionario.respSuelo - 1],
+        'Cond. Vegetación': ARR2[cuestionario.respVeg - 1],
+        'Precipitaciones': ARR3[cuestionario.respPrec - 1],
+        'Temporalidad Prec.': ARR4[cuestionario.respTempPrec - 1],
+        'Temperaturas': ARR5[cuestionario.respTemps - 1],
+        'Agua': ARR6[cuestionario.respGana - 1],
+        'Puntaje' : puntaje,
+        'Equivalente': equivalente,
+        'Comentarios': cuestionario.comentario
           ? cuestionario.comentario.replace('\n', '')
           : '',
       };
@@ -227,16 +267,19 @@ export class CuestionariosComponent implements OnInit {
       title: titulo,
       useBom: true,
       headers: [
-        'codigo_estacion',
-        'nombre_observador',
-        'fecha_reporte',
-        'respSuelo',
-        'respVeg',
-        'respPrec',
-        'respTempPrec',
-        'respTemps',
-        'respGana',
-        'comentario',
+        'Cód. Estación',
+        'Estación',
+        'Observador',
+        'Fecha',
+        'Cond. Suelo',
+        'Cond. Vegetación',
+        'Precipitaciones',
+        'Temporalidad Prec.',
+        'Temperaturas',
+        'Agua',
+        'Puntaje',
+        'Comentarios',
+        'Equivalente',
       ],
       useHeader: true,
     };
