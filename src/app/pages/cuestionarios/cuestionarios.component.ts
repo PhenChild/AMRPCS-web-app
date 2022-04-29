@@ -135,15 +135,9 @@ export class CuestionariosComponent implements OnInit {
   }
 
   nuevo(): void {
-    const dias = this.fechaActual.getDate();
-    const puedeReportar = dias <= 23;
-    if (puedeReportar) {
-      this.isForm = true;
-      const table = <HTMLInputElement>document.getElementById('table');
-      table.style.display = 'none';
-    } else {
-      this.tService.error('', 'Disponible los 10 primeros días del mes');
-    }
+    this.isForm = true;
+    const table = <HTMLInputElement>document.getElementById('table');
+    table.style.display = 'none';
   }
 
   formDone(event: any) {

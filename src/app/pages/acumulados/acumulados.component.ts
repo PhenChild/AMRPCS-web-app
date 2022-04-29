@@ -131,17 +131,9 @@ export class AcumuladosComponent implements OnInit {
   }
 
   nuevo(): void {
-    const horas = this.fechaActual.getHours();
-    const minutos = this.fechaActual.getMinutes();
-    const puedeReportar =
-      ((horas == 4 && minutos >= 30) || horas > 4) && horas < 10;
-    if (puedeReportar) {
-      const table = <HTMLInputElement>document.getElementById('table');
-      table.style.display = 'none';
-      this.isForm = true;
-    } else {
-      this.tService.error('', 'Disponible de 4h30 a 10h00');
-    }
+    const table = <HTMLInputElement>document.getElementById('table');
+    table.style.display = 'none';
+    this.isForm = true;
   }
 
   formDone(event: any) {

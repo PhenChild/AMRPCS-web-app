@@ -20,8 +20,12 @@ export class FormAcumuladoComponent implements OnInit {
   @Output() isDoneEvent = new EventEmitter<boolean>();
 
   estaciones: Estacion[] = [];
-  minDate: any = moment(new Date().setDate(new Date().getDate() - 5)).format("yyyy-MM-DD");
-  maxDate: any = moment(new Date().setDate(new Date().getDate() - 1)).format("yyyy-MM-DD"); 
+  minDate: any = moment(new Date().setDate(new Date().getDate() - 5)).format(
+    'yyyy-MM-DD'
+  );
+  maxDate: any = moment(new Date().setDate(new Date().getDate() - 1)).format(
+    'yyyy-MM-DD'
+  );
 
   constructor(private dbService: DbService, private tService: ToastrService) {}
 
@@ -33,7 +37,7 @@ export class FormAcumuladoComponent implements OnInit {
     }
     if (!this.isUpdating) {
       this.reporte = new ReporteAcumulado();
-      this.reporte.fechaFin = moment(new Date()).format("yyyy-MM-DD");
+      this.reporte.fechaFin = moment(new Date()).format('yyyy-MM-DD');
     }
   }
 
@@ -56,19 +60,31 @@ export class FormAcumuladoComponent implements OnInit {
           );
         }
       } else {
-        if (confirm('¿Desea crear un nuevo reporte acumulado?')) {
-          this.dbService.addReporteAcumulado(this.reporte).subscribe(
-            (data: any) => {
-              this.tService.success(
-                'Reporte creado con éxito',
-                'Envío exitoso'
-              );
-              form.resetForm();
-              this.isDoneEvent.emit(true);
-            },
-            (err: any) => {
-              this.tService.error('', 'Ha ocurrido un error');
-            }
+        const fecha = new Date(this.reporte.fechaFin);
+        const horas = fecha.getHours();
+        const minutos = fecha.getMinutes();
+        const puedeReportar =
+          ((horas == 4 && minutos >= 30) || horas > 4) && horas < 10;
+        if (puedeReportar) {
+          if (confirm('¿Desea crear un nuevo reporte acumulado?')) {
+            this.dbService.addReporteAcumulado(this.reporte).subscribe(
+              (data: any) => {
+                this.tService.success(
+                  'Reporte creado con éxito',
+                  'Envío exitoso'
+                );
+                form.resetForm();
+                this.isDoneEvent.emit(true);
+              },
+              (err: any) => {
+                this.tService.error('', 'Ha ocurrido un error');
+              }
+            );
+          }
+        } else {
+          this.tService.error(
+            'Disponible entre las 4h30 y 10h00',
+            'Horario no disponible'
           );
         }
       }

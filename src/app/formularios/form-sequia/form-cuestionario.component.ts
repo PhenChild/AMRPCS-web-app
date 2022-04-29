@@ -38,6 +38,9 @@ export class FormCuestionarioComponent implements OnInit {
   isError!: boolean;
 
   eliminados: any[] = [];
+
+  maxDate: any = moment(new Date()).format('yyyy-MM-DD');
+
   constructor(
     private dbService: DbService,
     private tService: ToastrService,
@@ -73,7 +76,6 @@ export class FormCuestionarioComponent implements OnInit {
     }
     if (!this.isUpdating) {
       this.cuestionario = new Cuestionario();
-      this.cuestionario.fecha = moment(new Date()).format('DD/MM/yyyy');
     } else {
       this.dbService.getCuestionariosFotos(this.cuestionario.id).subscribe(
         (data: any) => {
@@ -95,7 +97,6 @@ export class FormCuestionarioComponent implements OnInit {
           this.tService.error('', 'Ha ocurrido un error');
         }
       );
-      this.cuestionario.fecha = moment(new Date()).format('yyyy-MM-DD');
     }
 
     this.isCancel = false;
@@ -158,24 +159,34 @@ export class FormCuestionarioComponent implements OnInit {
             );
         }
       } else {
-        if (confirm('¿Desea crear un nuevo cuestionario de sequía?')) {
-          this.dbService.addCuestionario(this.cuestionario).subscribe(
-            (data: any) => {
-              this.idCuestionario = data.id;
-              if (this.uploader.queue.length == 0) {
-                this.tService.success(
-                  'Cuestionario enviado con éxito.',
-                  'Envío exitoso'
-                );
-                form.resetForm();
-                this.isDoneEvent.emit(true);
-              } else {
-                this.uploader.uploadAll();
+        const fecha = new Date(this.cuestionario.fecha);
+        const dias = fecha.getDate();
+        const puedeReportar = dias <= 23;
+        if (puedeReportar) {
+          if (confirm('¿Desea crear un nuevo cuestionario de sequía?')) {
+            this.dbService.addCuestionario(this.cuestionario).subscribe(
+              (data: any) => {
+                this.idCuestionario = data.id;
+                if (this.uploader.queue.length == 0) {
+                  this.tService.success(
+                    'Cuestionario enviado con éxito.',
+                    'Envío exitoso'
+                  );
+                  form.resetForm();
+                  this.isDoneEvent.emit(true);
+                } else {
+                  this.uploader.uploadAll();
+                }
+              },
+              (err: any) => {
+                this.tService.error('', 'Ha ocurrido un error');
               }
-            },
-            (err: any) => {
-              this.tService.error('', 'Ha ocurrido un error');
-            }
+            );
+          }
+        } else {
+          this.tService.error(
+            'Disponible los 10 primeros días del mes',
+            'Fecha no disponible'
           );
         }
       }

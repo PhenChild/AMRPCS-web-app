@@ -57,13 +57,13 @@
             <div class="form-group" *ngIf="!isUpdating">
               <label for="fechaInicio">Fecha*</label><br />
               <input
+                max="{{ maxDate }}"
                 type="date"
                 class="form-control"
                 name="fechaInicio"
                 id="fechaInicio"
                 [(ngModel)]="cuestionario.fecha"
                 required
-                disabled
               />
             </div>
             <div class="form-group">

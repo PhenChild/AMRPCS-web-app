@@ -35,7 +35,6 @@ export class ReportesComponent implements OnInit {
   /** Lista de reportes seleccionados*/
   reportes: Reporte[] = [];
   paises: Pais[] = [];
-  fechaActual!: Date;
   /** Lista de estaciones */
   estaciones: Estacion[] = [];
 
@@ -97,7 +96,6 @@ export class ReportesComponent implements OnInit {
       this.getData();
     }
     this.reporte = new Reporte();
-    this.fechaActual = new Date();
   }
 
   getData(): void {
@@ -130,17 +128,9 @@ export class ReportesComponent implements OnInit {
   }
 
   nuevo(): void {
-    const horas = this.fechaActual.getHours();
-    const minutos = this.fechaActual.getMinutes();
-    const puedeReportar =
-      ((horas == 4 && minutos >= 30) || horas > 4) && horas < 10;
-    if (puedeReportar) {
-      this.isForm = true;
-      const table = <HTMLInputElement>document.getElementById('table');
-      table.style.display = 'none';
-    } else {
-      this.tService.error('', 'Disponible de 4h30 a 10h00');
-    }
+    this.isForm = true;
+    const table = <HTMLInputElement>document.getElementById('table');
+    table.style.display = 'none';
   }
 
   formDone(event: any) {
