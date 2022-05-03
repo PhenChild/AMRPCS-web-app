@@ -4,6 +4,7 @@ import { DataTableDirective } from 'angular-datatables';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { Ocupacion } from 'src/app/models/ocupacion';
+import { Sector } from 'src/app/models/sector';
 import { DbService } from 'src/app/services/database/db.service';
 import Utils from 'src/app/utils/utils';
 
@@ -25,6 +26,7 @@ export class OcupacionComponent implements OnInit {
   };
   /** Lista de ocupaciones */
   ocupaciones: Ocupacion[] = [];
+  sectores: Sector[] = [];
 
   /** ocupacion */
   ocupacion = new Ocupacion();
@@ -36,13 +38,18 @@ export class OcupacionComponent implements OnInit {
 
   filtro = {
     descripcion: '',
+    sector: '',
   };
 
   isDtInitialized: boolean = false;
   isForm: boolean = false;
   constructor(private dbService: DbService, private tService: ToastrService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.dbService.getSectores().subscribe((data: any) => {
+      this.sectores = data;
+    });
+  }
 
   /**
    * Elimina los operadores de los datatables
@@ -64,6 +71,7 @@ export class OcupacionComponent implements OnInit {
 
     this.dbService.getFiltroOcupaciones(this.filtro).subscribe((data: any) => {
       this.ocupaciones = data as any;
+      console.log(this.ocupaciones);
       this.dtTrigger1.next();
       const table = <HTMLInputElement>(
         document.getElementById('tablaOcupaciones')
@@ -183,7 +191,10 @@ export class OcupacionComponent implements OnInit {
    * @param formOcupacion formulario de actualización
    */
   cancelar(formOcupacion: NgForm): void {
-    this.isForm = false;
+    const table = <HTMLInputElement>document.getElementById('table');
+    const form = <HTMLInputElement>document.getElementById('form-ocupacion');
+    table.style.display = 'block';
+    form.style.display = 'none';
     this.ocupacion = new Ocupacion();
     formOcupacion.reset();
   }

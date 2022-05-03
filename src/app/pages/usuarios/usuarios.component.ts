@@ -20,6 +20,7 @@ import { Location } from '@angular/common';
 import Utils from 'src/app/utils/utils';
 import { data } from 'jquery';
 import { Ocupacion } from 'src/app/models/ocupacion';
+import { Sector } from 'src/app/models/sector';
 
 /**
  * Componente para la pagina de usuarios.
@@ -53,6 +54,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   isSuccess!: boolean;
   isCancel!: boolean;
   isError!: boolean;
+  isOcupaciones = false;
 
   /** Lista de usuarios*/
   usuarios: User[] = [];
@@ -61,7 +63,8 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   usuario = new User();
   paises: Pais[] = [];
   ocupaciones: Ocupacion[] = [];
-
+  sectores: Sector[] = [];
+  sector = new Sector();
   confpassword = '';
 
   /** Operador del datatable de los usuarios */
@@ -146,8 +149,9 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     this.dbService.getPaises().subscribe((data: any) => {
       this.filtroPaises = data as any;
     });
-    this.dbService.getOcupaciones().subscribe((data: any) => {
-      this.ocupaciones = data as any;
+
+    this.dbService.getSectores().subscribe((data: any) => {
+      this.sectores = data as any;
     });
 
     this.uploader.onAfterAddingFile = (file) => {
@@ -193,6 +197,12 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     }
   }
 
+  getOcupaciones(sector: any) {
+    this.dbService.getOcupacionesbySector(sector).subscribe((data: any) => {
+      this.ocupaciones = data as any;
+      this.isOcupaciones = true;
+    });
+  }
   getData(): void {
     const table = <HTMLInputElement>document.getElementById('tablaUsuarios');
     table.style.display = 'none';
@@ -252,6 +262,10 @@ export class UsuariosComponent implements OnInit, OnDestroy {
       this.selectedEstaciones = data.map((a) => a.Estacion);
     });
     this.usuario = usuario;
+    if (usuario.Ocupacion) {
+      this.sector = usuario.Ocupacion.Sector.id;
+      this.getOcupaciones(this.sector);
+    }
     this.usuario.password = '';
     const form2 = document.getElementById('formUsuario');
     const tableE = <HTMLInputElement>document.getElementById('form-estacion');
@@ -304,7 +318,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
    * @param formUsuario formulario de usuario
    */
   submit(formUsuario: NgForm): void {
-    if (formUsuario.valid) {
+    if (formUsuario.valid && this.usuario.idOcupacion) {
       if (
         this.usuario.role == 'observer' &&
         this.selectedEstaciones.length == 0
@@ -314,7 +328,11 @@ export class UsuariosComponent implements OnInit, OnDestroy {
           'Debe seleccionar al menos una estación para el observador.'
         );
       } else {
-        if (confirm('¿Está seguro de actualizar la información del usuario?')) {
+        if (
+          formUsuario.valid &&
+          confirm('¿Está seguro de actualizar la información del usuario?')
+        ) {
+          console.log(this.usuario);
           this.dbService
             .updateUsuario(
               this.usuario,
@@ -337,6 +355,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
                   'Envío exitoso'
                 );
                 formUsuario.reset();
+                this.getData();
               },
               (err: any) => {
                 this.tService.error('', 'Ha ocurrido un error');

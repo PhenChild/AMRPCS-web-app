@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 import { DataTableDirective } from 'angular-datatables';
 import { Pais } from 'src/app/models/pais';
 import { Ocupacion } from 'src/app/models/ocupacion';
+import { Sector } from 'src/app/models/sector';
 
 /**
  * Componente para el from de usuarios.
@@ -41,7 +42,9 @@ export class FormUsuarioComponent implements OnInit {
 
   paises: Pais[] = [];
   ocupaciones: Ocupacion[] = [];
-
+  sectores: Sector[] = [];
+  sector = new Sector();
+  isOcupaciones = false;
   /**
    * Estacion selecionada.
    */
@@ -78,8 +81,8 @@ export class FormUsuarioComponent implements OnInit {
     this.dbService.getPaises().subscribe((data: any) => {
       this.paises = data as any;
     });
-    this.dbService.getOcupaciones().subscribe((data: any) => {
-      this.ocupaciones = data as any;
+    this.dbService.getSectores().subscribe((data: any) => {
+      this.sectores = data as any;
     });
   }
 
@@ -115,6 +118,13 @@ export class FormUsuarioComponent implements OnInit {
         );
         table.style.display = 'block';
       });
+  }
+
+  getOcupaciones(sector: any) {
+    this.dbService.getOcupacionesbySector(sector).subscribe((data: any) => {
+      this.ocupaciones = data as any;
+      this.isOcupaciones = true;
+    });
   }
 
   /**

@@ -5,7 +5,13 @@ export class Ocupacion {
 
   descripcion!: string;
 
-  //actividadEconomica: string;
+  sector!: string;
+
+  Sector!: {
+    descripcion: string;
+  };
+
+  idSector!: string;
 
   audCreatedAt!: string;
 

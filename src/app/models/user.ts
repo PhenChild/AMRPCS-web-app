@@ -31,6 +31,9 @@ export class User {
 
   Ocupacion!: {
     descripcion: string;
+    Sector: {
+      descripcion: string;
+    };
   };
 
   idOcupacion!: number;

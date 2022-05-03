@@ -24,7 +24,7 @@ export class DbService {
    * Constructor
    * @param http
    */
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   /**
    * Cabezera
@@ -257,9 +257,13 @@ export class DbService {
   }
 
   getInfoEstacion(nombre: any): any {
-    return this.http.post(this.dbURL + 'estacion/getInfoEstacion', { estacion: nombre }, {
-      headers: this.getHeader(),
-    });
+    return this.http.post(
+      this.dbURL + 'estacion/getInfoEstacion',
+      { estacion: nombre },
+      {
+        headers: this.getHeader(),
+      }
+    );
   }
 
   // PAISES ENDPOINTS
@@ -705,16 +709,35 @@ export class DbService {
     });
   }
   // OCUPACIÓN EDNPOINTS
+  getSectores(): any {
+    return this.http.get(this.dbURL + 'sector/getAll', {
+      headers: this.getHeader(),
+    });
+  }
+
   getOcupaciones(): any {
     return this.http.get(this.dbURL + 'ocupacion/getAll', {
       headers: this.getHeader(),
     });
   }
 
+  getOcupacionesbySector(sector: any): any {
+    return this.http.post(
+      this.dbURL + 'ocupacion/getAllSector',
+      { id: sector },
+      {
+        headers: this.getHeader(),
+      }
+    );
+  }
+
   getFiltroOcupaciones(filtro: any): any {
     var query = '';
     if (filtro.descripcion != '') {
       query += 'descripcion=' + filtro.descripcion + '&';
+    }
+    if (filtro.sector != '') {
+      query += 'sector=' + filtro.sector + '&';
     }
     return this.http.get(this.dbURL + 'ocupacion/getAll/filtro?' + query, {
       headers: this.getHeader(),

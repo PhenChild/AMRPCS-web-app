@@ -40,7 +40,20 @@
                 [(ngModel)]="filtro.descripcion"
               />
             </div>
-            <div class="form-group col-md-6"></div>
+            <div class="form-group col-md-3">
+              <label for="sector">Sector</label><br />
+              <select
+                name="sector"
+                id="sector"
+                class="form-control"
+                [(ngModel)]="filtro.sector"
+              >
+                <option *ngFor="let sector of sectores" [value]="sector.id">
+                  {{ sector.descripcion }}
+                </option>
+              </select>
+            </div>
+            <div class="form-group col-md-3"></div>
             <div class="form-group col-md-3">
               <button class="btn btn-default float-right" (click)="getData()">
                 Buscar
@@ -58,6 +71,7 @@
             <thead class="thead-light">
               <tr>
                 <th scope="col">Descripción</th>
+                <th scope="col">Sector</th>
                 <th scope="col">Creado</th>
                 <th scope="col">Actualizado</th>
                 <th scope="col">Estado</th>
@@ -75,6 +89,9 @@
                     </div>
                   </div>
                 </th>
+                <td>
+                  {{ ocupacion.Sector.descripcion }}
+                </td>
                 <td>
                   {{ date(ocupacion.audCreatedAt) }}
                   {{ time(ocupacion.audCreatedAt) }}
@@ -149,6 +166,19 @@
                 [(ngModel)]="ocupacion.descripcion"
                 required
               />
+            </div>
+            <div class="form-group">
+              <label for="sector">Sector de la ocupación</label><br />
+              <select
+                name="sector"
+                id="sector"
+                class="form-control"
+                [(ngModel)]="ocupacion.sector"
+              >
+                <option *ngFor="let sector of sectores" [value]="sector.id">
+                  {{ sector.descripcion }}
+                </option>
+              </select>
             </div>
             <div>
               <button
