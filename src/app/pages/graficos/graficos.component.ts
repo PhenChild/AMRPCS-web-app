@@ -9,6 +9,7 @@ import Utils from 'src/app/utils/utils';
 import 'chartjs-adapter-moment';
 import { NgForm } from '@angular/forms';
 import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
+import moment from 'moment';
 
 Chart.register(...registerables);
 
@@ -35,7 +36,7 @@ export class GraficosComponent implements OnInit {
     private modal: NgbModal,
     private tService: ToastrService,
     private router: ActivatedRoute
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     let estacion = this.router.snapshot.paramMap.get('estacion');
@@ -60,9 +61,15 @@ export class GraficosComponent implements OnInit {
     if (this.isDrawn) {
       this.myChart.destroy();
     }
+    let fechaCorrecta = true;
     let fi = new Date(this.filtro.fechaInicio);
-    let ff = new Date(this.filtro.fechaFin);
-    if (fi <= ff) {
+    if (this.filtro.fechaFin) {
+      let ff = new Date(this.filtro.fechaFin);
+      fechaCorrecta = fi <= ff;
+    } else {
+      this.filtro.fechaFin = moment(Date.now()).format('yyyy-MM-DD');
+    }
+    if (fechaCorrecta) {
       this.dbService.getReportesGraficos(this.filtro).subscribe(
         (data: any) => {
           this.reportes = data as any;
@@ -152,41 +159,58 @@ export class GraficosComponent implements OnInit {
   }
 
   downloadData() {
-    console.log(this.reportes)
-    this.dbService.getInfoEstacion(this.filtro.estacion).subscribe((data: any) => {
-      console.log(data)
-      const arr = this.reportes.map(function (rep: any) {
-        let re1 = /.000Z/gi
-        let re2 = /T/gi
-        let f = rep.fecha.replace(re1, '')
-        var obj = {
-          'Observador': rep.Observador.User.nombre + " " + rep.Observador.User.apellido,
-          'Fecha': f.replace(re2, ' '),
-          'Valor': rep.valor,
-          'Comentario': rep.comentario,
+    this.dbService
+      .getInfoEstacion(this.filtro.estacion)
+      .subscribe((data: any) => {
+        const arr = this.reportes.map(function (rep: any) {
+          let re1 = /.000Z/gi;
+          let re2 = /T/gi;
+          let f = rep.fecha.replace(re1, '');
+          var obj = {
+            Observador: rep.Observador
+              ? rep.Observador.User.nombre + ' ' + rep.Observador.User.apellido
+              : '',
+            Fecha: f.replace(re2, ' '),
+            Valor: rep.valor,
+            Comentario: rep.comentario,
+          };
+          return obj;
+        });
+        var titulo =
+          'Filtro: ' +
+          this.filtro.estacion +
+          ' - ' +
+          data.codigo +
+          ' en período: ' +
+          this.filtro.fechaInicio +
+          '_' +
+          this.filtro.fechaFin +
+          '\nUbicación: ' +
+          data.division1.nombre +
+          ', ' +
+          data.division2.nombre +
+          ', ' +
+          data.division3.nombre;
+        var options = {
+          fieldSeparator: ',',
+          quoteStrings: '"',
+          decimalseparator: '.',
+          showLabels: true,
+          showTitle: true,
+          title: titulo,
+          useBom: true,
+          headers: ['Observador', 'Fecha', 'Valor', 'Comentario'],
+          useHeader: true,
         };
-        return obj;
+        new AngularCsv(
+          arr,
+          this.filtro.estacion +
+            '_' +
+            this.filtro.fechaInicio +
+            '_' +
+            this.filtro.fechaFin,
+          options
+        );
       });
-      var titulo = "Filtro: " + this.filtro.estacion + " - " + data.codigo + " en período: " + this.filtro.fechaInicio + "_" + this.filtro.fechaFin + 
-      "\nUbicación: " + data.division1.nombre + ', ' + data.division2.nombre + ', ' +  data.division3.nombre;;
-      var options = {
-        fieldSeparator: ',',
-        quoteStrings: '"',
-        decimalseparator: '.',
-        showLabels: true,
-        showTitle: true,
-        title: titulo,
-        useBom: true,
-        headers: [
-          'Observador',
-          'Fecha',
-          'Valor',
-          'Comentario',
-        ],
-        useHeader: true,
-      };
-      new AngularCsv(arr, this.filtro.estacion + "_" + this.filtro.fechaInicio + "_" + this.filtro.fechaFin, options);
-    })
-    
   }
 }

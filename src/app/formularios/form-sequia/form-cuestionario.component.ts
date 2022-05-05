@@ -134,13 +134,17 @@ export class FormCuestionarioComponent implements OnInit {
             .subscribe(
               (data: any) => {
                 this.idCuestionario = parseInt(this.cuestionario.id);
+                let arr = [];
                 for (var item of this.uploader.queue) {
                   let file = item as any;
                   if (file.options.additionalParameter !== undefined) {
                     if (file.options.additionalParameter.subido) {
-                      item.remove();
+                      arr.push(item);
                     }
                   }
+                }
+                for (var item of arr) {
+                  item.remove();
                 }
                 if (this.uploader.queue.length == 0) {
                   this.tService.success(

@@ -139,6 +139,9 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     titlee = titlee.split('/')[1];
     if (titlee === 'admin-layout') {
       this.isAdmin = true;
+      this.dbService.getSectores().subscribe((data: any) => {
+        this.sectores = data as any;
+      });
     } else if (titlee === 'obs-layout') {
       this.isObserver = true;
     }
@@ -148,10 +151,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
     this.dbService.getPaises().subscribe((data: any) => {
       this.filtroPaises = data as any;
-    });
-
-    this.dbService.getSectores().subscribe((data: any) => {
-      this.sectores = data as any;
     });
 
     this.uploader.onAfterAddingFile = (file) => {
@@ -199,6 +198,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
   getOcupaciones(sector: any) {
     this.dbService.getOcupacionesbySector(sector).subscribe((data: any) => {
+      this.usuario.idOcupacion = -1;
       this.ocupaciones = data as any;
       this.isOcupaciones = true;
     });
@@ -264,7 +264,12 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     this.usuario = usuario;
     if (usuario.Ocupacion) {
       this.sector = usuario.Ocupacion.Sector.id;
-      this.getOcupaciones(this.sector);
+      this.dbService
+        .getOcupacionesbySector(this.sector)
+        .subscribe((data: any) => {
+          this.ocupaciones = data as any;
+          this.isOcupaciones = true;
+        });
     }
     this.usuario.password = '';
     const form2 = document.getElementById('formUsuario');
@@ -318,7 +323,11 @@ export class UsuariosComponent implements OnInit, OnDestroy {
    * @param formUsuario formulario de usuario
    */
   submit(formUsuario: NgForm): void {
-    if (formUsuario.valid && this.usuario.idOcupacion) {
+    if (
+      formUsuario.valid &&
+      this.usuario.idOcupacion &&
+      this.usuario.idOcupacion != -1
+    ) {
       if (
         this.usuario.role == 'observer' &&
         this.selectedEstaciones.length == 0
@@ -332,7 +341,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
           formUsuario.valid &&
           confirm('¿Está seguro de actualizar la información del usuario?')
         ) {
-          console.log(this.usuario);
           this.dbService
             .updateUsuario(
               this.usuario,

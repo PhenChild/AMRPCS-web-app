@@ -71,7 +71,6 @@ export class OcupacionComponent implements OnInit {
 
     this.dbService.getFiltroOcupaciones(this.filtro).subscribe((data: any) => {
       this.ocupaciones = data as any;
-      console.log(this.ocupaciones);
       this.dtTrigger1.next();
       const table = <HTMLInputElement>(
         document.getElementById('tablaOcupaciones')
@@ -86,6 +85,7 @@ export class OcupacionComponent implements OnInit {
    */
   editarOcupacion(ocupacion: any): void {
     this.ocupacion = ocupacion;
+    this.ocupacion.sector = ocupacion.Sector.id;
     this.isUpdating = true;
     const table = <HTMLInputElement>document.getElementById('table');
     const form = <HTMLInputElement>document.getElementById('form-ocupacion');

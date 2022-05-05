@@ -9,6 +9,7 @@ export class Ocupacion {
 
   Sector!: {
     descripcion: string;
+    id: number;
   };
 
   idSector!: string;

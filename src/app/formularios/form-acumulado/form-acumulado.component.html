@@ -80,19 +80,19 @@
             <div class="form-group" *ngIf="!isUpdating">
               <label for="fechaFin">Fecha Final*</label><br />
               <input
-                type="date"
+                type="datetime-local"
                 class="form-control"
+                max="{{ maxDateTime }}"
                 name="fechaFin"
                 id="fechaFin"
                 [(ngModel)]="reporte.fechaFin"
                 required
-                disabled
               />
             </div>
             <div class="form-group">
               <label for="valor">Valor*</label><br />
               <input
-                type="number"
+                type="float"
                 maxlength="3"
                 class="form-control"
                 name="valor"

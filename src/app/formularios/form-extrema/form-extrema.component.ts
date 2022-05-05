@@ -36,8 +36,6 @@ export class FormExtremaComponent implements OnInit {
   }
 
   saveReporte(form: NgForm) {
-    console.log(this.reporte);
-
     if (form.valid) {
       if (this.isUpdating) {
         if (confirm('¿Desea actualizar la información del reporte?')) {

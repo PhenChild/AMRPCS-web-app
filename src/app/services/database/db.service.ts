@@ -780,12 +780,8 @@ export class DbService {
   }
 
   activateOcupacion(ocupacion: any) {
-    return this.http.post(
-      this.dbURL + 'ocupacion/activateOcupacion',
-      ocupacion,
-      {
-        headers: this.getHeader(),
-      }
-    );
+    return this.http.post(this.dbURL + 'ocupacion/activate', ocupacion, {
+      headers: this.getHeader(),
+    });
   }
 }

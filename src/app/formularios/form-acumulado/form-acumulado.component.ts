@@ -26,6 +26,7 @@ export class FormAcumuladoComponent implements OnInit {
   maxDate: any = moment(new Date().setDate(new Date().getDate() - 1)).format(
     'yyyy-MM-DD'
   );
+  maxDateTime: any = moment(new Date()).format('yyyy-MM-DDTHH:mm:ss');
 
   constructor(private dbService: DbService, private tService: ToastrService) {}
 

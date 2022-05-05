@@ -33,7 +33,7 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: '/view-layout/reportes',
-    title: 'Precipitación',
+    title: 'Precipitación Diaria',
     icon: 'fa-file-alt',
     class: '',
   },

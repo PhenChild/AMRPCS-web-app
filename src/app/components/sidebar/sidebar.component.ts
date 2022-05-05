@@ -63,7 +63,7 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: '/admin-layout/reportes',
-    title: 'Precipitación',
+    title: 'Precipitación Diaria',
     icon: 'fa-file-alt',
     class: '',
   },
@@ -92,7 +92,7 @@ export const ROUTES: RouteInfo[] = [
     class: '',
   },
   {
-    path: '/obs-layout/acercade',
+    path: '/admin-layout/acercade',
     title: 'Acerca de',
     icon: 'fa-info-circle',
     class: '',
