@@ -186,14 +186,19 @@ export class AcumuladosComponent implements OnInit {
 
   downloadData() {
     const data = this.reportes.map(function (reporte) {
+      let re1 = /.000Z/gi
+      let re2 = /T/gi
+      let f1 = reporte.fechaInicio.replace(re1, '')
+      let f2 = reporte.fechaFin.replace(re1, '')
+
       var obj = {
         codigo_estacion: reporte.Observador.Estacion.codigo,
         nombre_observador:
           reporte.Observador.User.nombre +
           ' ' +
           reporte.Observador.User.apellido,
-        fecha_inicio_reporte: reporte.fechaInicio,
-        fecha_fin_reporte: reporte.fechaFin,
+        fecha_inicio_reporte: f1.replace(re2, ' '),
+        fecha_fin_reporte: f2.replace(re2, ' '),
         valor: reporte.valor,
         comentario: reporte.comentario
           ? reporte.comentario.replace('\n', '')

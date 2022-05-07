@@ -190,6 +190,10 @@ export class ExtremaComponent implements OnInit {
     const data = this.reportes.map(function (reporte) {
       var obj = null
       if (reporte.Observador.Estacion.nombre.slice(0, 2) != 'PP') {
+        let re1 = /.000Z/gi
+        let re2 = /T/gi
+        let f = reporte.fecha.replace(re1, '')
+        console.log(reporte)
         obj = {
           'Cód. Estación': reporte.Observador.Estacion.codigo,
           'Estación': reporte.Observador.Estacion.nombre,
@@ -197,13 +201,13 @@ export class ExtremaComponent implements OnInit {
             reporte.Observador.User.nombre +
             ' ' +
             reporte.Observador.User.apellido,
-          'Fecha': reporte.fecha,
-          'Fue notificado?': (reporte.notificacion) ? 'Sí': 'No',
-          'Inundación': reporte.inundacion,
-          'Granizo': reporte.granizo,
-          'Rayos': reporte.rayos,
-          'Deslizamientos': reporte.deslizamiento,
-          'Vientos Fuertes': reporte.vientos,
+          'Fecha': f.replace(re2, ' '),
+          'Fue notificado?': (reporte.notificacion) ? 'Sí' : 'No',
+          'Inundación': (reporte.inundacion == 1) ? 'Sí' : 'No',
+          'Granizo': (reporte.granizo == 1) ? 'Sí' : 'No',
+          'Rayos': (reporte.rayos == 1) ? 'Sí' : 'No',
+          'Deslizamientos': (reporte.deslizamiento == 1) ? 'Sí' : 'No',
+          'Vientos Fuertes': (reporte.vientos == 1) ? 'Sí' : 'No',
           'Comentarios': reporte.comentario
             ? reporte.comentario.replace('\n', '')
             : '',
