@@ -278,8 +278,8 @@ export class CuestionariosComponent implements OnInit {
         'Temperaturas',
         'Agua',
         'Puntaje',
-        'Comentarios',
         'Equivalente',
+        'Comentarios',
       ],
       useHeader: true,
     };
