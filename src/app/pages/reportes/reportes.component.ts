@@ -184,13 +184,17 @@ export class ReportesComponent implements OnInit {
 
   downloadData() {
     const data = this.reportes.map(function (reporte) {
+      let re1 = /.000Z/gi
+      let re2 = /T/gi
+      let f = reporte.fecha.replace(re1, '')
+
       var obj = {
         'Cód. Estación': reporte.Observador.Estacion.codigo,
         'Observador':
           reporte.Observador.User.nombre +
           ' ' +
           reporte.Observador.User.apellido,
-        'Fecha': reporte.fecha,
+        'Fecha': f.replace(re2, ' '),
         'Valor': reporte.valor,
         'Comentario': reporte.comentario
           ? reporte.comentario.replace('\n', '')
