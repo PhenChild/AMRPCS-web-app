@@ -77,6 +77,7 @@ export class FormExtremaComponent implements OnInit {
               this.isDoneEvent.emit(true);
             },
             (err: any) => {
+              console.log(err);
               this.tService.error('', 'Ha ocurrido un error');
             }
           );

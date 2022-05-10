@@ -122,6 +122,7 @@ export class FormUsuarioComponent implements OnInit {
 
   getOcupaciones(sector: any) {
     this.dbService.getOcupacionesbySector(sector).subscribe((data: any) => {
+      this.usuario.idOcupacion = -1;
       this.ocupaciones = data as any;
       this.isOcupaciones = true;
     });
@@ -153,7 +154,11 @@ export class FormUsuarioComponent implements OnInit {
    * @param formUsuario
    */
   onSubmit(formUsuario: NgForm) {
-    if (formUsuario.valid) {
+    if (
+      formUsuario.valid &&
+      this.usuario.idOcupacion &&
+      this.usuario.idOcupacion != -1
+    ) {
       if (this.confpassword == this.usuario.password) {
         if (
           this.usuario.role == 'observer' &&
@@ -175,7 +180,6 @@ export class FormUsuarioComponent implements OnInit {
                   );
                   formUsuario.reset();
                   this.selectedEstaciones = [];
-                  this.estaciones = [];
                   if (this.isDtInitialized) {
                     this.dtElement.dtInstance.then(
                       (dtInstance: DataTables.Api) => {
@@ -185,7 +189,12 @@ export class FormUsuarioComponent implements OnInit {
                   } else {
                     this.isDtInitialized = true;
                   }
+                  this.estaciones = [];
                   this.dtTrigger1.next();
+                  const table = <HTMLInputElement>(
+                    document.getElementById('form-estacion-new')
+                  );
+                  table.style.display = 'none';
                 },
                 (err: any) => {
                   if (err.status == 418) {

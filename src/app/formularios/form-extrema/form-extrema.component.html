@@ -20,7 +20,12 @@
                 class="form-control"
                 name="estacionadmin"
                 id="estacionadmin"
-                value="{{ reporte.Observador.Estacion.nombre }}"
+                value="{{
+                  reporte.Observador.Estacion.nombre +
+                    ' (' +
+                    reporte.Observador.Estacion.codigo +
+                    ')'
+                }}"
                 required
                 disabled
               />
@@ -38,7 +43,7 @@
                   *ngFor="let estacion of estaciones"
                   [value]="estacion.id"
                 >
-                  {{ estacion.nombre }}
+                  {{ estacion.nombre }} ({{ estacion.codigo }})
                 </option>
               </select>
             </div>
@@ -121,7 +126,7 @@
                   [(ngModel)]="reporte.vientos"
                 />
                 <label class="form-check-label" for="vientos"
-                  >Vientos Fuerte</label
+                  >Vientos Fuertes</label
                 >
               </div>
             </div>
@@ -144,6 +149,7 @@
                 id="comentario"
                 class="form-control"
                 [(ngModel)]="reporte.comentario"
+                maxlength="255"
               ></textarea>
             </div>
             <div>

@@ -69,7 +69,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       (err: any) => {
         this.tService.error(
           'Usuario o Contraseña Incorrecta.',
-          'Error en inicio de sesion'
+          'Error en inicio de sesión'
         );
       }
     );

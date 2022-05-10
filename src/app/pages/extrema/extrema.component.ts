@@ -188,23 +188,23 @@ export class ExtremaComponent implements OnInit {
 
   downloadData() {
     const data = this.reportes.map(function (reporte) {
-      var obj = null
+      var obj = null;
       if (reporte.Observador.Estacion.nombre.slice(0, 2) != 'PP') {
         obj = {
           'Cód. Estación': reporte.Observador.Estacion.codigo,
-          'Estación': reporte.Observador.Estacion.nombre,
-          'Observador':
+          Estación: reporte.Observador.Estacion.nombre,
+          Observador:
             reporte.Observador.User.nombre +
             ' ' +
             reporte.Observador.User.apellido,
-          'Fecha': reporte.fecha,
-          'Fue notificado?': (reporte.notificacion) ? 'Sí': 'No',
-          'Inundación': reporte.inundacion,
-          'Granizo': reporte.granizo,
-          'Rayos': reporte.rayos,
-          'Deslizamientos': reporte.deslizamiento,
+          Fecha: reporte.fecha,
+          'Fue notificado?': reporte.notificacion ? 'Sí' : 'No',
+          Inundación: reporte.inundacion,
+          Granizo: reporte.granizo,
+          Rayos: reporte.rayos,
+          Deslizamientos: reporte.deslizamiento,
           'Vientos Fuertes': reporte.vientos,
-          'Comentarios': reporte.comentario
+          Comentarios: reporte.comentario
             ? reporte.comentario.replace('\n', '')
             : '',
         };

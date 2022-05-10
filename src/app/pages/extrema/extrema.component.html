@@ -124,6 +124,11 @@
                 <th scope="col">Estación</th>
                 <th scope="col">Código Estación</th>
                 <th scope="col">Fecha</th>
+                <th scope="col">Inundación</th>
+                <th scope="col">Granizo</th>
+                <th scope="col">Rayos</th>
+                <th scope="col">Deslizamiento</th>
+                <th scope="col">Vientos Fuertes</th>
                 <th scope="col">Comentario</th>
                 <th scope="col" *ngIf="isAdmin">Creado</th>
                 <th scope="col" *ngIf="isAdmin">Actualizado</th>
@@ -152,6 +157,21 @@
                 </td>
                 <td width="15%">
                   {{ date(reporte.fecha) + " " + time(reporte.fecha) }}
+                </td>
+                <td width="10%" class="text-center">
+                  {{ reporte.inundacion ? "SI" : "NO" }}
+                </td>
+                <td width="10%" class="text-center">
+                  {{ reporte.granizo ? "SI" : "NO" }}
+                </td>
+                <td width="10%" class="text-center">
+                  {{ reporte.rayos ? "SI" : "NO" }}
+                </td>
+                <td width="10%" class="text-center">
+                  {{ reporte.deslizamiento ? "SI" : "NO" }}
+                </td>
+                <td width="10%" class="text-center">
+                  {{ reporte.vientos ? "SI" : "NO" }}
                 </td>
                 <td width="40%">
                   {{ reporte.comentario }}

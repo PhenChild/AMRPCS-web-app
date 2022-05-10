@@ -20,7 +20,12 @@
                 class="form-control"
                 name="estacionadmin"
                 id="estacionadmin"
-                value="{{ cuestionario.Observador.Estacion.nombre }}"
+                value="{{
+                  cuestionario.Observador.Estacion.nombre +
+                    ' (' +
+                    cuestionario.Observador.Estacion.codigo +
+                    ')'
+                }}"
                 required
                 disabled
               />
@@ -38,7 +43,7 @@
                   *ngFor="let estacion of estaciones"
                   [value]="estacion.id"
                 >
-                  {{ estacion.nombre }}
+                  {{ estacion.nombre }} ({{ estacion.codigo }})
                 </option>
               </select>
             </div>
@@ -319,6 +324,7 @@
                 id="comentario"
                 class="form-control"
                 [(ngModel)]="cuestionario.comentario"
+                maxlength="255"
               ></textarea>
             </div>
             <div class="row">
