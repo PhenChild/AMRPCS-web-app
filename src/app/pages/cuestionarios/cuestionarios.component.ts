@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
@@ -119,7 +119,8 @@ export class CuestionariosComponent implements OnInit {
     location: Location,
     private dbService: DbService,
     private tService: ToastrService,
-    private router: ActivatedRoute
+    private router: ActivatedRoute,
+    private routerA: Router
   ) {
     this.location = location;
   }
@@ -196,7 +197,10 @@ export class CuestionariosComponent implements OnInit {
   }
 
   formDone(event: any) {
-    if (event) {
+    if (this.isObserver) {
+      this.routerA.navigate(['/obs-layout/mis-reportes']);
+    }
+    if (event && this.isDtInitialized) {
       this.getData();
     }
     this.isForm = false;

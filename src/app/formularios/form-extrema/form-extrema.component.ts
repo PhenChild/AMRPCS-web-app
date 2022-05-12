@@ -60,7 +60,7 @@ export class FormExtremaComponent implements OnInit {
         }
       } else {
         if (
-          confirm('¿Desea crear un nuevo reporte de precipitación extrema?')
+          confirm('¿Desea enviar este nuevo reporte de precipitación extrema?')
         ) {
           this.reporte.inundacion = this.reporte.inundacion ? 1 : 0;
           this.reporte.granizo = this.reporte.granizo ? 1 : 0;

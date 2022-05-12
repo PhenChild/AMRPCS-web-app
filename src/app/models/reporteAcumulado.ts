@@ -7,7 +7,7 @@ export class ReporteAcumulado {
 
   fechaFin!: string;
 
-  valor!: number;
+  valor!: number | undefined;
 
   comentario!: string;
 

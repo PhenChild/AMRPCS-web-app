@@ -61,7 +61,7 @@
               <label for="fecha">Fecha*</label><br />
               <input
                 type="datetime-local"
-                max="{{ maxDate }}T00:00"
+                max="{{ maxDate }}T23:59"
                 class="form-control"
                 name="fecha"
                 id="fecha"
@@ -72,14 +72,27 @@
             <div class="form-group">
               <label for="valor">Valor*</label><br />
               <input
-                type="Float"
-                maxlength="3"
+                type="number"
+                max="500"
+                min="0"
+                step="any"
                 class="form-control"
                 name="valor"
                 id="valor"
                 [(ngModel)]="reporte.valor"
                 required
+                *ngIf="!isTraza"
               />
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  name="traza"
+                  id="traza"
+                  (change)="traza()"
+                />
+                <label class="form-check-label" for="traza">Traza</label>
+              </div>
             </div>
             <div class="form-group">
               <label for="comentario">Comentario</label><br />

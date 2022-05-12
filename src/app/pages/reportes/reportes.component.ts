@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Data } from '@angular/router';
+import { ActivatedRoute, Data, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import { ToastrService } from 'ngx-toastr';
@@ -61,7 +61,8 @@ export class ReportesComponent implements OnInit {
     private dbService: DbService,
     private modal: NgbModal,
     private tService: ToastrService,
-    private router: ActivatedRoute
+    private router: ActivatedRoute,
+    private routerA: Router
   ) {
     this.location = location;
   }
@@ -135,7 +136,10 @@ export class ReportesComponent implements OnInit {
 
   formDone(event: any) {
     this.isForm = false;
-    if (event) {
+    if (this.isObserver) {
+      this.routerA.navigate(['/obs-layout/mis-reportes']);
+    }
+    if (event && this.isDtInitialized) {
       this.getData();
     }
     const table = <HTMLInputElement>document.getElementById('table');
@@ -184,19 +188,19 @@ export class ReportesComponent implements OnInit {
 
   downloadData() {
     const data = this.reportes.map(function (reporte) {
-      let re1 = /.000Z/gi
-      let re2 = /T/gi
-      let f = reporte.fecha.replace(re1, '')
+      let re1 = /.000Z/gi;
+      let re2 = /T/gi;
+      let f = reporte.fecha.replace(re1, '');
 
       var obj = {
         'Cód. Estación': reporte.Observador.Estacion.codigo,
-        'Observador':
+        Observador:
           reporte.Observador.User.nombre +
           ' ' +
           reporte.Observador.User.apellido,
-        'Fecha': f.replace(re2, ' '),
-        'Valor': reporte.valor,
-        'Comentario': reporte.comentario
+        Fecha: f.replace(re2, ' '),
+        Valor: reporte.valor,
+        Comentario: reporte.comentario
           ? reporte.comentario.replace('\n', '')
           : '',
       };
@@ -217,13 +221,7 @@ export class ReportesComponent implements OnInit {
       showTitle: true,
       title: titulo,
       useBom: true,
-      headers: [
-        'Cód. Estación',
-        'Observador',
-        'Fecha',
-        'Valor',
-        'Comentario',
-      ],
+      headers: ['Cód. Estación', 'Observador', 'Fecha', 'Valor', 'Comentario'],
       useHeader: true,
     };
     new AngularCsv(data, 'reportes_precipitacion_diaria', options);

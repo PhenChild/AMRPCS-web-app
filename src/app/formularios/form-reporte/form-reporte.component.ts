@@ -20,7 +20,9 @@ export class FormReporteComponent implements OnInit {
   @Output() isDoneEvent = new EventEmitter<boolean>();
 
   estaciones: Estacion[] = [];
-  maxDate: any = moment(new Date()).format('yyyy-MM-DD');
+  maxDate: any = moment(new Date().setDate(23)).format('yyyy-MM-DD');
+
+  isTraza: boolean = false;
 
   constructor(private dbService: DbService, private tService: ToastrService) {}
 
@@ -60,7 +62,7 @@ export class FormReporteComponent implements OnInit {
         const puedeReportar =
           ((horas == 4 && minutos >= 30) || horas > 4) && horas < 10;
         if (puedeReportar) {
-          if (confirm('¿Desea crear un nuevo reporte?')) {
+          if (confirm('¿Desea enviar este nuevo reporte diario?')) {
             this.dbService.addReporte(this.reporte).subscribe(
               (data: any) => {
                 this.tService.success(
@@ -77,7 +79,7 @@ export class FormReporteComponent implements OnInit {
           }
         } else {
           this.tService.error(
-            'Disponible entre las 4h30 y 10h00',
+            'Los reportes de sequías deben realizarse hasta el décimo día de cada mes.',
             'Horario no disponible'
           );
         }
@@ -92,5 +94,15 @@ export class FormReporteComponent implements OnInit {
 
   date(fecha: any) {
     return Utils.date(fecha);
+  }
+
+  traza() {
+    this.isTraza = !this.isTraza;
+    console.log(this.isTraza);
+    if (this.isTraza) {
+      this.reporte.valor = -888;
+    } else {
+      delete this.reporte['valor'];
+    }
   }
 }

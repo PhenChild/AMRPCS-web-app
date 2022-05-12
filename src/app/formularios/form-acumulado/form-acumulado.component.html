@@ -60,9 +60,8 @@
             <div class="form-group" *ngIf="!isUpdating">
               <label for="fechaInicio">Fecha Inicio*</label><br />
               <input
-                type="date"
-                min="{{ minDate | date: 'yyyy-MM-dd' }}"
-                max="{{ maxDate | date: 'yyyy-MM-dd' }}"
+                type="datetime-local"
+                max="{{ maxDateTime }}"
                 class="form-control"
                 name="fechaInicio"
                 id="fechaInicio"
@@ -97,14 +96,37 @@
             <div class="form-group">
               <label for="valor">Valor*</label><br />
               <input
-                type="float"
-                maxlength="3"
+                type="number"
+                step="any"
+                max="500"
+                min="0"
                 class="form-control"
                 name="valor"
                 id="valor"
                 [(ngModel)]="reporte.valor"
                 required
+                *ngIf="!isTraza && !isDesborde"
               />
+              <div class="form-check" *ngIf="!isDesborde">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  name="traza"
+                  id="traza"
+                  (change)="traza()"
+                />
+                <label class="form-check-label" for="traza">Traza</label>
+              </div>
+              <div class="form-check" *ngIf="!isTraza">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  name="desborde"
+                  id="desborde"
+                  (change)="desborde()"
+                />
+                <label class="form-check-label" for="desborde">Desborde</label>
+              </div>
             </div>
             <div class="form-group">
               <label for="comentario">Comentario*</label><br />

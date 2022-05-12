@@ -5,7 +5,7 @@ export class Reporte {
 
   fecha!: string;
 
-  valor!: number;
+  valor!: number | undefined;
 
   comentario!: string;
 

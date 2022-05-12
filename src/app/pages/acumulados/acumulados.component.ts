@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import { ToastrService } from 'ngx-toastr';
@@ -63,7 +63,8 @@ export class AcumuladosComponent implements OnInit {
     private dbService: DbService,
     private modal: NgbModal,
     private tService: ToastrService,
-    private router: ActivatedRoute
+    private router: ActivatedRoute,
+    private routerA: Router
   ) {
     this.location = location;
   }
@@ -137,7 +138,10 @@ export class AcumuladosComponent implements OnInit {
   }
 
   formDone(event: any) {
-    if (event) {
+    if (this.isObserver) {
+      this.routerA.navigate(['/obs-layout/mis-reportes']);
+    }
+    if (event && this.isDtInitialized) {
       this.getData();
     }
     this.isForm = false;
@@ -186,11 +190,11 @@ export class AcumuladosComponent implements OnInit {
 
   downloadData() {
     const data = this.reportes.map(function (reporte) {
-      let re1 = /.000Z/gi
-      let re2 = /T/gi
-      let re3 = /-/gi
-      let f1 = reporte.fechaInicio.replace(re1, '')
-      let f2 = reporte.fechaFin.replace(re1, '')
+      let re1 = /.000Z/gi;
+      let re2 = /T/gi;
+      let re3 = /-/gi;
+      let f1 = reporte.fechaInicio.replace(re1, '');
+      let f2 = reporte.fechaFin.replace(re1, '');
 
       var obj = {
         codigo_estacion: reporte.Observador.Estacion.codigo,
@@ -198,8 +202,8 @@ export class AcumuladosComponent implements OnInit {
           reporte.Observador.User.nombre +
           ' ' +
           reporte.Observador.User.apellido,
-        fecha_inicio_reporte: (f1.replace(re2, ' ')).replace(re3,'/'),
-        fecha_fin_reporte: (f2.replace(re2, ' ')).replace(re3,'/'),
+        fecha_inicio_reporte: f1.replace(re2, ' ').replace(re3, '/'),
+        fecha_fin_reporte: f2.replace(re2, ' ').replace(re3, '/'),
         valor: reporte.valor,
         comentario: reporte.comentario
           ? reporte.comentario.replace('\n', '')

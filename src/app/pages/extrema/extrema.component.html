@@ -124,6 +124,7 @@
                 <th scope="col">Estación</th>
                 <th scope="col">Código Estación</th>
                 <th scope="col">Fecha</th>
+                <th scope="col">Notificacion</th>
                 <th scope="col">Inundación</th>
                 <th scope="col">Granizo</th>
                 <th scope="col">Rayos</th>
@@ -157,6 +158,9 @@
                 </td>
                 <td width="15%">
                   {{ date(reporte.fecha) + " " + time(reporte.fecha) }}
+                </td>
+                <td width="5%" class="text-center">
+                  {{ reporte.isNotificacion ? "SI" : "NO" }}
                 </td>
                 <td width="10%" class="text-center">
                   {{ reporte.inundacion ? "SI" : "NO" }}

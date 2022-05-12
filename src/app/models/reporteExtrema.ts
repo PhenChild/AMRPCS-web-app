@@ -18,6 +18,7 @@ export class ReporteExtrema {
   state!: string;
 
   notificacion!: boolean;
+  isNotificacion!: boolean;
 
   comentario!: string;
 

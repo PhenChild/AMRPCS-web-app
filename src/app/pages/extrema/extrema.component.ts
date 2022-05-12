@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
@@ -61,7 +61,8 @@ export class ExtremaComponent implements OnInit {
     location: Location,
     private dbService: DbService,
     private tService: ToastrService,
-    private router: ActivatedRoute
+    private router: ActivatedRoute,
+    private routerA: Router
   ) {
     this.location = location;
   }
@@ -138,7 +139,10 @@ export class ExtremaComponent implements OnInit {
   }
 
   formDone(event: any) {
-    if (event) {
+    if (this.isObserver) {
+      this.routerA.navigate(['/obs-layout/mis-reportes']);
+    }
+    if (event && this.isDtInitialized) {
       this.getData();
     }
     this.isForm = false;
@@ -202,7 +206,7 @@ export class ExtremaComponent implements OnInit {
             ' ' +
             reporte.Observador.User.apellido,
           Fecha: f.replace(re2, ' '),
-          'Fue notificado?': reporte.notificacion ? 'Sí' : 'No',
+          'Fue notificado?': reporte.isNotificacion ? 'Sí' : 'No',
           Inundación: reporte.inundacion == 1 ? 'Sí' : 'No',
           Granizo: reporte.granizo == 1 ? 'Sí' : 'No',
           Rayos: reporte.rayos == 1 ? 'Sí' : 'No',

@@ -26,7 +26,12 @@ export class FormAcumuladoComponent implements OnInit {
   maxDate: any = moment(new Date().setDate(new Date().getDate() - 1)).format(
     'yyyy-MM-DD'
   );
-  maxDateTime: any = moment(new Date()).format('yyyy-MM-DDTHH:mm:ss');
+  maxDateTime: any = moment(new Date().setHours(23)).format(
+    'yyyy-MM-DDTHH:mm:ss'
+  );
+
+  isTraza: boolean = false;
+  isDesborde: boolean = false;
 
   constructor(private dbService: DbService, private tService: ToastrService) {}
 
@@ -62,12 +67,25 @@ export class FormAcumuladoComponent implements OnInit {
         }
       } else {
         const fecha = new Date(this.reporte.fechaFin);
+        const fechaInicio = new Date(this.reporte.fechaInicio);
         const horas = fecha.getHours();
         const minutos = fecha.getMinutes();
         const puedeReportar =
           ((horas == 4 && minutos >= 30) || horas > 4) && horas < 10;
-        if (puedeReportar) {
-          if (confirm('¿Desea crear un nuevo reporte acumulado?')) {
+        const diferenciaDias = moment(fecha).diff(moment(fechaInicio), 'days');
+        console.log(diferenciaDias);
+        if (!puedeReportar) {
+          this.tService.error(
+            'Disponible entre las 4h30 y 10h00',
+            'Horario de Fecha Final no disponible'
+          );
+        } else if (diferenciaDias > 5) {
+          this.tService.error(
+            'Entre Fecha Inicio y Fecha Fin debe existir máximo una diferencia de 5 días',
+            ''
+          );
+        } else {
+          if (confirm('¿Desea enviar este nuevo reporte acumulado?')) {
             this.dbService.addReporteAcumulado(this.reporte).subscribe(
               (data: any) => {
                 this.tService.success(
@@ -82,11 +100,6 @@ export class FormAcumuladoComponent implements OnInit {
               }
             );
           }
-        } else {
-          this.tService.error(
-            'Disponible entre las 4h30 y 10h00',
-            'Horario no disponible'
-          );
         }
       }
     }
@@ -99,5 +112,25 @@ export class FormAcumuladoComponent implements OnInit {
 
   date(fecha: any) {
     return Utils.date(fecha);
+  }
+
+  traza() {
+    this.isTraza = !this.isTraza;
+    console.log(this.isTraza);
+    if (this.isTraza) {
+      this.reporte.valor = -888;
+    } else {
+      delete this.reporte['valor'];
+    }
+  }
+
+  desborde() {
+    this.isDesborde = !this.isDesborde;
+    console.log(this.isDesborde);
+    if (this.isDesborde) {
+      this.reporte.valor = -777;
+    } else {
+      delete this.reporte['valor'];
+    }
   }
 }
