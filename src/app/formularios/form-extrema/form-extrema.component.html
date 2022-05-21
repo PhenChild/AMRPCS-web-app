@@ -149,11 +149,12 @@
                 id="comentario"
                 class="form-control"
                 [(ngModel)]="reporte.comentario"
-                maxlength="255"
+                maxlength="300"
               ></textarea>
             </div>
             <div>
               <button
+                type="button"
                 class="btn btn-secondary float-left"
                 (click)="cancelar(formReporte)"
               >

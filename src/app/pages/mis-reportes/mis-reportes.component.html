@@ -198,7 +198,7 @@
                   {{ reporte.fechaInicio }}
                 </td>
                 <td scope="row">
-                  {{ date(reporte.fechaFin) }}
+                  {{ date(reporte.fechaFin) + " " + time(reporte.fechaFin) }}
                 </td>
                 <td>
                   {{ reporte.valor }}
@@ -244,6 +244,12 @@
                 <th scope="col">Estación</th>
                 <th scope="col">Código Estación</th>
                 <th scope="col">Fecha</th>
+                <th scope="col">Notificacion</th>
+                <th scope="col">Inundación</th>
+                <th scope="col">Granizo</th>
+                <th scope="col">Rayos</th>
+                <th scope="col">Deslizamiento</th>
+                <th scope="col">Vientos Fuertes</th>
                 <th scope="col">Comentario</th>
                 <!--<th scope="col">Acción</th>-->
               </tr>
@@ -269,6 +275,24 @@
                 </td>
                 <td scope="row">
                   {{ date(reporte.fecha) }}
+                </td>
+                <td width="5%" class="text-center">
+                  {{ reporte.isNotificacion ? "SI" : "NO" }}
+                </td>
+                <td width="10%" class="text-center">
+                  {{ reporte.inundacion ? "SI" : "NO" }}
+                </td>
+                <td width="10%" class="text-center">
+                  {{ reporte.granizo ? "SI" : "NO" }}
+                </td>
+                <td width="10%" class="text-center">
+                  {{ reporte.rayos ? "SI" : "NO" }}
+                </td>
+                <td width="10%" class="text-center">
+                  {{ reporte.deslizamiento ? "SI" : "NO" }}
+                </td>
+                <td width="10%" class="text-center">
+                  {{ reporte.vientos ? "SI" : "NO" }}
                 </td>
                 <td width="35%">
                   {{ reporte.comentario }}

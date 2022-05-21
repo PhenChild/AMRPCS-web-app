@@ -88,47 +88,51 @@ export class MisReportesComponent implements OnInit, OnDestroy {
   }
 
   getData(): void {
-    const table1 = <HTMLInputElement>(
-      document.getElementById('tablaPrecipitaciones')
-    );
-    const table2 = <HTMLInputElement>document.getElementById('tablaAcumulados');
-    const table3 = <HTMLInputElement>document.getElementById('tablaExtremas');
-    const table4 = <HTMLInputElement>(
-      document.getElementById('tablaCuestionarios')
-    );
+    if (this.filtro.estacion != '' && this.filtro.tipo != '') {
+      const table1 = <HTMLInputElement>(
+        document.getElementById('tablaPrecipitaciones')
+      );
+      const table2 = <HTMLInputElement>(
+        document.getElementById('tablaAcumulados')
+      );
+      const table3 = <HTMLInputElement>document.getElementById('tablaExtremas');
+      const table4 = <HTMLInputElement>(
+        document.getElementById('tablaCuestionarios')
+      );
 
-    table1.style.display = 'none';
-    table2.style.display = 'none';
-    table3.style.display = 'none';
-    table4.style.display = 'none';
+      table1.style.display = 'none';
+      table2.style.display = 'none';
+      table3.style.display = 'none';
+      table4.style.display = 'none';
 
-    if (this.filtro.tipo == 'precipitacion') {
-      this.dbService.getMisReportes(this.filtro).subscribe((data: any) => {
-        this.precipitaciones = data as Reporte[];
-        this.rerender();
-        table1.style.display = 'block';
-      });
-    } else if (this.filtro.tipo == 'acumulado') {
-      this.dbService.getMisReportes(this.filtro).subscribe((data: any) => {
-        this.acumulados = data as ReporteAcumulado[];
-        this.rerender();
-        table2.style.display = 'block';
-        //new AngularCsv(data, 'test');
-      });
-    } else if (this.filtro.tipo == 'extrema') {
-      this.dbService.getMisReportes(this.filtro).subscribe((data: any) => {
-        this.extremas = data as ReporteExtrema[];
-        this.rerender();
-        table3.style.display = 'block';
-        //new AngularCsv(data, 'test');
-      });
-    } else if (this.filtro.tipo == 'cuestionario') {
-      this.dbService.getMisReportes(this.filtro).subscribe((data: any) => {
-        this.cuestionarios = data as Cuestionario[];
-        this.rerender();
-        table4.style.display = 'block';
-        //new AngularCsv(data, 'test');
-      });
+      if (this.filtro.tipo == 'precipitacion') {
+        this.dbService.getMisReportes(this.filtro).subscribe((data: any) => {
+          this.precipitaciones = data as Reporte[];
+          this.rerender();
+          table1.style.display = 'block';
+        });
+      } else if (this.filtro.tipo == 'acumulado') {
+        this.dbService.getMisReportes(this.filtro).subscribe((data: any) => {
+          this.acumulados = data as ReporteAcumulado[];
+          this.rerender();
+          table2.style.display = 'block';
+          //new AngularCsv(data, 'test');
+        });
+      } else if (this.filtro.tipo == 'extrema') {
+        this.dbService.getMisReportes(this.filtro).subscribe((data: any) => {
+          this.extremas = data as ReporteExtrema[];
+          this.rerender();
+          table3.style.display = 'block';
+          //new AngularCsv(data, 'test');
+        });
+      } else if (this.filtro.tipo == 'cuestionario') {
+        this.dbService.getMisReportes(this.filtro).subscribe((data: any) => {
+          this.cuestionarios = data as Cuestionario[];
+          this.rerender();
+          table4.style.display = 'block';
+          //new AngularCsv(data, 'test');
+        });
+      }
     }
   }
 
@@ -163,9 +167,7 @@ export class MisReportesComponent implements OnInit, OnDestroy {
   }
 
   formReporteDone(event: any) {
-    if (event) {
-      this.getData();
-    }
+    this.getData();
     const table = <HTMLInputElement>document.getElementById('table');
     const form = <HTMLInputElement>document.getElementById('form-reporte');
     table.style.display = 'block';
@@ -183,9 +185,7 @@ export class MisReportesComponent implements OnInit, OnDestroy {
   }
 
   formAcumuladoDone(event: any) {
-    if (event) {
-      this.getData();
-    }
+    this.getData();
     const table = <HTMLInputElement>document.getElementById('table');
     const form = <HTMLInputElement>document.getElementById('form-acumulado');
     table.style.display = 'block';
@@ -202,9 +202,7 @@ export class MisReportesComponent implements OnInit, OnDestroy {
   }
 
   formDoneCuestionario(event: any) {
-    if (event) {
-      this.getData();
-    }
+    this.getData();
     this.isFormCuestionario = false;
     const table = <HTMLInputElement>document.getElementById('table');
     table.style.display = 'block';

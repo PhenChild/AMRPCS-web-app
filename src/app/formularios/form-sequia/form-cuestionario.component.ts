@@ -165,7 +165,7 @@ export class FormCuestionarioComponent implements OnInit {
       } else {
         const fecha = new Date(this.cuestionario.fecha);
         const dias = fecha.getDate();
-        const puedeReportar = dias <= 23;
+        const puedeReportar = dias <= 10;
         if (puedeReportar) {
           if (confirm('¿Desea enviar este nuevo cuestionario de sequía?')) {
             this.dbService.addCuestionario(this.cuestionario).subscribe(
@@ -189,7 +189,7 @@ export class FormCuestionarioComponent implements OnInit {
           }
         } else {
           this.tService.error(
-            'Disponible los 10 primeros días del mes',
+            'Los reportes de sequías deben realizarse hasta el décimo día de cada mes.',
             'Fecha no disponible'
           );
         }

@@ -106,8 +106,9 @@
                 class="btn btn-default float-left mb-3"
                 (click)="downloadData()"
               >
-                Descargar CSV
-              </button>
+                Descargar CSV</button
+              ><br />
+              <span>Descargar para poder ver el detalle de los reportes*</span>
             </div>
           </div>
         </div>
@@ -125,6 +126,7 @@
                   <th scope="col">Estación</th>
                   <th scope="col">Código Estación</th>
                   <th scope="col">Fecha</th>
+                  <th scope="col">Resultado</th>
                   <th scope="col">Comentario</th>
                   <th scope="col" *ngIf="isAdmin">Creado</th>
                   <th scope="col" *ngIf="isAdmin">Actualizado</th>
@@ -149,6 +151,9 @@
                   </td>
                   <td scope="row">
                     {{ date(cuestionario.fecha) }}
+                  </td>
+                  <td scope="row">
+                    {{ equivalente(cuestionario) }}
                   </td>
                   <td scope="row" width="35%">
                     {{ cuestionario.comentario }}

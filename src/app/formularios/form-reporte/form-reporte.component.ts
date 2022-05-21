@@ -79,7 +79,7 @@ export class FormReporteComponent implements OnInit {
           }
         } else {
           this.tService.error(
-            'Los reportes de sequías deben realizarse hasta el décimo día de cada mes.',
+            'Disponible entre las 4h30 y 10h00',
             'Horario no disponible'
           );
         }
@@ -97,12 +97,20 @@ export class FormReporteComponent implements OnInit {
   }
 
   traza() {
+    if (this.isUpdating) {
+      if (this.reporte.valor == -888) {
+        this.isTraza = true;
+      }
+    }
     this.isTraza = !this.isTraza;
-    console.log(this.isTraza);
     if (this.isTraza) {
       this.reporte.valor = -888;
     } else {
       delete this.reporte['valor'];
     }
+  }
+
+  setDecimals() {
+    this.reporte.valor = parseFloat(this.reporte.valor?.toFixed(1)!);
   }
 }

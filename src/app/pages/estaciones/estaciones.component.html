@@ -482,12 +482,25 @@
                     </th>
                   </tr>
                   <tr *ngFor="let variable of variables">
-                    <th scope="row" (click)="verDatos(variable)">
+                    <th scope="row">
                       <div class="media align-items-center">
                         <div class="media-body">
                           <span class="mb-0 text-sm">{{
                             variable.nombre
                           }}</span>
+                          <button
+                            class="btn btn-secondary float-right m-0"
+                            (click)="verDatos(variable)"
+                          >
+                            Ver Datos
+                          </button>
+                          <button
+                            class="btn btn-default float-right mr-2"
+                            (click)="downloadDataEspecifico()"
+                            *ngIf="variable.nombre == 'Precipitación Diaria'"
+                          >
+                            Descargar Reportes
+                          </button>
                         </div>
                       </div>
                     </th>
@@ -539,12 +552,6 @@
                 (click)="cancelar(formEstacion)"
               >
                 Cancelar
-              </button>
-              <button
-                class="btn btn-default float-left mb-3"
-                (click)="downloadDataEspecifico()"
-              >
-                Descargar Reportes
               </button>
               <button
                 class="btn btn-default float-right"

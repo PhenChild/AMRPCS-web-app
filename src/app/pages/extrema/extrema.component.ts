@@ -139,10 +139,10 @@ export class ExtremaComponent implements OnInit {
   }
 
   formDone(event: any) {
-    if (this.isObserver) {
+    if (event && this.isObserver) {
       this.routerA.navigate(['/obs-layout/mis-reportes']);
     }
-    if (event && this.isDtInitialized) {
+    if (this.isDtInitialized) {
       this.getData();
     }
     this.isForm = false;

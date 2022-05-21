@@ -405,8 +405,8 @@ export class EstacionesComponent implements OnInit, OnDestroy {
     let url = this.isAdmin
       ? '/admin-layout'
       : this.isObserver
-        ? '/obs-layout'
-        : '/view-layout';
+      ? '/obs-layout'
+      : '/view-layout';
     var dn = new Date(Date.now());
     var df = new Date(Date.now());
     df.setMonth(dn.getMonth() - 1);
@@ -431,8 +431,8 @@ export class EstacionesComponent implements OnInit, OnDestroy {
     let url = this.isAdmin
       ? '/admin-layout'
       : this.isObserver
-        ? '/obs-layout'
-        : '/view-layout';
+      ? '/obs-layout'
+      : '/view-layout';
     if (variable.nombre == 'Precipitación Diaria') {
       this.router.navigate([
         url + '/reportes',
@@ -445,6 +445,15 @@ export class EstacionesComponent implements OnInit, OnDestroy {
     } else if (variable.nombre == 'Precipitación Acumulada') {
       this.router.navigate([
         url + '/acumulados',
+        {
+          estacion: this.estacion.nombre,
+          ff: strDN,
+          fi: strDF,
+        },
+      ]);
+    } else if (variable.nombre == 'Percepción de Sequía (Mensual)') {
+      this.router.navigate([
+        url + '/cuestionarios',
         {
           estacion: this.estacion.nombre,
           ff: strDN,
@@ -493,103 +502,118 @@ export class EstacionesComponent implements OnInit, OnDestroy {
       };
       return obj;
     });
-    this.dbService.getUsuariosEstaciones(json).subscribe(
-      (usuarios: any) => {
-        var dataArr = [];
-        for (var i of usuarios) {
-          if (i[0].nombre.slice(0, 2) != 'PP') {
-            var arrNombres = i[1].map(function (nombre: any) {
-              var string = nombre.nombre;
-              return string;
-            });
-            var string = arrNombres.join(" - ");
-            var obj = {
-              'Cód. Estación': i[0].codigo,
-              'Nombre': i[0].nombre,
-              'Longitud': i[0].posicion.coordinates[0],
-              'Latitud': i[0].posicion.coordinates[1],
-              'Altitud': i[0].altitud,
-              'Direccion': i[0].direccion,
-              'Referencias': i[0].referencias,
-              'Usuarios': string,
-              'Ubicación': i[0].division1.nombre + ', ' + i[0].division2.nombre + ', ' + i[0].division3.nombre,
-              'Pais': i[0].Division.Pai.nombre
-            }
-            dataArr.push(obj);
-          }
-        }
-        var titulo = 'Estaciones Registradas';
-          var options = {
-            fieldSeparator: ',',
-            quoteStrings: '"',
-            decimalseparator: '.',
-            showLabels: true,
-            showTitle: true,
-            title: titulo,
-            useBom: true,
-            headers: [
-              'Cód. Estación',
-              'Nombre',
-              'Longitud',
-              'Latitud',
-              'Altitud',
-              'Direccion',
-              'Referencias',
-              'Usuarios',
-              'Ubicación',
-              'Pais',
-            ],
-            useHeader: true,
+    this.dbService.getUsuariosEstaciones(json).subscribe((usuarios: any) => {
+      var dataArr = [];
+      for (var i of usuarios) {
+        if (i[0].nombre.slice(0, 2) != 'PP') {
+          var arrNombres = i[1].map(function (nombre: any) {
+            var string = nombre.nombre;
+            return string;
+          });
+          var string = arrNombres.join(' - ');
+          var obj = {
+            'Cód. Estación': i[0].codigo,
+            Nombre: i[0].nombre,
+            Longitud: i[0].posicion.coordinates[0],
+            Latitud: i[0].posicion.coordinates[1],
+            Altitud: i[0].altitud,
+            Direccion: i[0].direccion,
+            Referencias: i[0].referencias,
+            Usuarios: string,
+            Ubicación:
+              i[0].division1.nombre +
+              ', ' +
+              i[0].division2.nombre +
+              ', ' +
+              i[0].division3.nombre,
+            Pais: i[0].Division.Pai.nombre,
           };
-        new AngularCsv(dataArr, 'Estaciones', options);
-      });
+          dataArr.push(obj);
+        }
+      }
+      var titulo = 'Estaciones Registradas';
+      var options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalseparator: '.',
+        showLabels: true,
+        showTitle: true,
+        title: titulo,
+        useBom: true,
+        headers: [
+          'Cód. Estación',
+          'Nombre',
+          'Longitud',
+          'Latitud',
+          'Altitud',
+          'Direccion',
+          'Referencias',
+          'Usuarios',
+          'Ubicación',
+          'Pais',
+        ],
+        useHeader: true,
+      };
+      new AngularCsv(dataArr, 'Estaciones', options);
+    });
   }
 
   downloadDataEspecifico() {
-    var filtro =
-    {
+    var filtro = {
       observador: '',
       estacion: '',
       fechaInicio: '',
       fechaFin: '',
       codEstacion: this.estacion.codigo,
-      pais: ''
-    }
-    this.dbService.getReportes(filtro).subscribe(
-      (d: any) => {
-        const data = d.map(function (rep: Reporte) {
-          let re1 = /.000Z/gi
-          let re2 = /T/gi
-          let f = rep.fecha.replace(re1, '')
-          var obj = {
-            'Observador': rep.Observador.User.nombre + ' ' + rep.Observador.User.apellido,
-            'Fecha': f.replace(re2, ' '),
-            'Valor': rep.valor,
-            'Comentario': rep.comentario,
-          };
-          return obj;
-        });
-        var titulo = 'Reportes de Estacion ' + this.estacion.nombre + " - " + this.estacion.codigo + "\nCoordenadas: " +
-          this.estacion.posicion.coordinates[0] + ", " + this.estacion.posicion.coordinates[1] + ", " + this.estacion.altitud + "\nUbicación: " +
-          this.estacion.division1.nombre + ', ' + this.estacion.division2.nombre + ', ' +  this.estacion.division3.nombre;
-        var options = {
-          fieldSeparator: ',',
-          quoteStrings: '"',
-          decimalseparator: '.',
-          showLabels: true,
-          showTitle: true,
-          title: titulo,
-          useBom: true,
-          headers: [
-            'Observador',
-            'Fecha',
-            'Valor',
-            'Comentario',
-          ],
-          useHeader: true,
+      pais: '',
+    };
+    this.dbService.getReportes(filtro).subscribe((d: any) => {
+      const data = d.map(function (rep: Reporte) {
+        let re1 = /.000Z/gi;
+        let re2 = /T/gi;
+        let f = rep.fecha.replace(re1, '');
+        var obj = {
+          Observador:
+            rep.Observador.User.nombre + ' ' + rep.Observador.User.apellido,
+          Fecha: f.replace(re2, ' '),
+          Valor: rep.valor,
+          Comentario: rep.comentario,
         };
-        new AngularCsv(data, 'Estacion ' + this.estacion.nombre, options);
-      }
-    )
+        return obj;
+      });
+      var titulo =
+        'Reportes de precipitación diaria de Estacion ' +
+        this.estacion.nombre +
+        ' - ' +
+        this.estacion.codigo +
+        '\nCoordenadas: ' +
+        this.estacion.posicion.coordinates[0] +
+        ', ' +
+        this.estacion.posicion.coordinates[1] +
+        ', ' +
+        this.estacion.altitud +
+        '\nUbicación: ' +
+        this.estacion.division1.nombre +
+        ', ' +
+        this.estacion.division2.nombre +
+        ', ' +
+        this.estacion.division3.nombre;
+      var options = {
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalseparator: '.',
+        showLabels: true,
+        showTitle: true,
+        title: titulo,
+        useBom: true,
+        headers: ['Observador', 'Fecha', 'Valor', 'Comentario'],
+        useHeader: true,
+      };
+      new AngularCsv(
+        data,
+        this.estacion.codigo + '_' + this.estacion.nombre + '_' + 'Prec-Diaria',
+        options
+      );
+    });
   }
 }

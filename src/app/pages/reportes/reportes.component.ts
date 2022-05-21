@@ -136,10 +136,10 @@ export class ReportesComponent implements OnInit {
 
   formDone(event: any) {
     this.isForm = false;
-    if (this.isObserver) {
+    if (event && this.isObserver) {
       this.routerA.navigate(['/obs-layout/mis-reportes']);
     }
-    if (event && this.isDtInitialized) {
+    if (this.isDtInitialized) {
       this.getData();
     }
     const table = <HTMLInputElement>document.getElementById('table');

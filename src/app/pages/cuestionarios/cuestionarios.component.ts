@@ -197,10 +197,10 @@ export class CuestionariosComponent implements OnInit {
   }
 
   formDone(event: any) {
-    if (this.isObserver) {
+    if (event && this.isObserver) {
       this.routerA.navigate(['/obs-layout/mis-reportes']);
     }
-    if (event && this.isDtInitialized) {
+    if (this.isDtInitialized) {
       this.getData();
     }
     this.isForm = false;
@@ -294,7 +294,7 @@ export class CuestionariosComponent implements OnInit {
         Temperaturas: ARR5[cuestionario.respTemps - 1],
         Agua: ARR6[cuestionario.respGana - 1],
         Puntaje: puntaje,
-        Equivalente: equivalente,
+        Resultado: equivalente,
         Comentarios: cuestionario.comentario
           ? cuestionario.comentario.replace('\n', '')
           : '',
@@ -328,11 +328,42 @@ export class CuestionariosComponent implements OnInit {
         'Temperaturas',
         'Agua',
         'Puntaje',
-        'Equivalente',
+        'Resultado',
         'Comentarios',
       ],
       useHeader: true,
     };
     new AngularCsv(data, 'cuestionarios_de_sequia', options);
+  }
+
+  equivalente(cuestionario: Cuestionario) {
+    let equivalente = '';
+    let puntaje =
+      cuestionario.respSuelo +
+      cuestionario.respVeg +
+      cuestionario.respPrec +
+      cuestionario.respTempPrec +
+      cuestionario.respTemps +
+      cuestionario.respGana;
+    if (6 >= puntaje && puntaje <= 10) {
+      equivalente = 'Humedad muy alta';
+    } else if (11 >= puntaje && puntaje <= 14) {
+      equivalente = 'Humedad alta';
+    } else if (15 >= puntaje && puntaje <= 18) {
+      equivalente = 'Humedad moderada ';
+    } else if (19 >= puntaje && puntaje <= 22) {
+      equivalente = 'Humedad baja';
+    } else if (23 >= puntaje && puntaje <= 26) {
+      equivalente = 'Neutro';
+    } else if (27 >= puntaje && puntaje <= 30) {
+      equivalente = 'Sequía baja';
+    } else if (31 >= puntaje && puntaje <= 34) {
+      equivalente = 'Sequía moderada';
+    } else if (35 >= puntaje && puntaje <= 38) {
+      equivalente = 'Sequía alta';
+    } else if (39 >= puntaje && puntaje <= 42) {
+      equivalente = 'Sequía muy alta';
+    }
+    return equivalente;
   }
 }

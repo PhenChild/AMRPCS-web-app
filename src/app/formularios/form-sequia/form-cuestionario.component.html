@@ -324,7 +324,7 @@
                 id="comentario"
                 class="form-control"
                 [(ngModel)]="cuestionario.comentario"
-                maxlength="255"
+                maxlength="300"
               ></textarea>
             </div>
             <div class="row">
@@ -412,6 +412,7 @@
             </div>
             <div>
               <button
+                type="button"
                 class="btn btn-secondary float-left"
                 (click)="cancelar(formCuestionario)"
               >

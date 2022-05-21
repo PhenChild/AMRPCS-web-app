@@ -114,9 +114,18 @@ export class FormAcumuladoComponent implements OnInit {
     return Utils.date(fecha);
   }
 
+  checkValor() {
+    if (this.isUpdating) {
+      if (this.reporte.valor == -888) {
+        this.isTraza = true;
+      } else if (this.reporte.valor == -777) {
+        this.isDesborde = true;
+      }
+    }
+  }
   traza() {
+    this.checkValor();
     this.isTraza = !this.isTraza;
-    console.log(this.isTraza);
     if (this.isTraza) {
       this.reporte.valor = -888;
     } else {
@@ -125,12 +134,15 @@ export class FormAcumuladoComponent implements OnInit {
   }
 
   desborde() {
+    this.checkValor();
     this.isDesborde = !this.isDesborde;
-    console.log(this.isDesborde);
     if (this.isDesborde) {
       this.reporte.valor = -777;
     } else {
       delete this.reporte['valor'];
     }
+  }
+  setDecimals() {
+    this.reporte.valor = parseFloat(this.reporte.valor?.toFixed(1)!);
   }
 }

@@ -60,8 +60,8 @@
             <div class="form-group" *ngIf="!isUpdating">
               <label for="fechaInicio">Fecha Inicio*</label><br />
               <input
-                type="datetime-local"
-                max="{{ maxDateTime }}"
+                type="date"
+                max="{{ maxDate }}"
                 class="form-control"
                 name="fechaInicio"
                 id="fechaInicio"
@@ -104,25 +104,28 @@
                 name="valor"
                 id="valor"
                 [(ngModel)]="reporte.valor"
+                (focusout)="setDecimals()"
                 required
-                *ngIf="!isTraza && !isDesborde"
+                *ngIf="reporte.valor != -888 && reporte.valor != -777"
               />
-              <div class="form-check" *ngIf="!isDesborde">
+              <div class="form-check" *ngIf="reporte.valor != -777">
                 <input
                   type="checkbox"
                   class="form-check-input"
                   name="traza"
                   id="traza"
+                  [checked]="reporte.valor == -888"
                   (change)="traza()"
                 />
                 <label class="form-check-label" for="traza">Traza</label>
               </div>
-              <div class="form-check" *ngIf="!isTraza">
+              <div class="form-check" *ngIf="reporte.valor != -888">
                 <input
                   type="checkbox"
                   class="form-check-input"
                   name="desborde"
                   id="desborde"
+                  [checked]="reporte.valor == -777"
                   (change)="desborde()"
                 />
                 <label class="form-check-label" for="desborde">Desborde</label>
@@ -135,11 +138,12 @@
                 id="comentario"
                 class="form-control"
                 [(ngModel)]="reporte.comentario"
-                maxlength="255"
+                maxlength="300"
               ></textarea>
             </div>
             <div>
               <button
+                type="button"
                 class="btn btn-secondary float-left"
                 (click)="cancelar(formAcumulado)"
               >

@@ -75,19 +75,21 @@
                 type="number"
                 max="500"
                 min="0"
-                step="any"
+                step="0.1"
                 class="form-control"
                 name="valor"
                 id="valor"
                 [(ngModel)]="reporte.valor"
+                (focusout)="setDecimals()"
                 required
-                *ngIf="!isTraza"
+                *ngIf="reporte.valor != -888"
               />
               <div class="form-check">
                 <input
                   type="checkbox"
                   class="form-check-input"
                   name="traza"
+                  [checked]="reporte.valor == -888"
                   id="traza"
                   (change)="traza()"
                 />
@@ -101,11 +103,12 @@
                 id="comentario"
                 class="form-control"
                 [(ngModel)]="reporte.comentario"
-                maxlength="255"
+                maxlength="300"
               ></textarea>
             </div>
             <div>
               <button
+                type="button"
                 class="btn btn-secondary float-left"
                 (click)="cancelar(formReporte)"
               >
