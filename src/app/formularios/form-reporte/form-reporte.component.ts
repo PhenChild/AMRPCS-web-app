@@ -20,7 +20,7 @@ export class FormReporteComponent implements OnInit {
   @Output() isDoneEvent = new EventEmitter<boolean>();
 
   estaciones: Estacion[] = [];
-  maxDate: any = moment(new Date().setDate(23)).format('yyyy-MM-DD');
+  maxDate: any = moment(new Date()).format('yyyy-MM-DD');
 
   isTraza: boolean = false;
 
@@ -111,6 +111,15 @@ export class FormReporteComponent implements OnInit {
   }
 
   setDecimals() {
-    this.reporte.valor = parseFloat(this.reporte.valor?.toFixed(1)!);
+    let valor = parseFloat(this.reporte.valor?.toFixed(1)!);
+    if (!isNaN(valor)) {
+      this.reporte.valor = parseFloat(this.reporte.valor?.toFixed(1)!);
+    } else {
+      delete this.reporte['valor'];
+      this.tService.error(
+        '',
+        'Ingresar un valor con formato válido: ###.# (Hasta un entero de 3 dígitos y un decimal)'
+      );
+    }
   }
 }

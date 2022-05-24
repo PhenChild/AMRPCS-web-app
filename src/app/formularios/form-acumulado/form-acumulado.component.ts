@@ -143,6 +143,11 @@ export class FormAcumuladoComponent implements OnInit {
     }
   }
   setDecimals() {
-    this.reporte.valor = parseFloat(this.reporte.valor?.toFixed(1)!);
+    let valor = parseFloat(this.reporte.valor?.toFixed(1)!);
+    if (!isNaN(valor)) {
+      this.reporte.valor = parseFloat(this.reporte.valor?.toFixed(1)!);
+    } else {
+      this.tService.error('', 'Ingresar un valor con formato válido');
+    }
   }
 }

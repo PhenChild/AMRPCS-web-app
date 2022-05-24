@@ -167,6 +167,7 @@ export class FormCuestionarioComponent implements OnInit {
         const dias = fecha.getDate();
         const puedeReportar = dias <= 10;
         if (puedeReportar) {
+          console.log(this.cuestionario);
           if (confirm('¿Desea enviar este nuevo cuestionario de sequía?')) {
             this.dbService.addCuestionario(this.cuestionario).subscribe(
               (data: any) => {

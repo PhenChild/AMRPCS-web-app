@@ -331,6 +331,7 @@
                 <th scope="col">Estación</th>
                 <th scope="col">Código Estación</th>
                 <th scope="col">Fecha</th>
+                <th scope="col">Resultado</th>
                 <th scope="col">Comentario</th>
                 <th scope="col">Acción</th>
               </tr>
@@ -356,6 +357,9 @@
                 </td>
                 <td scope="row">
                   {{ date(cuestionario.fecha) }}
+                </td>
+                <td scope="row">
+                  {{ equivalente(cuestionario) }}
                 </td>
                 <td width="35%">
                   {{ cuestionario.comentario }}

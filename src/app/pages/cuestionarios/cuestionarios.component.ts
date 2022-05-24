@@ -259,23 +259,23 @@ export class CuestionariosComponent implements OnInit {
         cuestionario.respTemps +
         cuestionario.respGana;
       var equivalente;
-      if (6 >= puntaje && puntaje <= 10) {
+      if (puntaje >= 6 && puntaje <= 10) {
         equivalente = 'Humedad muy alta';
-      } else if (11 >= puntaje && puntaje <= 14) {
+      } else if (puntaje >= 11 && puntaje <= 14) {
         equivalente = 'Humedad alta';
-      } else if (15 >= puntaje && puntaje <= 18) {
+      } else if (puntaje >= 15 && puntaje <= 18) {
         equivalente = 'Humedad moderada ';
-      } else if (19 >= puntaje && puntaje <= 22) {
+      } else if (puntaje >= 19 && puntaje <= 22) {
         equivalente = 'Humedad baja';
-      } else if (23 >= puntaje && puntaje <= 26) {
+      } else if (puntaje >= 23 && puntaje <= 26) {
         equivalente = 'Neutro';
-      } else if (27 >= puntaje && puntaje <= 30) {
+      } else if (puntaje >= 27 && puntaje <= 30) {
         equivalente = 'Sequía baja';
-      } else if (31 >= puntaje && puntaje <= 34) {
+      } else if (puntaje >= 31 && puntaje <= 34) {
         equivalente = 'Sequía moderada';
-      } else if (35 >= puntaje && puntaje <= 38) {
+      } else if (puntaje >= 35 && puntaje <= 38) {
         equivalente = 'Sequía alta';
-      } else if (39 >= puntaje && puntaje <= 42) {
+      } else if (puntaje >= 39 && puntaje <= 42) {
         equivalente = 'Sequía muy alta';
       }
 
@@ -345,23 +345,23 @@ export class CuestionariosComponent implements OnInit {
       cuestionario.respTempPrec +
       cuestionario.respTemps +
       cuestionario.respGana;
-    if (6 >= puntaje && puntaje <= 10) {
+    if (puntaje >= 6 && puntaje <= 10) {
       equivalente = 'Humedad muy alta';
-    } else if (11 >= puntaje && puntaje <= 14) {
+    } else if (puntaje >= 11 && puntaje <= 14) {
       equivalente = 'Humedad alta';
-    } else if (15 >= puntaje && puntaje <= 18) {
+    } else if (puntaje >= 15 && puntaje <= 18) {
       equivalente = 'Humedad moderada ';
-    } else if (19 >= puntaje && puntaje <= 22) {
+    } else if (puntaje >= 19 && puntaje <= 22) {
       equivalente = 'Humedad baja';
-    } else if (23 >= puntaje && puntaje <= 26) {
+    } else if (puntaje >= 23 && puntaje <= 26) {
       equivalente = 'Neutro';
-    } else if (27 >= puntaje && puntaje <= 30) {
+    } else if (puntaje >= 27 && puntaje <= 30) {
       equivalente = 'Sequía baja';
-    } else if (31 >= puntaje && puntaje <= 34) {
+    } else if (puntaje >= 31 && puntaje <= 34) {
       equivalente = 'Sequía moderada';
-    } else if (35 >= puntaje && puntaje <= 38) {
+    } else if (puntaje >= 35 && puntaje <= 38) {
       equivalente = 'Sequía alta';
-    } else if (39 >= puntaje && puntaje <= 42) {
+    } else if (puntaje >= 39 && puntaje <= 42) {
       equivalente = 'Sequía muy alta';
     }
     return equivalente;

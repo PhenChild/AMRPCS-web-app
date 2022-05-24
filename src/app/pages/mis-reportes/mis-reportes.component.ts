@@ -207,4 +207,35 @@ export class MisReportesComponent implements OnInit, OnDestroy {
     const table = <HTMLInputElement>document.getElementById('table');
     table.style.display = 'block';
   }
+
+  equivalente(cuestionario: Cuestionario) {
+    let equivalente = '';
+    let puntaje =
+      cuestionario.respSuelo +
+      cuestionario.respVeg +
+      cuestionario.respPrec +
+      cuestionario.respTempPrec +
+      cuestionario.respTemps +
+      cuestionario.respGana;
+    if (puntaje >= 6 && puntaje <= 10) {
+      equivalente = 'Humedad muy alta';
+    } else if (puntaje >= 11 && puntaje <= 14) {
+      equivalente = 'Humedad alta';
+    } else if (puntaje >= 15 && puntaje <= 18) {
+      equivalente = 'Humedad moderada ';
+    } else if (puntaje >= 19 && puntaje <= 22) {
+      equivalente = 'Humedad baja';
+    } else if (puntaje >= 23 && puntaje <= 26) {
+      equivalente = 'Neutro';
+    } else if (puntaje >= 27 && puntaje <= 30) {
+      equivalente = 'Sequía baja';
+    } else if (puntaje >= 31 && puntaje <= 34) {
+      equivalente = 'Sequía moderada';
+    } else if (puntaje >= 35 && puntaje <= 38) {
+      equivalente = 'Sequía alta';
+    } else if (puntaje >= 39 && puntaje <= 42) {
+      equivalente = 'Sequía muy alta';
+    }
+    return equivalente;
+  }
 }

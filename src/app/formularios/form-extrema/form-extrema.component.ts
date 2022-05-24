@@ -31,7 +31,7 @@ export class FormExtremaComponent implements OnInit {
     }
     if (!this.isUpdating) {
       this.reporte = new ReporteExtrema();
-      this.reporte.fecha = moment(new Date()).format('yyyy-MM-DDThh:mm');
+      this.reporte.fecha = moment(new Date()).format('yyyy-MM-DDTHH:mm');
     }
   }
 
