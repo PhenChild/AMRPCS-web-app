@@ -61,7 +61,19 @@ export class FormReporteComponent implements OnInit {
         const minutos = fecha.getMinutes();
         const puedeReportar =
           ((horas == 4 && minutos >= 30) || horas > 4) && horas < 10;
-        if (puedeReportar) {
+        const mayorAFechaActual =
+          moment(fecha).diff(moment(this.maxDate), 'days') > 0;
+        if (!puedeReportar) {
+          this.tService.error(
+            'Disponible entre las 4h30 y 10h00',
+            'Horario no disponible'
+          );
+        } else if (mayorAFechaActual) {
+          this.tService.error(
+            'La fecha final no puede ser mayor a la fecha actual.',
+            ''
+          );
+        } else {
           if (confirm('¿Desea enviar este nuevo reporte diario?')) {
             this.dbService.addReporte(this.reporte).subscribe(
               (data: any) => {
@@ -77,11 +89,6 @@ export class FormReporteComponent implements OnInit {
               }
             );
           }
-        } else {
-          this.tService.error(
-            'Disponible entre las 4h30 y 10h00',
-            'Horario no disponible'
-          );
         }
       }
     }
@@ -118,7 +125,7 @@ export class FormReporteComponent implements OnInit {
       delete this.reporte['valor'];
       this.tService.error(
         '',
-        'Ingresar un valor con formato válido: ###.# (Hasta un entero de 3 dígitos y un decimal)'
+        'Ingresar un valor con formato válido: ###.# (Un número de hasta tres cifras enteras y un decimal)'
       );
     }
   }

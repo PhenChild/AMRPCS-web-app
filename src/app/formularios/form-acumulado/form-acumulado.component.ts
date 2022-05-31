@@ -73,7 +73,10 @@ export class FormAcumuladoComponent implements OnInit {
         const puedeReportar =
           ((horas == 4 && minutos >= 30) || horas > 4) && horas < 10;
         const diferenciaDias = moment(fecha).diff(moment(fechaInicio), 'days');
-        console.log(diferenciaDias);
+        const mayorAFechaActual =
+          moment(fecha).diff(moment(this.maxDateTime), 'days') == 0 ||
+          moment(fechaInicio).diff(moment(this.maxDateTime), 'days') == 0;
+        console.log(mayorAFechaActual);
         if (!puedeReportar) {
           this.tService.error(
             'Disponible entre las 4h30 y 10h00',
@@ -82,6 +85,16 @@ export class FormAcumuladoComponent implements OnInit {
         } else if (diferenciaDias > 5) {
           this.tService.error(
             'Entre Fecha Inicio y Fecha Fin debe existir máximo una diferencia de 5 días',
+            ''
+          );
+        } else if (diferenciaDias == 0) {
+          this.tService.error(
+            'La fecha final debe ser mayor a la fecha de inicio.',
+            ''
+          );
+        } else if (mayorAFechaActual) {
+          this.tService.error(
+            'La fecha final no puede ser mayor a la fecha actual.',
             ''
           );
         } else {
@@ -147,7 +160,10 @@ export class FormAcumuladoComponent implements OnInit {
     if (!isNaN(valor)) {
       this.reporte.valor = parseFloat(this.reporte.valor?.toFixed(1)!);
     } else {
-      this.tService.error('', 'Ingresar un valor con formato válido');
+      this.tService.error(
+        '',
+        'Ingresar un valor con formato válido: ###.# (Un número de hasta tres cifras enteras y un decimal)'
+      );
     }
   }
 }

@@ -166,7 +166,19 @@ export class FormCuestionarioComponent implements OnInit {
         const fecha = new Date(this.cuestionario.fecha);
         const dias = fecha.getDate();
         const puedeReportar = dias <= 10;
-        if (puedeReportar) {
+        const mayorAFechaActual =
+          moment(fecha).diff(moment(this.maxDate), 'days') > 0;
+        if (!puedeReportar) {
+          this.tService.error(
+            'Los reportes de sequías deben realizarse hasta el décimo día de cada mes.',
+            'Fecha no disponible'
+          );
+        } else if (mayorAFechaActual) {
+          this.tService.error(
+            'La fecha final no puede ser mayor a la fecha actual.',
+            ''
+          );
+        } else {
           console.log(this.cuestionario);
           if (confirm('¿Desea enviar este nuevo cuestionario de sequía?')) {
             this.dbService.addCuestionario(this.cuestionario).subscribe(
@@ -188,11 +200,6 @@ export class FormCuestionarioComponent implements OnInit {
               }
             );
           }
-        } else {
-          this.tService.error(
-            'Los reportes de sequías deben realizarse hasta el décimo día de cada mes.',
-            'Fecha no disponible'
-          );
         }
       }
     }
