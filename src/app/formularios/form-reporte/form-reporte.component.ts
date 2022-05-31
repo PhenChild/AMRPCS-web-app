@@ -60,7 +60,8 @@ export class FormReporteComponent implements OnInit {
         const horas = fecha.getHours();
         const minutos = fecha.getMinutes();
         const puedeReportar =
-          ((horas == 4 && minutos >= 30) || horas > 4) && horas < 10;
+          ((horas == 4 && minutos >= 30) || horas > 4) &&
+          ((horas == 10 && minutos == 0) || horas < 10);
         const mayorAFechaActual =
           moment(fecha).diff(moment(this.maxDate), 'days') > 0;
         if (!puedeReportar) {

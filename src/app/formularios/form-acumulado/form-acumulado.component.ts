@@ -71,7 +71,8 @@ export class FormAcumuladoComponent implements OnInit {
         const horas = fecha.getHours();
         const minutos = fecha.getMinutes();
         const puedeReportar =
-          ((horas == 4 && minutos >= 30) || horas > 4) && horas < 10;
+          ((horas == 4 && minutos >= 30) || horas > 4) &&
+          ((horas == 10 && minutos == 0) || horas < 10);
         const diferenciaDias = moment(fecha).diff(moment(fechaInicio), 'days');
         const mayorAFechaActual =
           moment(fecha).diff(moment(this.maxDateTime), 'days') > 0 ||
