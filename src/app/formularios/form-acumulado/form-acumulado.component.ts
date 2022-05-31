@@ -74,9 +74,8 @@ export class FormAcumuladoComponent implements OnInit {
           ((horas == 4 && minutos >= 30) || horas > 4) && horas < 10;
         const diferenciaDias = moment(fecha).diff(moment(fechaInicio), 'days');
         const mayorAFechaActual =
-          moment(fecha).diff(moment(this.maxDateTime), 'days') == 0 ||
-          moment(fechaInicio).diff(moment(this.maxDateTime), 'days') == 0;
-        console.log(mayorAFechaActual);
+          moment(fecha).diff(moment(this.maxDateTime), 'days') > 0 ||
+          moment(fechaInicio).diff(moment(this.maxDateTime), 'days') > 0;
         if (!puedeReportar) {
           this.tService.error(
             'Disponible entre las 4h30 y 10h00',
