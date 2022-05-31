@@ -87,7 +87,7 @@ export class FormAcumuladoComponent implements OnInit {
             'Entre Fecha Inicio y Fecha Fin debe existir máximo una diferencia de 5 días',
             ''
           );
-        } else if (diferenciaDias == 0) {
+        } else if (diferenciaDias <= 0) {
           this.tService.error(
             'La fecha final debe ser mayor a la fecha de inicio.',
             ''
