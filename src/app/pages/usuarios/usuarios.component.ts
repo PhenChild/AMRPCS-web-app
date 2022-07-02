@@ -324,9 +324,9 @@ export class UsuariosComponent implements OnInit, OnDestroy {
    */
   submit(formUsuario: NgForm): void {
     if (
-      formUsuario.valid &&
-      this.usuario.idOcupacion &&
-      this.usuario.idOcupacion != -1
+      formUsuario.valid
+      //this.usuario.idOcupacion &&
+      //this.usuario.idOcupacion != -1
     ) {
       if (
         this.usuario.role == 'observer' &&
@@ -375,6 +375,11 @@ export class UsuariosComponent implements OnInit, OnDestroy {
             );
         }
       }
+    } else {
+      this.tService.error(
+        '',
+        'Formulario incompleto, por favor revisar los campos faltantes.'
+      );
     }
   }
 

@@ -71,7 +71,7 @@
               />
             </div>
             <div class="form-group">
-              <label for="sector">Sector de la ocupación*</label><br />
+              <label for="sector">Sector de la ocupación</label><br />
               <select
                 name="sector"
                 id="sector"
@@ -85,13 +85,12 @@
               </select>
             </div>
             <div class="form-group" *ngIf="isOcupaciones">
-              <label for="ocupacion">Ocupación*</label><br />
+              <label for="ocupacion">Ocupación</label><br />
               <select
                 name="ocupacion"
                 id="ocupacion"
                 class="form-control"
                 [(ngModel)]="usuario.idOcupacion"
-                required
               >
                 <option
                   *ngFor="let ocupacion of ocupaciones"

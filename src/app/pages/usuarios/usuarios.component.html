@@ -259,14 +259,13 @@
               />
             </div>
             <div class="form-group">
-              <label for="sector">Sector de la ocupación*</label><br />
+              <label for="sector">Sector de la ocupación</label><br />
               <select
                 name="sector"
                 id="sector"
                 class="form-control"
                 [(ngModel)]="sector"
                 (change)="getOcupaciones(sector)"
-                required
               >
                 <option *ngFor="let sector of sectores" [value]="sector.id">
                   {{ sector.descripcion }}
@@ -274,14 +273,13 @@
               </select>
             </div>
             <div class="form-group" *ngIf="isOcupaciones">
-              <label for="ocupacion">Ocupación*</label><br />
+              <label for="ocupacion">Ocupación</label><br />
               <select
                 name="ocupacion"
                 id="ocupacion"
                 class="form-control"
                 [(ngModel)]="usuario.idOcupacion"
                 [disabled]="!isAdmin"
-                required
               >
                 <option
                   *ngFor="let ocupacion of ocupaciones"

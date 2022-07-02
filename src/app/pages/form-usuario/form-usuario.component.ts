@@ -155,9 +155,9 @@ export class FormUsuarioComponent implements OnInit {
    */
   onSubmit(formUsuario: NgForm) {
     if (
-      formUsuario.valid &&
-      this.usuario.idOcupacion &&
-      this.usuario.idOcupacion != -1
+      formUsuario.valid
+      //this.usuario.idOcupacion &&
+      //this.usuario.idOcupacion != -1
     ) {
       if (this.confpassword == this.usuario.password) {
         if (
@@ -212,6 +212,11 @@ export class FormUsuarioComponent implements OnInit {
       } else {
         this.tService.error('', 'Las contraseñas deben coincidir');
       }
+    } else {
+      this.tService.error(
+        '',
+        'Formulario incompleto, por favor revisar los campos faltantes.'
+      );
     }
   }
 
