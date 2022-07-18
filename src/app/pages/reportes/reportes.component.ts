@@ -36,7 +36,6 @@ export class ReportesComponent implements OnInit {
   reportes: Reporte[] = [];
   paises: Pais[] = [];
   /** Lista de estaciones */
-  estaciones: Estacion[] = [];
 
   /** Operador del datatable de los registros */
   dtTrigger: Subject<any> = new Subject<any>();
@@ -77,9 +76,6 @@ export class ReportesComponent implements OnInit {
       this.isAdmin = true;
     } else if (titlee === 'obs-layout') {
       this.isObserver = true;
-      this.dbService.getEstacionesSelfUsuario().subscribe((data: any) => {
-        this.estaciones = data.map((item: any) => item.Estacion);
-      });
     }
 
     this.dbService.getPaises().subscribe((data: any) => {

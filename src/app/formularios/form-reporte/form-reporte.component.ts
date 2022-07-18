@@ -29,7 +29,7 @@ export class FormReporteComponent implements OnInit {
   ngOnInit(): void {
     if (this.isObserver && !this.isUpdating) {
       this.dbService.getEstacionesSelfUsuario().subscribe((data: any) => {
-        this.estaciones = data.map((item: any) => item.Estacion);
+        this.estaciones = data.map((item: any) => item.Estacion).filter((item:any) => item.hasPluviometro);
       });
     }
     if (!this.isUpdating) {

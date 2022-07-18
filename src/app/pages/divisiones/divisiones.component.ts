@@ -208,6 +208,7 @@ export class DivisionesComponent implements OnInit {
       this.dbService
         .getDivisionesSuperiores(this.division.idPais, this.division.nivel)
         .subscribe((data: any) => {
+          console.log(data)
           this.divisionesSuperiores = data as any;
           const table = <HTMLInputElement>document.getElementById('table');
           const form = <HTMLInputElement>(
